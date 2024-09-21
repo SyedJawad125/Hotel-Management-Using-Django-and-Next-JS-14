@@ -10,7 +10,7 @@ const NavbarCom = () => {
     <nav className="bg-blue-700 w-full">
       <div className="container mx-auto flex justify-between items-center p-0">
         <div className="text-white text-1xl font-bold ml-10">
-          <Link href="/">EMPLOYEE MANAGEMENT SYSTEM</Link>
+          <Link href="/">HOTEL MANAGEMENT SYSTEM</Link>
         </div>
         <ul className="flex space-x-10 ml-auto mr-10">
           {[

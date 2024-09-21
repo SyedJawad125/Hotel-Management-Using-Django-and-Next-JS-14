@@ -3,11 +3,13 @@ import Image from 'next/image';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-import banner1 from '../../public/images/banner1.jpg'
-import banner2 from '../../public/images/banner2.jpg'
-import banner3 from '../../public/images/banner3.jpg'
-import banner4 from '../../public/images/banner4.jpg'
-import banner5 from '../../public/images/banner5.jpg'
+import banner1 from '../../public/images/Hotelbanner1.webp'
+import banner2 from '../../public/images/Hotelbanner2.webp'
+import banner3 from '../../public/images/Hotelbanner3.jpg'
+import banner4 from '../../public/images/Hotelbanner4.jpg'
+import banner5 from '../../public/images/Hotelbanner5.png'
+import banner6 from '../../public/images/Hotelbanner6.png'
+import banner7 from '../../public/images/Hotelbanner8.jpg'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
 import { Carousel } from "react-responsive-carousel";
 
@@ -61,6 +63,22 @@ const NextJsCarousel = () => {
               <div>
                   <Image
                       src={banner5}
+                      alt="image5"
+                      className="w-full h-[87vh] object-cover"
+                  />
+                  {/* <p className="legend">Image 5</p> */}
+              </div>
+              <div>
+                  <Image
+                      src={banner6}
+                      alt="image5"
+                      className="w-full h-[87vh] object-cover"
+                  />
+                  {/* <p className="legend">Image 5</p> */}
+              </div>
+              <div>
+                  <Image
+                      src={banner7}
                       alt="image5"
                       className="w-full h-[87vh] object-cover"
                   />
