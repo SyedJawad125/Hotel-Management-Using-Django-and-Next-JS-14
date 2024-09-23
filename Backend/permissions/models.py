@@ -7,11 +7,14 @@ from django.db import models
 class Role(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
+    code = models.CharField(max_length=50, null=True, blank=True)
     permissions = models.ManyToManyField('Permission', related_name='roles')
+
 
 
 class Permission(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
     code = models.CharField(max_length=50)
+    module_name = models.CharField(max_length=50, null=True, blank=True)
 
