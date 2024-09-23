@@ -6,9 +6,11 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 #from .blog_serializer import BlogSerializer
 from utils.base_authentication import JWTAuthentication
-from .hotel_controller import EmployeeController
+from .hotel_controller import EmployeeController, RoomController
 
 employee_controller = EmployeeController()
+room_controller = RoomController()
+
 
 
 class EmployeeViews(ModelViewSet):
@@ -29,3 +31,20 @@ class EmployeeViews(ModelViewSet):
     # @permission_required(['delete_employee'])
     def delete_employee(self, request):
         return employee_controller.delete_employee(request)
+    
+
+
+class RoomViews(ModelViewSet):
+    authentication_classes = [JWTAuthentication]
+
+    def post_room(self, request):
+        return room_controller.create(request)
+    
+    def get_room(self, request):
+        return room_controller.get_room(request)
+
+    def update_room(self, request):
+        return room_controller.update_room(request)
+
+    def delete_room(self, request):
+        return room_controller.delete_room(request)

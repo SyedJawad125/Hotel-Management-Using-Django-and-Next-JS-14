@@ -1,6 +1,6 @@
 from django_filters import DateFilter, CharFilter, FilterSet
 from .models import *
-
+import django_filters
 
 
 class EmployeeFilter(FilterSet):
@@ -16,3 +16,16 @@ class EmployeeFilter(FilterSet):
         model = Employee
         # fields ='__all__'
         exclude = ['image']
+
+
+class RoomFilter(django_filters.FilterSet):
+    price_min = django_filters.NumberFilter(field_name='price_per_night', lookup_expr='gte')
+    price_max = django_filters.NumberFilter(field_name='price_per_night', lookup_expr='lte')
+    capacity_min = django_filters.NumberFilter(field_name='capacity', lookup_expr='gte')
+    capacity_max = django_filters.NumberFilter(field_name='capacity', lookup_expr='lte')
+    category = django_filters.ChoiceFilter(choices=Room.ROOM_CATEGORIES)
+    is_available = django_filters.BooleanFilter(field_name='is_available')
+
+    class Meta:
+        model = Room
+        fields = ['category', 'price_per_night', 'is_available', 'capacity']
