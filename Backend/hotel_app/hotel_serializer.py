@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Contact, Employee, Product, Order, OrderDetail, Category
+from .models import Contact, Employee
 from rest_framework.serializers import ModelSerializer
 from user_auth.user_serializer import UserListingSerializer
 
