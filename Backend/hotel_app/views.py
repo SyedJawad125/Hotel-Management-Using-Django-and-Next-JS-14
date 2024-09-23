@@ -12,7 +12,7 @@ employee_controller = EmployeeController()
 
 
 class EmployeeViews(ModelViewSet):
-    # authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
 
     # @permission_required(['create_employee'])
     def post_employee(self, request):
