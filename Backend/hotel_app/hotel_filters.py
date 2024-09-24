@@ -18,6 +18,17 @@ class EmployeeFilter(FilterSet):
         exclude = ['image']
 
 
+class GuestFilter(django_filters.FilterSet):
+    address = django_filters.CharFilter(lookup_expr='icontains')  # Filter for partial matches in address
+    date_of_birth = django_filters.DateFilter()  # Exact match for date of birth
+    passport = django_filters.CharFilter(lookup_expr='exact')  # Exact match for passport
+    user = django_filters.ModelChoiceFilter(queryset=User.objects.all())  # Filter by related User
+    
+    class Meta:
+        model = Guest
+        fields = ['address', 'date_of_birth', 'passport', 'user']
+
+
 class RoomFilter(django_filters.FilterSet):
     price_min = django_filters.NumberFilter(field_name='price_per_night', lookup_expr='gte')
     price_max = django_filters.NumberFilter(field_name='price_per_night', lookup_expr='lte')

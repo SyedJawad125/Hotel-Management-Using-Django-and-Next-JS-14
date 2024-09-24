@@ -22,6 +22,11 @@ class User(TimeStamps,AbstractUser):
     last_failed_time = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_locked = models.BooleanField(default=False)
+    # cnic                = models.CharField(max_length=13, blank=True, null=True)
+    # is_staff            = models.BooleanField(default=False)
+    # is_superuser        = models.BooleanField(default=False)
+    # login_attempts      = models.IntegerField(default=0)
+    current_token       = models.CharField(max_length=500, blank=True, null=True)
     role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='user_role', null=True, blank=True)
     
     REQUIRED_FIELDS = ["email", "password"]

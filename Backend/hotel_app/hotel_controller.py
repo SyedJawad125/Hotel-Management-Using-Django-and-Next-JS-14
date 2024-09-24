@@ -3,14 +3,17 @@ from django.utils import timezone
 from django.contrib.auth import authenticate
 from hotel_app.hotel_filters import EmployeeFilter
 from hotel_app.hotel_filters import *
-from hotel_app.hotel_serializer import EmployeeSerializer, RoomSerializer
+from hotel_app.hotel_serializer import EmployeeSerializer, GuestSerializer, RoomSerializer
 from hotel_app.models import Employee
+from user_auth.user_serializer import UserSerializer
 from utils.reusable_methods import get_first_error_message, generate_six_length_random_number
 from rest_framework.response import Response
 from django.db.models import Sum, Count, Avg, F
 from utils.helper import create_response, paginate_data
 from utils.response_messages import *
 from datetime import date, timedelta
+from rest_framework import status
+import logging
 # from vehicle.serializer import serializer
 # from e_commerce.settings import EMAIL_HOST_USER
 # from django.core.mail import send_mail
@@ -111,8 +114,88 @@ class EmployeeController:
         except Exception as e:
             return Response({'error': str(e)}, 500)
         
+class GuestController:
+    serializer_class = GuestSerializer
+    filterset_class = GuestFilter
 
+    def create_guest(self, request):
+        try:
+            user_data = request.data.pop("user", None)
 
+            if user_data:
+                logging.info(f"User data received: {user_data}")
+
+                # Create a user using the user_data dictionary
+                serialized_user = UserSerializer(data=user_data)
+
+                if serialized_user.is_valid():
+                    logging.info("User data is valid. Proceeding to save.")
+
+                    # Start an atomic transaction
+                    with transaction.atomic():
+                        # Save the user instance
+                        user_response = serialized_user.save()
+
+                        # Debugging: Check if the user_response object has a guid
+                        if not hasattr(user_response, 'guid'):
+                            logging.error("User object doesn't have a GUID. Something went wrong while saving.")
+                            return Response(
+                                {'error': "User object doesn't have a GUID. User might not be saved correctly."},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                            )
+
+                        logging.info(f"User saved successfully with GUID: {user_response.guid}")
+
+                        # Now that the user is saved, it should have a GUID
+                        request.data['user'] = user_response.guid  # Assign saved user's GUID to request data
+
+                        # Serialize the guest data using the updated request.data
+                        serialized_guest = GuestSerializer(data=request.data)
+
+                        if serialized_guest.is_valid():
+                            guest_response = serialized_guest.save()
+
+                            return Response(
+                                {
+                                    'msg': 'Guest created successfully',
+                                    'guest': GuestSerializer(guest_response).data
+                                },
+                                status=status.HTTP_201_CREATED
+                            )
+                        else:
+                            transaction.set_rollback(True)
+                            logging.error(f"Error in Guest data: {serialized_guest.errors}")
+                            return Response(
+                                {
+                                    'msg': 'Error in Guest data',
+                                    'errors': serialized_guest.errors
+                                },
+                                status=status.HTTP_400_BAD_REQUEST
+                            )
+                else:
+                    logging.error(f"Error in User data: {serialized_user.errors}")
+                    return Response(
+                        {
+                            'msg': 'Error in User data',
+                            'errors': serialized_user.errors
+                        },
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+            else:
+                logging.error("User data not provided.")
+                return Response(
+                    {
+                        'msg': 'User data not provided'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        except Exception as e:
+            logging.error(f"Exception occurred: {str(e)}")
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class RoomController:
@@ -207,3 +290,75 @@ class RoomController:
                 return Response({"data": "ID NOT PROVIDED"}, 400)
         except Exception as e:
             return Response({'error': str(e)}, 500)
+        
+
+
+# class GuestController:
+#     serializer_class = GuestSerializer
+#     filterset_class = GuestFilter
+
+#     def create_guest(self, request):
+#         try:
+#             # Extract the user dictionary from request.data
+#             user_data = request.data.pop("user", None)
+
+#             if user_data:
+#                 # Serialize the user data
+#                 serialized_user = UserSerializer(data=user_data)
+
+#                 if serialized_user.is_valid():
+#                     # Start an atomic transaction to ensure both User and Guest are created together
+#                     with transaction.atomic():
+#                         # Save the user and get the user instance
+#                         user_instance = serialized_user.save()
+
+#                         # Add the saved user instance to request data
+#                         request.data['user'] = user_instance.id
+
+#                         # Serialize the guest data with the updated request.data
+#                         serialized_guest = GuestSerializer(data=request.data)
+
+#                         if serialized_guest.is_valid():
+#                             # Save the guest instance
+#                             guest_instance = serialized_guest.save()
+
+#                             # Return success response
+#                             return Response(
+#                                 {
+#                                     'msg': 'Guest created successfully',
+#                                     'guest': GuestSerializer(guest_instance).data
+#                                 },
+#                                 status=status.HTTP_201_CREATED
+#                             )
+#                         else:
+#                             # Rollback transaction if guest data is invalid
+#                             transaction.set_rollback(True)
+#                             return Response(
+#                                 {
+#                                     'msg': 'Error in Guest data',
+#                                     'errors': serialized_guest.errors
+#                                 },
+#                                 status=status.HTTP_400_BAD_REQUEST
+#                             )
+#                 else:
+#                     # Return error if user data is invalid
+#                     return Response(
+#                         {
+#                             'msg': 'Error in User data',
+#                             'errors': serialized_user.errors
+#                         },
+#                         status=status.HTTP_400_BAD_REQUEST
+#                     )
+#             else:
+#                 # Handle case when no user data is provided
+#                 return Response(
+#                     {'msg': 'User data not provided'},
+#                     status=status.HTTP_400_BAD_REQUEST
+#                 )
+
+#         except Exception as e:
+#             # Catch and return any unexpected errors
+#             return Response(
+#                 {'error': str(e)},
+#                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
+#             )

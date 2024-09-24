@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import EmployeeViews, RoomViews
+from .views import EmployeeViews, GuestViews, RoomViews
 
 
 urlpatterns = [
@@ -8,6 +8,8 @@ path('employee', EmployeeViews.as_view({"get": "get_employee",
                                                 "post": "post_employee",
                                                 "patch": "update_employee",
                                                 "delete": "delete_employee"})),
+                                                
+path('guest', GuestViews.as_view({"post": "post_guest"})),
 
 path('room', RoomViews.as_view({"get": "get_room",
                                                 "post": "post_room",

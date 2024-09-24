@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Employee, Room
+from .models import Employee, Guest, Room
 from rest_framework.serializers import ModelSerializer
 from user_auth.user_serializer import UserListingSerializer
 
@@ -28,3 +28,8 @@ class RoomSerializer(serializers.ModelSerializer):
         data['updated_by'] = UserListingSerializer(instance.updated_by).data if instance.updated_by else None 
 
         return data
+    
+class GuestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Guest
+        fields = '__all__'
