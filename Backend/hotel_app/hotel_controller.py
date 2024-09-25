@@ -222,10 +222,13 @@ class GuestController:
             return Response({'error': str(e)}, 500)
         
 
-    def update_guest(self, request, guest_id):
+    def update_guest(self, request, *args, **kwargs):
         try:
+            # Retrieve 'id' from kwargs as it is passed from the URL
+            guest_id = kwargs.get('id')
+
             # Fetch the existing guest record by guest_id
-            guest = get_object_or_404(Guest, pk=guest_id)
+            guest = get_object_or_404(Guest, id=guest_id)
 
             # Pop user data from the request payload
             user_data = request.data.pop("user", None)
@@ -296,6 +299,8 @@ class GuestController:
                 {'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
         
     def delete_guest(self, request):
         try:
