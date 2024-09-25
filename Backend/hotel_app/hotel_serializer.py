@@ -33,3 +33,9 @@ class GuestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guest
         fields = '__all__'
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['user'] = UserListingSerializer(instance.user).data if instance.user else None
+
+        return data

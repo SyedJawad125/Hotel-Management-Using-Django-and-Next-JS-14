@@ -9,7 +9,8 @@ path('employee', EmployeeViews.as_view({"get": "get_employee",
                                                 "patch": "update_employee",
                                                 "delete": "delete_employee"})),
                                                 
-path('guest', GuestViews.as_view({"post": "post_guest"})),
+path('guest', GuestViews.as_view({"get": "get_guest",
+                                          "post": "post_guest"})),
 
 path('room', RoomViews.as_view({"get": "get_room",
                                                 "post": "post_room",
