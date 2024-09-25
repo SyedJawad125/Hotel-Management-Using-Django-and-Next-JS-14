@@ -12,8 +12,10 @@ from django.db.models import Sum, Count, Avg, F
 from utils.helper import create_response, paginate_data
 from utils.response_messages import *
 from datetime import date, timedelta
+
 from rest_framework import status
 import logging
+from django.shortcuts import get_object_or_404
 # from vehicle.serializer import serializer
 # from e_commerce.settings import EMAIL_HOST_USER
 # from django.core.mail import send_mail
@@ -218,6 +220,114 @@ class GuestController:
 
         except Exception as e:
             return Response({'error': str(e)}, 500)
+        
+
+    def update_guest(self, request, guest_id):
+        try:
+            # Fetch the existing guest record by guest_id
+            guest = get_object_or_404(Guest, pk=guest_id)
+
+            # Pop user data from the request payload
+            user_data = request.data.pop("user", None)
+
+            if user_data:
+                logging.info(f"User data received for update: {user_data}")
+
+                # Fetch the existing user associated with this guest
+                user_instance = get_object_or_404(User, guid=guest.user.guid)
+
+                # Update the user instance with the provided data
+                serialized_user = UserSerializer(user_instance, data=user_data, partial=True)
+
+                if serialized_user.is_valid():
+                    logging.info("User data is valid for update. Proceeding to save.")
+
+                    # Start an atomic transaction
+                    with transaction.atomic():
+                        # Save the updated user instance
+                        user_response = serialized_user.save()
+
+                        logging.info(f"User updated successfully with GUID: {user_response.guid}")
+
+                        # Now update the guest data
+                        serialized_guest = GuestSerializer(guest, data=request.data, partial=True)
+
+                        if serialized_guest.is_valid():
+                            guest_response = serialized_guest.save()
+
+                            return Response(
+                                {
+                                    'msg': 'Guest updated successfully',
+                                    'guest': GuestSerializer(guest_response).data
+                                },
+                                status=status.HTTP_200_OK
+                            )
+                        else:
+                            transaction.set_rollback(True)
+                            logging.error(f"Error in Guest data during update: {serialized_guest.errors}")
+                            return Response(
+                                {
+                                    'msg': 'Error in Guest data',
+                                    'errors': serialized_guest.errors
+                                },
+                                status=status.HTTP_400_BAD_REQUEST
+                            )
+                else:
+                    logging.error(f"Error in User data during update: {serialized_user.errors}")
+                    return Response(
+                        {
+                            'msg': 'Error in User data',
+                            'errors': serialized_user.errors
+                        },
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+            else:
+                logging.error("User data not provided for update.")
+                return Response(
+                    {
+                        'msg': 'User data not provided'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        except Exception as e:
+            logging.error(f"Exception occurred during guest update: {str(e)}")
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+    def delete_guest(self, request):
+        try:
+            # Check if the request has 'id' in query parameters
+            if "id" in request.query_params:
+                guest_id = request.query_params['id']
+
+                # Retrieve the Guest instance by ID
+                guest_instance = Guest.objects.filter(id=guest_id).first()
+
+                # If the Guest instance is found
+                if guest_instance:
+                    # Get the related User instance
+                    user_instance = guest_instance.user
+
+                    # Delete the Guest record
+                    guest_instance.delete()
+
+                    # Delete the associated User record
+                    if user_instance:
+                        user_instance.delete()
+
+                    return Response({"data": "SUCCESSFULLY DELETED GUEST AND ASSOCIATED USER"}, status=200)
+                else:
+                    return Response({"data": "GUEST RECORD NOT FOUND"}, status=404)
+            else:
+                return Response({"data": "GUEST ID NOT PROVIDED"}, status=400)
+        
+        # Catch any exceptions that occur
+        except Exception as e:
+            logging.error(f"Exception occurred while deleting guest: {str(e)}")
+            return Response({'error': str(e)}, status=500)
 
 
 class RoomController:

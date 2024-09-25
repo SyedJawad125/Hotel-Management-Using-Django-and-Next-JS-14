@@ -42,6 +42,12 @@ class GuestViews(ModelViewSet):
     def get_guest(self, request):
         return guest_controller.get_guest(request)
     
+    def update_guest(self, request):
+        return guest_controller.update_guest(request)
+    
+    def delete_guest(self, request):
+        return guest_controller.delete_guest(request)
+    
 class RoomViews(ModelViewSet):
     authentication_classes = [JWTAuthentication]
 
