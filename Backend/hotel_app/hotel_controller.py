@@ -224,8 +224,15 @@ class GuestController:
 
     def update_guest(self, request, *args, **kwargs):
         try:
-            # Retrieve 'id' from kwargs as it is passed from the URL
-            guest_id = kwargs.get('id')
+            # Retrieve 'id' from request data
+            guest_id = request.data.get('id')
+
+            if not guest_id:
+                logging.error("Guest ID not provided in the request.")
+                return Response(
+                    {'msg': 'Guest ID not provided'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
             # Fetch the existing guest record by guest_id
             guest = get_object_or_404(Guest, id=guest_id)
@@ -299,6 +306,7 @@ class GuestController:
                 {'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
 
 
         
