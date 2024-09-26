@@ -222,7 +222,7 @@ class GuestController:
             return Response({'error': str(e)}, 500)
         
 
-    def update_guest(self, request, *args, **kwargs):
+    def update_guest(self, request):
         try:
             # Retrieve 'id' from request data
             guest_id = request.data.get('id')
