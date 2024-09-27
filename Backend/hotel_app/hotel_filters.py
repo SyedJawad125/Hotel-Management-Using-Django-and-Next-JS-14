@@ -19,6 +19,7 @@ class EmployeeFilter(FilterSet):
 
 
 class GuestFilter(django_filters.FilterSet):
+    id = CharFilter(field_name='id')
     address = django_filters.CharFilter(lookup_expr='icontains')  # Filter for partial matches in address
     date_of_birth = django_filters.DateFilter()  # Exact match for date of birth
     passport = django_filters.CharFilter(lookup_expr='exact')  # Exact match for passport
