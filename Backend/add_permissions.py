@@ -9,6 +9,11 @@ permissions = [
     Permission(name='Read Role', code='read_role', module_name='Role', description='User can read role'),
     Permission(name='Update Role', code='update_role', module_name='Role', description='User can update role'),
     Permission(name='Delete Role', code='delete_role', module_name='Role', description='User can delete role'),
+
+    Permission(name='Create Room', code='create_room', module_name='Room', description='User can create Room'),
+    Permission(name='Read Room', code='read_room', module_name='Room', description='User can read Room'),
+    Permission(name='Update Room', code='update_room', module_name='Room', description='User can update Room'),
+    Permission(name='Delete Room', code='delete_room', module_name='Room', description='User can delete Room'),
    
 ]
 
