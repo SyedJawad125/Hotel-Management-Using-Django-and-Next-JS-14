@@ -53,11 +53,14 @@ class Room(models.Model):
     
 
 class Booking(models.Model):
-    guest = models.ForeignKey(Guest, on_delete=models.CASCADE, related_name='guest1', null=True, blank=True)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='room1', null=True, blank=True)
+   
     check_in = models.DateField()
     check_out = models.DateField()
     total_price = models.DecimalField(max_digits=8, decimal_places=2)
+    guest = models.ForeignKey(Guest, on_delete=models.CASCADE, related_name='guest1', null=True, blank=True)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='room1', null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='booking_created_by', null=True, blank=True)
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='booking_updated_by', null=True, blank=True)
 
     def clean(self):
         if self.check_out <= self.check_in:
@@ -76,10 +79,13 @@ class Payment(models.Model):
         ('CASH', 'Cash'),
     ]
 
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name='booking1', null=True, blank=True)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     payment_date = models.DateTimeField(auto_now_add=True)
     payment_method = models.CharField(max_length=15, choices=PAYMENT_METHODS)
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name='booking1', null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='payment_created_by', null=True, blank=True)
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payment_updated_by', null=True, blank=True)
+    
 
     def __str__(self):
         return f"Payment {self.id} for Booking {self.booking.id}"

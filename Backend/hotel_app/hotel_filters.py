@@ -43,6 +43,19 @@ class RoomFilter(django_filters.FilterSet):
         model = Room
         fields = ['category', 'price_per_night', 'is_available', 'capacity']
 
+
+class BookingFilter(django_filters.FilterSet):
+    id = CharFilter(field_name='id')
+    guest = django_filters.CharFilter(field_name='guest__name', lookup_expr='icontains')
+    room = django_filters.CharFilter(field_name='room__name', lookup_expr='icontains')
+    check_in = django_filters.DateFilter(field_name='check_in', lookup_expr='exact')
+    check_out = django_filters.DateFilter(field_name='check_out', lookup_expr='exact')
+    total_price = django_filters.RangeFilter(field_name='total_price')
+
+    class Meta:
+        model = Booking
+        fields = ['guest', 'room', 'check_in', 'check_out', 'total_price']
+
 class ContactFilter(FilterSet):
     id = CharFilter(field_name='id')
     date_from = DateFilter(field_name='created_at', lookup_expr='gte' )
