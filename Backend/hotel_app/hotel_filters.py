@@ -31,6 +31,7 @@ class GuestFilter(django_filters.FilterSet):
 
 
 class RoomFilter(django_filters.FilterSet):
+    id = CharFilter(field_name='id')
     price_min = django_filters.NumberFilter(field_name='price_per_night', lookup_expr='gte')
     price_max = django_filters.NumberFilter(field_name='price_per_night', lookup_expr='lte')
     capacity_min = django_filters.NumberFilter(field_name='capacity', lookup_expr='gte')
@@ -41,3 +42,13 @@ class RoomFilter(django_filters.FilterSet):
     class Meta:
         model = Room
         fields = ['category', 'price_per_night', 'is_available', 'capacity']
+
+class ContactFilter(FilterSet):
+    id = CharFilter(field_name='id')
+    date_from = DateFilter(field_name='created_at', lookup_expr='gte' )
+    date_to = DateFilter(field_name='created_at', lookup_expr='lte' )
+    name = CharFilter(field_name='name', lookup_expr='icontains')
+
+    class Meta:
+        model = Contact
+        fields ='__all__'

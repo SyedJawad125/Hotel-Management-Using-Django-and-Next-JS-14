@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.contrib.auth import authenticate
 from hotel_app.hotel_filters import EmployeeFilter
 from hotel_app.hotel_filters import *
-from hotel_app.hotel_serializer import EmployeeSerializer, GuestSerializer, RoomSerializer
+from hotel_app.hotel_serializer import ContactSerializer, EmployeeSerializer, GuestSerializer, RoomSerializer
 from hotel_app.models import Employee
 from user_auth.user_serializer import UserSerializer
 from utils.reusable_methods import get_first_error_message, generate_six_length_random_number
@@ -437,73 +437,49 @@ class RoomController:
             return Response({'error': str(e)}, 500)
         
 
+class ContactController:
+    serializer_class = ContactSerializer
+    filterset_class = ContactFilter
 
-# class GuestController:
-#     serializer_class = GuestSerializer
-#     filterset_class = GuestFilter
+ 
+    def create(self, request):
+        try:
+            request.POST._mutable = True
+            request.data["created_by"] = request.user.guid
+            request.POST._mutable = False
 
-#     def create_guest(self, request):
-#         try:
-#             # Extract the user dictionary from request.data
-#             user_data = request.data.pop("user", None)
+            # if request.user.role in ['admin', 'manager'] or request.user.is_superuser:  # roles
+            validated_data = ContactSerializer(data=request.data)
+            if validated_data.is_valid():
+                response = validated_data.save()
+                response_data = ContactSerializer(response).data
+                return Response({'data': response_data}, 200)
+            else:
+                error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
+                return Response({'data': error_message}, 400)
+            # else:
+            #     return Response({'data': "Permission Denaied"}, 400)
+        except Exception as e:
+            return Response({'error': str(e)}, 500)
 
-#             if user_data:
-#                 # Serialize the user data
-#                 serialized_user = UserSerializer(data=user_data)
+    # mydata = Member.objects.filter(firstname__endswith='s').values()
+    def get_contact(self, request):
+        try:
 
-#                 if serialized_user.is_valid():
-#                     # Start an atomic transaction to ensure both User and Guest are created together
-#                     with transaction.atomic():
-#                         # Save the user and get the user instance
-#                         user_instance = serialized_user.save()
+            instances = self.serializer_class.Meta.model.objects.all()
 
-#                         # Add the saved user instance to request data
-#                         request.data['user'] = user_instance.id
+            filtered_data = self.filterset_class(request.GET, queryset=instances)
+            data = filtered_data.qs
 
-#                         # Serialize the guest data with the updated request.data
-#                         serialized_guest = GuestSerializer(data=request.data)
+            paginated_data, count = paginate_data(data, request)
 
-#                         if serialized_guest.is_valid():
-#                             # Save the guest instance
-#                             guest_instance = serialized_guest.save()
+            serialized_data = self.serializer_class(paginated_data, many=True).data
+            response_data = {
+                "count": count,
+                "data": serialized_data,
+            }
+            return create_response(response_data, "SUCCESSFUL", 200)
 
-#                             # Return success response
-#                             return Response(
-#                                 {
-#                                     'msg': 'Guest created successfully',
-#                                     'guest': GuestSerializer(guest_instance).data
-#                                 },
-#                                 status=status.HTTP_201_CREATED
-#                             )
-#                         else:
-#                             # Rollback transaction if guest data is invalid
-#                             transaction.set_rollback(True)
-#                             return Response(
-#                                 {
-#                                     'msg': 'Error in Guest data',
-#                                     'errors': serialized_guest.errors
-#                                 },
-#                                 status=status.HTTP_400_BAD_REQUEST
-#                             )
-#                 else:
-#                     # Return error if user data is invalid
-#                     return Response(
-#                         {
-#                             'msg': 'Error in User data',
-#                             'errors': serialized_user.errors
-#                         },
-#                         status=status.HTTP_400_BAD_REQUEST
-#                     )
-#             else:
-#                 # Handle case when no user data is provided
-#                 return Response(
-#                     {'msg': 'User data not provided'},
-#                     status=status.HTTP_400_BAD_REQUEST
-#                 )
 
-#         except Exception as e:
-#             # Catch and return any unexpected errors
-#             return Response(
-#                 {'error': str(e)},
-#                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
-#             )
+        except Exception as e:
+            return Response({'error': str(e)}, 500)
