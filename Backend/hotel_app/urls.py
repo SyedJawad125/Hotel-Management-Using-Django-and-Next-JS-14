@@ -20,8 +20,6 @@ path('room', RoomViews.as_view({"get": "get_room",
                                                 "delete": "delete_room"})),
 
  path('contact', ContactViews.as_view({"get": "get_contact",
-                                                "post": "post_contact",
-                                                "patch": "update_contact",
-                                                "delete": "delete_contact"})),
+                                                "post": "post_contact"})),
     
 ]

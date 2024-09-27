@@ -19,7 +19,7 @@ const Contact = () => {
         const payload = {"name":name ,"phone_number":phone_number, 
           "email":email, "message":message}
         
-        const response = await AxiosInstance.post('/ecommerce/contact', payload , {
+        const response = await AxiosInstance.post('/hotel/contact', payload , {
         headers: {
             'Content-Type': 'application/json'
         }

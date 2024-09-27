@@ -65,16 +65,10 @@ class RoomViews(ModelViewSet):
         return room_controller.delete_room(request)
     
 class ContactViews(ModelViewSet):
-    # authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
 
     def post_contact(self, request):
         return contact_controller.create(request)
 
     def get_contact(self, request):
         return contact_controller.get_contact(request)
-
-    def update_contact(self, request):
-        return contact_controller.update_contact(request)
-
-    def delete_contact(self, request):
-        return contact_controller.delete_contact(request)
