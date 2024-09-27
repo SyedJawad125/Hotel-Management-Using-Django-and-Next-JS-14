@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ContactViews, EmployeeViews, GuestViews, RoomViews
+from .views import ContactViews, EmployeeViews, GuestViews, RoomViews, PaymentViews
 
 
 urlpatterns = [
@@ -22,6 +22,11 @@ path('booking', RoomViews.as_view({"get": "get_booking",
                                                 "post": "post_booking",
                                                 "patch": "update_booking",
                                                 "delete": "delete_booking"})),
+
+path('payment', PaymentViews.as_view({"get": "get_payment",
+                                                "post": "post_payment",
+                                                "patch": "update_payment",
+                                                "delete": "delete_payment"})),
 
  path('contact', ContactViews.as_view({"get": "get_contact",
                                                 "post": "post_contact"})),

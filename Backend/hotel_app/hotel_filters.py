@@ -56,6 +56,24 @@ class BookingFilter(django_filters.FilterSet):
         model = Booking
         fields = ['guest', 'room', 'check_in', 'check_out', 'total_price']
 
+
+class PaymentFilter(django_filters.FilterSet):
+    # Define filters for each field
+    amount = django_filters.NumberFilter(field_name="amount", lookup_expr='exact')
+    min_amount = django_filters.NumberFilter(field_name="amount", lookup_expr='gte')
+    max_amount = django_filters.NumberFilter(field_name="amount", lookup_expr='lte')
+    payment_date = django_filters.DateFilter(field_name="payment_date", lookup_expr='exact')
+    payment_date__gte = django_filters.DateFilter(field_name="payment_date", lookup_expr='gte')
+    payment_date__lte = django_filters.DateFilter(field_name="payment_date", lookup_expr='lte')
+    payment_method = django_filters.ChoiceFilter(field_name="payment_method", choices=Payment.PAYMENT_METHODS)
+    booking = django_filters.ModelChoiceFilter(queryset=Booking.objects.all())
+    created_by = django_filters.ModelChoiceFilter(queryset=User.objects.all())
+
+    class Meta:
+        model = Payment
+        fields = ['amount', 'payment_date', 'payment_method', 'booking', 'created_by']
+
+        
 class ContactFilter(FilterSet):
     id = CharFilter(field_name='id')
     date_from = DateFilter(field_name='created_at', lookup_expr='gte' )

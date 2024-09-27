@@ -1,9 +1,11 @@
 from django.contrib import admin
-from .models import Employee, Room
+from .models import Booking, Employee, Payment, Room
 # Register your models here
 
 admin.site.register(Employee)
 admin.site.register(Room)
+admin.site.register(Booking)
+admin.site.register(Payment)
 
 
 

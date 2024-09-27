@@ -6,12 +6,14 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 #from .blog_serializer import BlogSerializer
 from utils.base_authentication import JWTAuthentication
-from .hotel_controller import ContactController, EmployeeController, RoomController, GuestController, BookingController
+from .hotel_controller import ContactController, EmployeeController, RoomController, GuestController, BookingController, PaymentController
+
 
 employee_controller = EmployeeController()
 guest_controller = GuestController()
 room_controller = RoomController()
 booking_controller = BookingController()
+Payment_controller = PaymentController()
 contact_controller = ContactController()
 
 
@@ -80,6 +82,21 @@ class BookingViews(ModelViewSet):
 
     def delete_booking(self, request):
         return booking_controller.delete_booking(request)
+    
+class PaymentViews(ModelViewSet):
+    authentication_classes = [JWTAuthentication]
+
+    def post_payment(self, request):
+        return payment_controller.create(request)
+    
+    def get_payment(self, request):
+        return payment_controller.get_payment(request)
+
+    def update_payment(self, request):
+        return payment_controller.update_payment(request)
+
+    def delete_payment(self, request):
+        return payment_controller.delete_payment(request)
     
 class ContactViews(ModelViewSet):
     authentication_classes = [JWTAuthentication]
