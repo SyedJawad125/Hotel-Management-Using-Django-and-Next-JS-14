@@ -36,6 +36,9 @@ class RoomAdmin(admin.ModelAdmin):
 # Register Room model with custom admin class
 admin.site.register(Room, RoomAdmin)
 
+
+
+
 class BookingAdmin(admin.ModelAdmin):
     # Fields to display in the list view
     list_display = ('id', 'guest', 'room', 'check_in', 'check_out', 'total_price', 'created_by', 'updated_by')
@@ -66,7 +69,41 @@ class BookingAdmin(admin.ModelAdmin):
 # Register the Booking model with the custom admin
 admin.site.register(Booking, BookingAdmin)
 
-admin.site.register(Payment)
+
+
+
+# Custom admin for the Payment model
+class PaymentAdmin(admin.ModelAdmin):
+    # Fields to display in the list view
+    list_display = ('id', 'amount', 'payment_date', 'payment_method', 'booking', 'created_by', 'updated_by')
+    
+    # Filters to allow filtering by payment method, booking, and created_by
+    list_filter = ('payment_method', 'booking', 'created_by')
+    
+    # Fields to search by
+    search_fields = ('booking__id', 'created_by__username', 'updated_by__username')
+    
+    # Organize fields into sections for better readability in the detail view
+    fieldsets = (
+        (None, {
+            'fields': ('amount', 'payment_method', 'booking')
+        }),
+        ('Date Information', {
+            'fields': ('payment_date',)
+        }),
+        ('Created/Updated By', {
+            'fields': ('created_by', 'updated_by')
+        }),
+    )
+    
+    # Making fields read-only where necessary (payment_date auto-generated)
+    readonly_fields = ('payment_date',)
+
+# Register the Payment model with the admin site
+admin.site.register(Payment, PaymentAdmin)
+
+
+
 
 class EmployeeAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'email', 'position', 'department')
