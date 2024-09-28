@@ -1,6 +1,17 @@
 from django.contrib import admin
-from .models import Permission, Role
-# Register your models here.
+from .models import Role, Permission
 
-admin.site.register(Permission)
-admin.site.register(Role)
+# Custom admin for Role
+class RoleAdmin(admin.ModelAdmin):
+    list_display = ('name', 'code')
+    search_fields = ('name', 'code')
+    filter_horizontal = ('permissions',)  # To display many-to-many fields
+
+# Custom admin for Permission
+class PermissionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'code', 'module_name')
+    search_fields = ('name', 'code')
+
+# Register models in admin
+admin.site.register(Role, RoleAdmin)
+admin.site.register(Permission, PermissionAdmin)

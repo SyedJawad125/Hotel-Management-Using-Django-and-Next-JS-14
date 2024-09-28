@@ -2,10 +2,76 @@ from django.contrib import admin
 from .models import Booking, Employee, Payment, Room
 # Register your models here
 
-admin.site.register(Employee)
-admin.site.register(Room)
-admin.site.register(Booking)
+# Custom admin for Room model
+class RoomAdmin(admin.ModelAdmin):
+    # Fields to display in the list view
+    list_display = ('room_number', 'category', 'price_per_night', 'is_available', 'capacity', 'created_by', 'updated_by')
+    
+    # Add filters for easier navigation
+    list_filter = ('category', 'is_available')
+    
+    # Search functionality for room number and category
+    search_fields = ('room_number', 'category')
+    
+    # Organize fields in the admin form view
+    fieldsets = (
+        (None, {
+            'fields': ('room_number', 'category', 'price_per_night', 'capacity')
+        }),
+        ('Availability', {
+            'fields': ('is_available',)
+        }),
+        ('Audit', {
+            'fields': ('created_by', 'updated_by')
+        }),
+    )
+    
+    # To make sure 'created_by' and 'updated_by' are filled automatically
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:  # If this is a new object
+            obj.created_by = request.user
+        obj.updated_by = request.user
+        super().save_model(request, obj, form, change)
+
+# Register Room model with custom admin class
+admin.site.register(Room, RoomAdmin)
+
+class BookingAdmin(admin.ModelAdmin):
+    # Fields to display in the list view
+    list_display = ('id', 'guest', 'room', 'check_in', 'check_out', 'total_price', 'created_by', 'updated_by')
+    
+    # Fields to filter the list by
+    list_filter = ('check_in', 'check_out', 'guest', 'room')
+    
+    # Fields that can be searched
+    search_fields = ('guest__first_name', 'guest__last_name', 'room__name', 'created_by__username', 'updated_by__username')
+    
+    # Fields to display in the form view when creating/editing a booking
+    fieldsets = (
+        (None, {
+            'fields': ('guest', 'room', 'check_in', 'check_out', 'total_price')
+        }),
+        ('Audit Information', {
+            'fields': ('created_by', 'updated_by')
+        }),
+    )
+    
+    # Automatically set 'created_by' and 'updated_by' fields
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:
+            obj.created_by = request.user
+        obj.updated_by = request.user
+        super().save_model(request, obj, form, change)
+
+# Register the Booking model with the custom admin
+admin.site.register(Booking, BookingAdmin)
+
 admin.site.register(Payment)
+
+class EmployeeAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'email', 'position', 'department')
+
+admin.site.register(Employee, EmployeeAdmin)
 
 
 

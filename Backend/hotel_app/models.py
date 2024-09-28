@@ -18,7 +18,9 @@ class Employee(models.Model):
     image = models.ImageField(upload_to='employee_images/', blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='employee_created_by', null=True, blank=True)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='employee_updated_by', null=True, blank=True)
-
+   
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
 
 class Guest(models.Model):
     # first_name = models.CharField(max_length=100)
