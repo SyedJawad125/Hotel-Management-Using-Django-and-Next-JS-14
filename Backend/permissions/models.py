@@ -10,7 +10,8 @@ class Role(models.Model):
     code = models.CharField(max_length=50, null=True, blank=True)
     permissions = models.ManyToManyField('Permission', related_name='roles')
 
-
+    def __str__(self):
+        return self.name
 
 class Permission(models.Model):
     name = models.CharField(max_length=50)

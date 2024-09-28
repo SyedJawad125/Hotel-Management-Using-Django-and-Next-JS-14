@@ -40,10 +40,10 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    role = serializers.CharField(source='role.name', read_only=True)
     class Meta:
         model = User
         fields = '__all__'
-
     
 
     def validate(self,instance):
@@ -75,12 +75,12 @@ class VerifyOtpSerializer(serializers.Serializer):
     def validate(self, instance):
         user = self.context.get("user")
         if user.check_password(instance["new_password"]):
-            raise SameOldPassword()
-        if len(instance["new_password"]) < 7:
-            raise PasswordMustBeEightChar()
+            raise serializers.ValidationError("The new password cannot be the same as the old password.", code=400)
+        if len(instance["new_password"]) < 8:
+            raise serializers.ValidationError("Password must be at least 8 characters long.", code=400)
         if instance['new_password'] != instance['confirm_password']:
-            raise PasswordsDoesNotMatch()
-        return instance
+            raise serializers.ValidationError("The two password fields didn’t match.", code=400)
+
 
 
 class ForgetPasswordSerializer(serializers.Serializer):
