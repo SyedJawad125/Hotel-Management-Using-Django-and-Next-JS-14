@@ -13,7 +13,7 @@ employee_controller = EmployeeController()
 guest_controller = GuestController()
 room_controller = RoomController()
 booking_controller = BookingController()
-Payment_controller = PaymentController()
+payment_controller = PaymentController()
 contact_controller = ContactController()
 
 
@@ -38,7 +38,7 @@ class EmployeeViews(ModelViewSet):
         return employee_controller.delete_employee(request)
     
 class GuestViews(ModelViewSet):
-    # authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
 
     def post_guest(self, request):
         return guest_controller.create_guest(request)

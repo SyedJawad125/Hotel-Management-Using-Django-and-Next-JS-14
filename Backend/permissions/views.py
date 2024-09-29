@@ -19,7 +19,7 @@ permission_controller = PermissionController()
 
 class RoleViews(ModelViewSet):
 
-    # authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
 
     def post_role(self, request):
         return role_controller.create(request)
@@ -35,7 +35,7 @@ class RoleViews(ModelViewSet):
     
 class PermissionViews(ModelViewSet):
 
-    # authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication]
     
     def post_permission(self, request):
         return permission_controller.create(request)
@@ -49,38 +49,4 @@ class PermissionViews(ModelViewSet):
     def delete_permission(self, request):
         return permission_controller.delete_permission(request)
 
-
-# class RolepermissionViews(ModelViewSet):
-
-#     authentication_classes = [JWTAuthentication]
-    
-    
-#     def get_rolepermission(self, request):
-#         return rolepermission_controller.get_rolepermission(request)
-    
-
-
-# class MakeViews(ModelViewSet):
-#     authentication_classes = [JWTAuthentication]
-
-#     # permission_classes = [IsAdminUser]
-
-#     # @permission_required(['create_make'])
-#     def post_make(self, request):
-#         return make_controller.create(request)
-
-
-#     # @permission_required(['read_make'])
-#     def get_make(self, request):
-#         return make_controller.get_make(request)
-
-
-#     # @permission_required(['update_make'])
-#     def update_make(self, request):
-#         return make_controller.update_make(request)
-
-#     # @permission_required(['delete_make'])
-#     def delete_make(self, request):
-#         return make_controller.delete_make(request)
-    
 
