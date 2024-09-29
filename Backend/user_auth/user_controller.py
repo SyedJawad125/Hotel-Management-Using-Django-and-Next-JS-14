@@ -242,7 +242,8 @@ class LoginController():
                 "name": user.get_full_name(),
                 "username": user.username,
                 "email": user.email,
-                "role": user.role.id if user.role else None,  # Include role ID in the response
+                "role_id": user.role.id if user.role else None,  # Include role ID in the response
+                "role_name":  user.role.name ,
                 "permissions": permissions_dict  # Ensure permissions are included in the response
             }
 

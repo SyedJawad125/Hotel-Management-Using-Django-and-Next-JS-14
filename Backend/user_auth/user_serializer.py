@@ -40,7 +40,6 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    role = serializers.CharField(source='role.name', read_only=True)
     class Meta:
         model = User
         fields = '__all__'
