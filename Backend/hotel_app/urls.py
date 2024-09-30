@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ContactViews, EmployeeViews, GuestViews, RoomViews, BookingViews, PaymentViews, BookingViewSet
+from .views import ContactViews, EmployeeViews, GuestViews, RoomViews, BookingViews, PaymentViews
 
 
 urlpatterns = [

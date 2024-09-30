@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 #from .blog_serializer import BlogSerializer
 from utils.base_authentication import JWTAuthentication
-from .hotel_controller import BookingRoomController, ContactController, EmployeeController, RoomController, GuestController, BookingController, PaymentController
+from .hotel_controller import ContactController, EmployeeController, RoomController, GuestController, BookingController, PaymentController
 
 
 employee_controller = EmployeeController()
@@ -16,7 +16,7 @@ room_controller = RoomController()
 booking_controller = BookingController()
 payment_controller = PaymentController()
 contact_controller = ContactController()
-bookingroom_controller = BookingRoomController()
+# bookingroom_controller = BookingRoomController()
 
 
 

@@ -463,39 +463,44 @@ class BookingController:
     #         #     return Response({'data': "Permission Denaied"}, 400)
     #     except Exception as e:
     #         return Response({'error': str(e)}, 500)
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         try:
             # Make POST data mutable
             request.POST._mutable = True
-            request.data["created_by"] = request.user.guid
-            request.POST._mutable = False
 
-            # Check room availability
+            # Get the room ID from the request data
             room_id = request.data.get('room')
             if not room_id:
                 return Response({'error': 'Room ID is required'}, 400)
 
             try:
+                # Fetch the room object
                 room = Room.objects.get(id=room_id)
             except Room.DoesNotExist:
                 return Response({'error': 'Room does not exist'}, 404)
 
-            if room.is_available:
-                # Proceed with booking since the room is available
-                room.is_available = False  # Mark the room as unavailable
-                room.save()
+            if not room.is_available:
+                return Response({'error': 'Room is not available'}, 400)
 
-                # Validate and save booking data
-                validated_data = BookingSerializer(data=request.data)
-                if validated_data.is_valid():
-                    response = validated_data.save()
-                    response_data = BookingSerializer(response).data
-                    return Response({'data': response_data}, 200)
-                else:
-                    error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
-                    return Response({'data': error_message}, 400)
+            # Set the created_by field
+            request.data["created_by"] = request.user.guid
+
+            # Fetch the room price and calculate the total price
+            request.data["total_price"] = room.price_per_night
+
+            # Mark the room as unavailable after booking
+            room.is_available = False
+            room.save()
+
+            # Proceed with validating and saving the booking
+            validated_data = BookingSerializer(data=request.data)
+            if validated_data.is_valid():
+                response = validated_data.save()
+                response_data = BookingSerializer(response).data
+                return Response({'data': response_data}, 200)
             else:
-                return Response({"error": "Room is not available"}, 400)
+                error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
+                return Response({'data': error_message}, 400)
 
         except Exception as e:
             return Response({'error': str(e)}, 500)
@@ -596,7 +601,7 @@ class PaymentController:
 
 
 
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         try:
             # Make POST data mutable
             request.POST._mutable = True
@@ -609,15 +614,29 @@ class PaymentController:
                 return Response({'error': 'Booking ID is required'}, 400)
 
             try:
+                # Fetch the booking object
                 booking = Booking.objects.get(id=booking_id)
             except Booking.DoesNotExist:
                 return Response({'error': 'Booking does not exist'}, 404)
 
-            # Proceed with payment if booking exists
+            # Retrieve room number and total price from the booking
+            room_number = booking.room.id  # Assuming `room.id` refers to room number
+            amount = booking.total_price  # Fetching the total price from the booking
+
+            # Add the amount to the payment request data
+            request.POST._mutable = True
+            request.data["amount"] = amount  # Set the amount based on the booking's total price
+            request.POST._mutable = False
+
+            # Proceed with validating and saving the payment
             validated_data = PaymentSerializer(data=request.data)
             if validated_data.is_valid():
                 response = validated_data.save()
+
+                # Create response data, including room number and amount
                 response_data = PaymentSerializer(response).data
+                response_data['room_number'] = room_number  # Adding room number to the response
+
                 return Response({'data': response_data}, 200)
             else:
                 error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
