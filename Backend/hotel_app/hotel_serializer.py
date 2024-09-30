@@ -76,3 +76,13 @@ class ContactSerializer(ModelSerializer):
         data['updated_by'] = UserListingSerializer(instance.updated_by).data if instance.updated_by else None
 
         return data
+
+
+class RoomAvailabilitySerializer(serializers.Serializer):
+    check_in = serializers.DateField()
+    check_out = serializers.DateField()
+
+    def validate(self, data):
+        if data['check_out'] <= data['check_in']:
+            raise serializers.ValidationError("Check-out date must be after check-in date.")
+        return data
