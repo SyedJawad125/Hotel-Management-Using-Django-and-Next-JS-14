@@ -538,13 +538,46 @@ class PaymentController:
     filterset_class = PaymentFilter
 
  
+    # def create(self, request):
+    #     try:
+    #         request.POST._mutable = True
+    #         request.data["created_by"] = request.user.guid
+    #         request.POST._mutable = False
+
+    #         # if request.user.role in ['admin', 'manager'] or request.user.is_superuser:  # roles
+    #         validated_data = PaymentSerializer(data=request.data)
+    #         if validated_data.is_valid():
+    #             response = validated_data.save()
+    #             response_data = PaymentSerializer(response).data
+    #             return Response({'data': response_data}, 200)
+    #         else:
+    #             error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
+    #             return Response({'data': error_message}, 400)
+    #         # else:
+    #         #     return Response({'data': "Permission Denaied"}, 400)
+    #     except Exception as e:
+    #         return Response({'error': str(e)}, 500)
+
+
+
     def create(self, request):
         try:
+            # Make POST data mutable
             request.POST._mutable = True
             request.data["created_by"] = request.user.guid
             request.POST._mutable = False
 
-            # if request.user.role in ['admin', 'manager'] or request.user.is_superuser:  # roles
+            # Check if the booking exists
+            booking_id = request.data.get('booking')
+            if not booking_id:
+                return Response({'error': 'Booking ID is required'}, 400)
+
+            try:
+                booking = Booking.objects.get(id=booking_id)
+            except Booking.DoesNotExist:
+                return Response({'error': 'Booking does not exist'}, 404)
+
+            # Proceed with payment if booking exists
             validated_data = PaymentSerializer(data=request.data)
             if validated_data.is_valid():
                 response = validated_data.save()
@@ -553,8 +586,7 @@ class PaymentController:
             else:
                 error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
                 return Response({'data': error_message}, 400)
-            # else:
-            #     return Response({'data': "Permission Denaied"}, 400)
+
         except Exception as e:
             return Response({'error': str(e)}, 500)
 
@@ -669,6 +701,48 @@ class ContactController:
             }
             return create_response(response_data, "SUCCESSFUL", 200)
 
+
+        except Exception as e:
+            return Response({'error': str(e)}, 500)
+        
+class BookingRoomController:
+    serializer_class = BookingSerializer
+    filterset_class = BookingFilter
+    
+
+    def post_bookroom(self, request):
+        try:
+            # Make POST data mutable
+            # request.POST._mutable = True
+            # request.data["created_by"] = request.user.guid
+            # request.POST._mutable = False
+
+            # Check room availability
+            room_id = request.data.get('room')
+            if not room_id:
+                return Response({'error': 'Room ID is required'}, 400)
+
+            try:
+                room = Room.objects.get(id=room_id)
+            except Room.DoesNotExist:
+                return Response({'error': 'Room does not exist'}, 404)
+
+            if room.is_available:
+                # Proceed with booking since the room is available
+                room.is_available = False  # Mark the room as unavailable
+                room.save()
+
+                # Validate and save booking data
+                validated_data = BookingSerializer(data=request.data)
+                if validated_data.is_valid():
+                    response = validated_data.save()
+                    response_data = BookingSerializer(response).data
+                    return Response({'data': response_data}, 200)
+                else:
+                    error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
+                    return Response({'data': error_message}, 400)
+            else:
+                return Response({"error": "Room is not available"}, 400)
 
         except Exception as e:
             return Response({'error': str(e)}, 500)
