@@ -444,26 +444,62 @@ class BookingController:
     filterset_class = BookingFilter
 
  
+    # def create(self, request):
+    #     try:
+    #         request.POST._mutable = True
+    #         request.data["created_by"] = request.user.guid
+    #         request.POST._mutable = False
+
+    #         # if request.user.role in ['admin', 'manager'] or request.user.is_superuser:  # roles
+    #         validated_data = BookingSerializer(data=request.data)
+    #         if validated_data.is_valid():
+    #             response = validated_data.save()
+    #             response_data = BookingSerializer(response).data
+    #             return Response({'data': response_data}, 200)
+    #         else:
+    #             error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
+    #             return Response({'data': error_message}, 400)
+    #         # else:
+    #         #     return Response({'data': "Permission Denaied"}, 400)
+    #     except Exception as e:
+    #         return Response({'error': str(e)}, 500)
     def create(self, request):
         try:
+            # Make POST data mutable
             request.POST._mutable = True
             request.data["created_by"] = request.user.guid
             request.POST._mutable = False
 
-            # if request.user.role in ['admin', 'manager'] or request.user.is_superuser:  # roles
-            validated_data = BookingSerializer(data=request.data)
-            if validated_data.is_valid():
-                response = validated_data.save()
-                response_data = BookingSerializer(response).data
-                return Response({'data': response_data}, 200)
+            # Check room availability
+            room_id = request.data.get('room')
+            if not room_id:
+                return Response({'error': 'Room ID is required'}, 400)
+
+            try:
+                room = Room.objects.get(id=room_id)
+            except Room.DoesNotExist:
+                return Response({'error': 'Room does not exist'}, 404)
+
+            if room.is_available:
+                # Proceed with booking since the room is available
+                room.is_available = False  # Mark the room as unavailable
+                room.save()
+
+                # Validate and save booking data
+                validated_data = BookingSerializer(data=request.data)
+                if validated_data.is_valid():
+                    response = validated_data.save()
+                    response_data = BookingSerializer(response).data
+                    return Response({'data': response_data}, 200)
+                else:
+                    error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
+                    return Response({'data': error_message}, 400)
             else:
-                error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
-                return Response({'data': error_message}, 400)
-            # else:
-            #     return Response({'data': "Permission Denaied"}, 400)
+                return Response({"error": "Room is not available"}, 400)
+
         except Exception as e:
             return Response({'error': str(e)}, 500)
-
+        
     # mydata = Member.objects.filter(firstname__endswith='s').values()
     def get_booking(self, request):
         try:
