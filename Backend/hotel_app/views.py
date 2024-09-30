@@ -110,10 +110,10 @@ class ContactViews(ModelViewSet):
     def get_contact(self, request):
         return contact_controller.get_contact(request)
     
-class BookingViewSet(ModelViewSet):
-    authentication_classes = [JWTAuthentication]
+# class BookingViewSet(ModelViewSet):
+#     authentication_classes = [JWTAuthentication]
 
-    def post_bookroom(self, request):
-        return bookingroom_controller.post_bookroom(request)
+#     def post_bookroom(self, request):
+#         return bookingroom_controller.post_bookroom(request)
 
 
