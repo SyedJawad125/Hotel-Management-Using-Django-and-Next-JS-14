@@ -38,27 +38,28 @@ admin.site.register(Room, RoomAdmin)
 
 
 
-
 class BookingAdmin(admin.ModelAdmin):
     # Fields to display in the list view
-    list_display = ('id', 'guest', 'room', 'check_in', 'check_out', 'total_price', 'created_by', 'updated_by')
-    
+    list_display = ('id', 'guest', 'get_rooms', 'check_in', 'check_out', 'total_price', 'created_by', 'updated_by')
     # Fields to filter the list by
-    list_filter = ('check_in', 'check_out', 'guest', 'room')
-    
+    list_filter = ('check_in', 'check_out', 'guest')  # Removed 'room' as it's ManyToMany
     # Fields that can be searched
-    search_fields = ('guest__first_name', 'guest__last_name', 'room__name', 'created_by__username', 'updated_by__username')
-    
+    search_fields = ('guest__first_name', 'guest__last_name', 'rooms__name', 'created_by__username', 'updated_by__username')
     # Fields to display in the form view when creating/editing a booking
     fieldsets = (
         (None, {
-            'fields': ('guest', 'room', 'check_in', 'check_out', 'total_price')
+            'fields': ('guest', 'rooms', 'check_in', 'check_out', 'total_price')  # Changed 'room' to 'rooms'
         }),
         ('Audit Information', {
             'fields': ('created_by', 'updated_by')
         }),
     )
     
+    # Custom method to display the rooms as a comma-separated string
+    def get_rooms(self, obj):
+        return ", ".join([room.name for room in obj.rooms.all()])  # Assuming 'Room' model has a 'name' field
+    # Optional: Set the column name for this custom field
+    get_rooms.short_description = 'Rooms'
     # Automatically set 'created_by' and 'updated_by' fields
     def save_model(self, request, obj, form, change):
         if not obj.pk:
@@ -68,6 +69,7 @@ class BookingAdmin(admin.ModelAdmin):
 
 # Register the Booking model with the custom admin
 admin.site.register(Booking, BookingAdmin)
+
 
 
 

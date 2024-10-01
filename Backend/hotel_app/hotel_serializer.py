@@ -41,6 +41,7 @@ class GuestSerializer(serializers.ModelSerializer):
         return data
 
 class BookingSerializer(serializers.ModelSerializer):
+    rooms = serializers.PrimaryKeyRelatedField(queryset=Room.objects.all(), many=True)
     class Meta:
         model = Booking
         fields = '__all__'

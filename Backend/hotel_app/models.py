@@ -54,7 +54,7 @@ class Booking(models.Model):
     check_out = models.DateField()
     total_price = models.DecimalField(max_digits=8, decimal_places=2)
     guest = models.ForeignKey(Guest, on_delete=models.CASCADE, related_name='guest1', null=True, blank=True)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='room1', null=True, blank=True)
+    rooms = models.ManyToManyField(Room, related_name='bookings')
     created_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='booking_created_by', null=True, blank=True)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='booking_updated_by', null=True, blank=True)
 

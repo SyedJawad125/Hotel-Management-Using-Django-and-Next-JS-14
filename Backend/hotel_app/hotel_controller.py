@@ -444,59 +444,54 @@ class BookingController:
     filterset_class = BookingFilter
 
  
-    # def create(self, request):
-    #     try:
-    #         request.POST._mutable = True
-    #         request.data["created_by"] = request.user.guid
-    #         request.POST._mutable = False
 
-    #         # if request.user.role in ['admin', 'manager'] or request.user.is_superuser:  # roles
-    #         validated_data = BookingSerializer(data=request.data)
-    #         if validated_data.is_valid():
-    #             response = validated_data.save()
-    #             response_data = BookingSerializer(response).data
-    #             return Response({'data': response_data}, 200)
-    #         else:
-    #             error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
-    #             return Response({'data': error_message}, 400)
-    #         # else:
-    #         #     return Response({'data': "Permission Denaied"}, 400)
-    #     except Exception as e:
-    #         return Response({'error': str(e)}, 500)
     def create(self, request, *args, **kwargs):
         try:
             # Make POST data mutable
             request.POST._mutable = True
 
-            # Get the room ID from the request data
-            room_id = request.data.get('room')
-            if not room_id:
-                return Response({'error': 'Room ID is required'}, 400)
+            # Get the list of room IDs from the request data
+            room_ids = request.data.get('rooms', [])
+            if not room_ids:
+                return Response({'error': 'At least one room ID is required'}, 400)
 
-            try:
-                # Fetch the room object
-                room = Room.objects.get(id=room_id)
-            except Room.DoesNotExist:
-                return Response({'error': 'Room does not exist'}, 404)
+            total_price = 0
+            rooms = []
 
-            if not room.is_available:
-                return Response({'error': 'Room is not available'}, 400)
+            for room_id in room_ids:
+                try:
+                    # Fetch the room object
+                    room = Room.objects.get(id=room_id)
+                except Room.DoesNotExist:
+                    return Response({'error': f'Room with ID {room_id} does not exist'}, 404)
 
-            # Set the created_by field
+                if not room.is_available:
+                    return Response({'error': f'Room with ID {room_id} is not available'}, 400)
+
+                # Add room price to total price
+                total_price += room.price_per_night
+                rooms.append(room)
+
+            # Set the total price and created_by field
+            request.data["total_price"] = total_price
             request.data["created_by"] = request.user.guid
-
-            # Fetch the room price and calculate the total price
-            request.data["total_price"] = room.price_per_night
-
-            # Mark the room as unavailable after booking
-            room.is_available = False
-            room.save()
 
             # Proceed with validating and saving the booking
             validated_data = BookingSerializer(data=request.data)
             if validated_data.is_valid():
-                response = validated_data.save()
-                response_data = BookingSerializer(response).data
+                # Save the booking and associate rooms
+                booking = validated_data.save()
+
+                # Link rooms to the booking
+                booking.rooms.set(rooms)
+                booking.save()
+
+                # Mark the rooms as unavailable
+                for room in rooms:
+                    room.is_available = False
+                    room.save()
+
+                response_data = BookingSerializer(booking).data
                 return Response({'data': response_data}, 200)
             else:
                 error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
