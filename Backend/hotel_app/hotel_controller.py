@@ -584,28 +584,6 @@ class PaymentController:
     serializer_class = PaymentSerializer
     filterset_class = PaymentFilter
 
- 
-    # def create(self, request):
-    #     try:
-    #         request.POST._mutable = True
-    #         request.data["created_by"] = request.user.guid
-    #         request.POST._mutable = False
-
-    #         # if request.user.role in ['admin', 'manager'] or request.user.is_superuser:  # roles
-    #         validated_data = PaymentSerializer(data=request.data)
-    #         if validated_data.is_valid():
-    #             response = validated_data.save()
-    #             response_data = PaymentSerializer(response).data
-    #             return Response({'data': response_data}, 200)
-    #         else:
-    #             error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
-    #             return Response({'data': error_message}, 400)
-    #         # else:
-    #         #     return Response({'data': "Permission Denaied"}, 400)
-    #     except Exception as e:
-    #         return Response({'error': str(e)}, 500)
-
-
 
     def create(self, request, *args, **kwargs):
         try:
@@ -625,8 +603,8 @@ class PaymentController:
             except Booking.DoesNotExist:
                 return Response({'error': 'Booking does not exist'}, 404)
 
-            # Retrieve room number and total price from the booking
-            room_number = booking.room.id  # Assuming `room.id` refers to room number
+            # Retrieve rooms number and total price from the booking
+            room_number = booking.rooms.id  # Assuming `rooms.id` refers to rooms number
             amount = booking.total_price  # Fetching the total price from the booking
 
             # Add the amount to the payment request data
