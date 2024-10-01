@@ -457,6 +457,7 @@ class BookingController:
 
             total_price = 0
             rooms = []
+            room_details = []  # To store room details with price
 
             for room_id in room_ids:
                 try:
@@ -471,6 +472,12 @@ class BookingController:
                 # Add room price to total price
                 total_price += room.price_per_night
                 rooms.append(room)
+
+                # Append room price details
+                room_details.append({
+                    'room_id': room.id,
+                    'room_price': room.price_per_night
+                })
 
             # Set the total price and created_by field
             request.data["total_price"] = total_price
@@ -492,6 +499,10 @@ class BookingController:
                     room.save()
 
                 response_data = BookingSerializer(booking).data
+                # Add the room details and total price to the response
+                response_data['room_details'] = room_details
+                response_data['total_price'] = total_price
+
                 return Response({'data': response_data}, 200)
             else:
                 error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
