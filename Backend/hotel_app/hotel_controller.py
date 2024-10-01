@@ -603,8 +603,12 @@ class PaymentController:
             except Booking.DoesNotExist:
                 return Response({'error': 'Booking does not exist'}, 404)
 
-            # Retrieve rooms number and total price from the booking
-            room_number = booking.rooms.id  # Assuming `rooms.id` refers to rooms number
+            # Retrieve all room numbers (IDs) associated with the booking
+            room_numbers = [room.id for room in booking.rooms.all()]  # Get all room IDs associated with the booking
+            if not room_numbers:
+                return Response({'error': 'No rooms are associated with this booking'}, 400)
+
+            # Retrieve the total price from the booking
             amount = booking.total_price  # Fetching the total price from the booking
 
             # Add the amount to the payment request data
@@ -617,9 +621,10 @@ class PaymentController:
             if validated_data.is_valid():
                 response = validated_data.save()
 
-                # Create response data, including room number and amount
+                # Create response data, including room numbers and amount
                 response_data = PaymentSerializer(response).data
-                response_data['room_number'] = room_number  # Adding room number to the response
+                response_data['room_numbers'] = room_numbers  # Adding room numbers to the response
+                response_data['amount'] = amount
 
                 return Response({'data': response_data}, 200)
             else:
@@ -628,6 +633,7 @@ class PaymentController:
 
         except Exception as e:
             return Response({'error': str(e)}, 500)
+
 
     # mydata = Member.objects.filter(firstname__endswith='s').values()
     def get_payment(self, request):
