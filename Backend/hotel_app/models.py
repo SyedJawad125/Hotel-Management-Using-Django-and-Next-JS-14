@@ -56,8 +56,12 @@ class Guest(models.Model):
     regex=r'^[0-9-]+$',
     message='Passport must contain only numbers and dashes (-).'
     )
+    no_dollar_dot_validator = RegexValidator(
+    regex=r'^[^$.]+$',
+    message='Address must not contain the dollar sign ($) or dot (.).'
+    )
 
-    address = models.TextField()
+    address = models.TextField(validators=[no_dollar_dot_validator])
     date_of_birth = models.DateField(validators=[validate_date_of_birth])
     passport = models.CharField(max_length=13, blank=True, null=True, validators=[numeric_dash_validator])
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userguest', null=True, blank=True)
@@ -95,11 +99,14 @@ class Room(models.Model):
     def __str__(self):
         return f"Room {self.room_number} - {self.category}"
     
+def validate_total_price(value):
+    if value <= 0:
+        raise ValidationError('Total Price must be greater than zero.')
 class Booking(models.Model):
    
     check_in = models.DateField()
     check_out = models.DateField()
-    total_price = models.DecimalField(max_digits=8, decimal_places=2, validators=[validate_price_per_night])
+    total_price = models.DecimalField(max_digits=8, decimal_places=2, validators=[validate_total_price])
     guest = models.ForeignKey(Guest, on_delete=models.CASCADE, related_name='guest1', null=True, blank=True)
     rooms = models.ManyToManyField(Room, related_name='bookings')
     created_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='booking_created_by', null=True, blank=True)
@@ -113,6 +120,9 @@ class Booking(models.Model):
     def __str__(self):
         return f"Booking {self.id} by {self.guest}"
     
+def validate_amount(value):
+    if value <= 0:
+        raise ValidationError('Total Price must be greater than zero.')   
 
 class Payment(models.Model):
     PAYMENT_METHODS = [
@@ -122,7 +132,7 @@ class Payment(models.Model):
         ('CASH', 'Cash'),
     ]
 
-    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    amount = models.DecimalField(max_digits=8, decimal_places=2, validators=[validate_amount])
     payment_date = models.DateTimeField(auto_now_add=True)
     payment_method = models.CharField(max_length=15, choices=PAYMENT_METHODS)
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name='booking1', null=True, blank=True)
