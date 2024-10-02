@@ -1,20 +1,11 @@
 from django.db import models
 from user_auth.models import User
-from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.utils import timezone
-from datetime import date
 from django.core.validators import MinValueValidator
-# from django.core.validators import validate_date_of_birth
-# Create your models here.
+from utils.validators import *
 
-def validate_date_of_birth(value):
-    if value >= date.today():
-        raise ValidationError("Date of birth must be in the past.")
-def validate_salary(value):
-        if value <= 0:
-            raise ValidationError('Salary must be greater than zero.')
-        
+    
 class Employee(models.Model):
 
     alphabetic_validator = RegexValidator(
@@ -22,7 +13,6 @@ class Employee(models.Model):
         message='This field accepts only alphabetic characters.',
         code='invalid_input'
     )
-
     numeric_validator = RegexValidator(
     regex='^[0-9]+$',
     message='Phone number must contain only digits.',
@@ -38,7 +28,7 @@ class Employee(models.Model):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15, validators=[numeric_validator])
     date_of_birth = models.DateField(validators=[validate_date_of_birth])
-    hire_date = models.DateField()
+    hire_date = models.DateField(default=timezone.now)
     position = models.CharField(max_length=50, validators=[alphanumeric_or_alpha_validator])
     department = models.CharField(max_length=50, validators=[alphabetic_validator])
     salary = models.DecimalField(max_digits=10, decimal_places=2, validators=[validate_salary])
@@ -66,9 +56,6 @@ class Guest(models.Model):
     passport = models.CharField(max_length=13, blank=True, null=True, validators=[numeric_dash_validator])
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userguest', null=True, blank=True)
 
-def validate_price_per_night(value):
-    if value <= 0:
-        raise ValidationError('Price per night must be greater than zero.')
 
 class Room(models.Model):
     numeric_validator = RegexValidator(
@@ -82,7 +69,6 @@ class Room(models.Model):
         ('DOUBLE', 'Double Room'),
         ('SUITE', 'Suite'),
     ]
-
     room_number = models.CharField(max_length=5, unique=True, validators=[numeric_validator])
     category = models.CharField(max_length=15, choices=ROOM_CATEGORIES)
     price_per_night = models.DecimalField(max_digits=6, decimal_places=2, validators=[validate_price_per_night])
@@ -91,17 +77,15 @@ class Room(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='room_created_by', null=True, blank=True)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='room_updated_by', null=True, blank=True)
 
-    def clean(self):
-        super().clean()
-        if self.capacity <= 0:
-            raise ValidationError({'capacity': 'Capacity must be at least 1.'})
+    # def clean(self):
+    #     super().clean()
+    #     if self.capacity <= 0:
+    #         raise ValidationError({'capacity': 'Capacity must be at least 1.'})
         
     def __str__(self):
         return f"Room {self.room_number} - {self.category}"
     
-def validate_total_price(value):
-    if value <= 0:
-        raise ValidationError('Total Price must be greater than zero.')
+
 class Booking(models.Model):
    
     check_in = models.DateField()
@@ -115,15 +99,12 @@ class Booking(models.Model):
     def clean(self):
         if self.check_out <= self.check_in:
             raise ValidationError("Check-out date must be after the check-in date.")
-
-
+        if self.check_in < timezone.now().date():
+            raise ValidationError("Check-in date cannot be in the past.")
     def __str__(self):
         return f"Booking {self.id} by {self.guest}"
     
-def validate_amount(value):
-    if value <= 0:
-        raise ValidationError('Total Price must be greater than zero.')   
-
+   
 class Payment(models.Model):
     PAYMENT_METHODS = [
         ('CREDIT_CARD', 'Credit Card'),
@@ -131,7 +112,6 @@ class Payment(models.Model):
         ('PAYPAL', 'PayPal'),
         ('CASH', 'Cash'),
     ]
-
     amount = models.DecimalField(max_digits=8, decimal_places=2, validators=[validate_amount])
     payment_date = models.DateTimeField(auto_now_add=True)
     payment_method = models.CharField(max_length=15, choices=PAYMENT_METHODS)
@@ -144,14 +124,12 @@ class Payment(models.Model):
         return f"Payment {self.id} for Booking {self.booking.id}"
 
 
-
 class Contact(models.Model):
 
     alphabet_space_validator = RegexValidator(
     regex=r'^[A-Za-z]+( [A-Za-z]+)*$',
     message='Name must contain only alphabets and single spaces between words.'
     )
-    
     numeric_validator = RegexValidator(
     regex='^[0-9]+$',
     message='Phone number must contain only digits.',

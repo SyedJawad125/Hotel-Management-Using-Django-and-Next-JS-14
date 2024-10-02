@@ -1,12 +1,3 @@
-# from django.utils import timezone
-# from django.contrib.auth import authenticate
-
-# from user_auth.user_serializer import *
-# from user_auth.models import Token, User
-# from utils.reusable_methods import get_first_error_message, generate_six_length_random_number
-# from utils.response_messages import *
-# from utils.helper import create_response, paginate_data
-
 import threading
 from django.core.mail import send_mail
 from django.utils import timezone
