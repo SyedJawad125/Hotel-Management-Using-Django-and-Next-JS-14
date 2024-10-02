@@ -56,7 +56,8 @@ class Guest(models.Model):
     passport = models.CharField(max_length=13, blank=True, null=True, validators=[numeric_dash_validator])
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userguest', null=True, blank=True)
 
-
+from django.core.validators import MinValueValidator
+from django.utils.translation import gettext_lazy as _
 class Room(models.Model):
     numeric_validator = RegexValidator(
         regex='^[0-9]+$',
@@ -73,10 +74,11 @@ class Room(models.Model):
     category = models.CharField(max_length=15, choices=ROOM_CATEGORIES)
     price_per_night = models.DecimalField(max_digits=6, decimal_places=2, validators=[validate_price_per_night])
     is_available = models.BooleanField(default=True)
-    capacity = models.IntegerField(validators=[MinValueValidator(1)])  # Use the default validator without a message
+    capacity = models.IntegerField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='room_created_by', null=True, blank=True)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='room_updated_by', null=True, blank=True)
 
+    # capacity = models.IntegerField(validators=[MinValueValidator(1, message=_("Capacity must be at least 1."))])
     # def clean(self):
     #     super().clean()
     #     if self.capacity <= 0:
