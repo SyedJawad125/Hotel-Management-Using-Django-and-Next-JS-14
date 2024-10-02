@@ -57,7 +57,7 @@ class BookingAdmin(admin.ModelAdmin):
     
     # Custom method to display the rooms as a comma-separated string
     def get_rooms(self, obj):
-        return ", ".join([room.name for room in obj.rooms.all()])  # Assuming 'Room' model has a 'name' field
+        return ", ".join([room.room_number for room in obj.rooms.all()])  # Assuming 'Room' model has a 'room_number' field
     # Optional: Set the column name for this custom field
     get_rooms.short_description = 'Rooms'
     # Automatically set 'created_by' and 'updated_by' fields
