@@ -18,7 +18,6 @@ def validate_total_price(value):
 def validate_amount(value):
     if value <= 0:
         raise ValidationError('Amount must be greater than zero.') 
-
 def validate_image(image):
     try:
         img = Image.open(image)

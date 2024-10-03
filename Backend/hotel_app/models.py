@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator
 from django.utils import timezone
 from django.core.validators import MinValueValidator
 from utils.validators import *
+# from ckeditor.fields import RichTextField
 
 class Employee(models.Model):
     alphabetic_validator = RegexValidator(
@@ -65,7 +66,6 @@ class Guest(models.Model):
     passport = models.CharField(max_length=13, blank=True, null=True, validators=[numeric_dash_validator])
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userguest', null=True, blank=True)
 
-from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _
 class Room(models.Model):
     numeric_validator = RegexValidator(
@@ -97,7 +97,7 @@ class Room(models.Model):
     
 
 class Booking(models.Model):
-   
+    
     check_in = models.DateField()
     check_out = models.DateField()
     total_price = models.DecimalField(max_digits=8, decimal_places=2, validators=[validate_total_price])
