@@ -72,8 +72,6 @@ admin.site.register(Booking, BookingAdmin)
 
 
 
-
-
 # Custom admin for the Payment model
 class PaymentAdmin(admin.ModelAdmin):
     # Fields to display in the list view
@@ -103,8 +101,6 @@ class PaymentAdmin(admin.ModelAdmin):
 
 # Register the Payment model with the admin site
 admin.site.register(Payment, PaymentAdmin)
-
-
 
 
 class EmployeeAdmin(admin.ModelAdmin):

@@ -78,11 +78,10 @@ class Room(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='room_created_by', null=True, blank=True)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='room_updated_by', null=True, blank=True)
 
-    # capacity = models.IntegerField(validators=[MinValueValidator(1, message=_("Capacity must be at least 1."))])
-    # def clean(self):
-    #     super().clean()
-    #     if self.capacity <= 0:
-    #         raise ValidationError({'capacity': 'Capacity must be at least 1.'})
+    def clean(self):
+        super().clean()
+        if self.capacity < 1:
+            raise ValidationError({'capacity': 'Capacity must be at least 1.'})
         
     def __str__(self):
         return f"Room {self.room_number} - {self.category}"
