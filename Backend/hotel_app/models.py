@@ -4,15 +4,7 @@ from django.core.validators import RegexValidator
 from django.utils import timezone
 from django.core.validators import MinValueValidator
 from utils.validators import *
-from PIL import Image
-import bleach
 
-def validate_image(image):
-    try:
-        img = Image.open(image)
-        img.verify()
-    except (IOError, SyntaxError) as e:
-        raise ValidationError("Invalid image file.")   
 class Employee(models.Model):
     alphabetic_validator = RegexValidator(
         regex='^[a-zA-Z]+$',
@@ -39,7 +31,7 @@ class Employee(models.Model):
     department = models.CharField(max_length=50, validators=[alphabetic_validator])
     salary = models.DecimalField(max_digits=10, decimal_places=2, validators=[validate_salary])
     is_active = models.BooleanField(default=True)
-    image = models.ImageField(upload_to='employee_images/', blank=True, null=True)
+    image = models.ImageField(upload_to='employee_images/', blank=True, null=True, validators=[validate_image])
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='employee_created_by', null=True, blank=True)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='employee_updated_by', null=True, blank=True)
     
