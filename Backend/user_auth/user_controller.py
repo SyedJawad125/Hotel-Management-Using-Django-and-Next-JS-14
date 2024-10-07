@@ -233,8 +233,8 @@ class LoginController():
                 "name": user.get_full_name(),
                 "username": user.username,
                 "email": user.email,
-                "role_id": user.role.id if user.role else None,  # Include role ID in the response
-                "role_name":  user.role.name ,
+                "role_id": user.role.id if user.role else None,  # Include role ID if it exists
+                "role_name": user.role.name if user.role else None,  # Include role name if it exists
                 "permissions": permissions_dict  # Ensure permissions are included in the response
             }
 
