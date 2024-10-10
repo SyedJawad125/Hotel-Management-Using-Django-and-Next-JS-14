@@ -1,10 +1,8 @@
 import React from 'react'
 import NavbarCom from "@/components/NavbarCom";
-import ContactPageCom from "@/components/ContactPageCom";
+import CheckPage from "@/components/CheckPage";
 import TopNavbarCom from "@/components/TopNavbarCom";
 import FooterCom from "@/components/FooterCom";
-
-
 
 
 const page = () => {
@@ -12,8 +10,8 @@ const page = () => {
     <div>
       <TopNavbarCom/>
       <NavbarCom/>
-      <ContactPageCom/>
-      {/* <FooterCom/> */}
+      <CheckPage/>
+      <FooterCom/>
     </div>
   )
 }

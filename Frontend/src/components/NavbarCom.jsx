@@ -17,8 +17,8 @@ const NavbarCom = () => {
             { name: 'Home', path: '/' },
             { name: 'About', path: '/about' },
             { name: 'Services', path: '/services' },
-            // { name: 'Products', path: '/publicproducts' },
-            { name: 'Contact', path: '/contact' },
+            { name: 'Check', path: '/checkpage' },
+            { name: 'Contact', path: '/contactus' },
             // { name: 'Admin', path: '/admindashboard' },
           ].map((item) => (
             <li key={item.path}>
