@@ -15,6 +15,10 @@ permissions = [
     Permission(name='Update Room', code='update_room', module_name='Room', description='User can update Room'),
     Permission(name='Delete Room', code='delete_room', module_name='Room', description='User can delete Room'),
    
+    Permission(name='Create Employee', code='create_employee', module_name='Employee', description='User can create Employee'),
+    Permission(name='Read Employee', code='read_employee', module_name='Employee', description='User can read Employee'),
+    Permission(name='Update Employee', code='update_employee', module_name='Employee', description='User can update Employee'),
+    Permission(name='Delete Employee', code='delete_employee', module_name='Employee', description='User can delete Employee'),
 ]
 
 

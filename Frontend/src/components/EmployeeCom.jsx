@@ -68,7 +68,7 @@ const EmployeeCom = () => {
   };
 
   // Filter records based on search term
-  const filteredRecords = Array.isArray(records) ? records.filter((record) => {
+    const filteredRecords = Array.isArray(records) ? records.filter((record) => {
     const fullName = `${record.first_name?.toLowerCase() || ''} ${record.last_name?.toLowerCase() || ''}`;
     const idMatch = record.id?.toString() === searchTerm;
     const nameMatch = fullName.includes(searchTerm);
@@ -85,14 +85,14 @@ const EmployeeCom = () => {
       <h2 className="text-2xl font-bold mb-4 text-center text-white">Employees Record</h2>
 
       {/* Conditionally render the Add Employee button based on user permissions */}
-      {/* {permissions.create_employee && ( */}
+      {permissions.create_employee && (
         <button
           className="btn btn-primary mt-3 bg-blue-500 text-white py-2 px-4 rounded"
           onClick={() => router.push('/addemployeepage')}
         >
           Add Employee
         </button>
-      {/* )} */}
+        )} 
 
       <br />
       <br />
@@ -141,22 +141,22 @@ const EmployeeCom = () => {
                     </button>
                     
                     {/* Conditionally render the Update and Delete buttons based on user permissions */}
-                    {/* {permissions.update_employee && ( */}
+                    {permissions.update_employee && (
                       <button
                         className="btn btn-primary bg-blue-500 text-white py-1 px-2 rounded"
                         onClick={() => updateRecord(item)}
                       >
                         Update
                       </button>
-                    {/* )} */}
-                    {/* {permissions.delete_employee && ( */}
+                     )} 
+                    {permissions.delete_employee && (
                       <button
                         className="btn btn-danger bg-red-500 text-white py-1 px-2 rounded"
                         onClick={() => deleteRecord(item.id)}
                       >
                         Delete
                       </button>
-                    {/* )} */}
+                    )} 
                   </div>
                 </li>
               ))}

@@ -19,24 +19,22 @@ contact_controller = ContactController()
 # bookingroom_controller = BookingRoomController()
 
 
-
-
 class EmployeeViews(ModelViewSet):
     authentication_classes = [JWTAuthentication]
 
-    # @permission_required(['create_employee'])
+    @permission_required(['create_employee'])
     def post_employee(self, request):
         return employee_controller.create(request)
     
-    # @permission_required(['read_employee'])
+    @permission_required(['read_employee'])
     def get_employee(self, request):
         return employee_controller.get_employee(request)
 
-    # @permission_required(['update_employee'])
+    @permission_required(['update_employee'])
     def update_employee(self, request):
         return employee_controller.update_employee(request)
 
-    # @permission_required(['delete_employee'])
+    @permission_required(['delete_employee'])
     def delete_employee(self, request):
         return employee_controller.delete_employee(request)
     

@@ -36,20 +36,20 @@ const Sidebar = () => {
           <h2 className="text-2xl mb-6">Admin Panel</h2>
           <nav>
             {/* Conditionally render links based on the user's role */}
-            {/* {userRole !== '10' && ( */}
-              
-                <Link href="/admindashboard">
-                  <div className={`block py-2.5 px-4 rounded ${isActive('/admindashboard') ? 'bg-gray-700' : 'hover:text-red-500 px-3 py-2'}`}>
-                    Adminpage
-                  </div>
-                </Link>
-                <Link href="/employeepage">
-                  <div className={`block py-2.5 px-4 rounded ${isActive('/employeepage') ? 'bg-gray-700' : 'hover:text-red-500 px-3 py-2'}`}>
-                    Employee Record
-                  </div>
-                </Link>
-          
-            {/* )} */}
+            {userRole !== '8' && (
+              <>
+              <Link href="/admindashboard">
+                <div className={`block py-2.5 px-4 rounded ${isActive('/admindashboard') ? 'bg-gray-700' : 'hover:text-red-500 px-3 py-2'}`}>
+                  Adminpage
+                </div>
+              </Link>
+              <Link href="/employeepage">
+                <div className={`block py-2.5 px-4 rounded ${isActive('/employeepage') ? 'bg-gray-700' : 'hover:text-red-500 px-3 py-2'}`}>
+                  Employee Record
+                </div>
+              </Link>
+              </>
+             )} 
             <Link href="/clientselfpage">
               <div className={`block py-2.5 px-4 rounded ${isActive('/clientselfpage') ? 'bg-gray-700' : 'hover:text-red-500 px-3 py-2'}`}>
                 Client Self Detail
