@@ -8,8 +8,8 @@ from utils.validators import *
 
 class Employee(models.Model):
     alphabetic_validator = RegexValidator(
-        regex='^[a-zA-Z]+$',
-        message='This field accepts only alphabetic characters.',
+        regex='^[a-zA-Z ]+$',
+        message='This field accepts only alphabetic characters and spaces.',
         code='invalid_input'
     )
     numeric_validator = RegexValidator(
@@ -18,7 +18,7 @@ class Employee(models.Model):
         code='invalid_phone_number'
     )
     alphanumeric_or_alpha_validator = RegexValidator(
-        regex=r'^(?!^\d+$)[a-zA-Z0-9]+$',
+        regex=r'^(?!^\d+$)[a-zA-Z0-9 ]+$',
         message='Position must contain only alphabetic or alphanumeric characters, but not only numbers.'
     )
     

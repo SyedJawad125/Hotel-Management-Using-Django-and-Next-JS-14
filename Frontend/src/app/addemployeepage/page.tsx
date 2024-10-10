@@ -56,7 +56,7 @@ const AddEmployee = () => {
       if (image) formData.append('image', image);
       // formData.append('prod_has_category', prodHasCategory);
 
-      const response = await AxiosInstance.post('/ecommerce/employee', formData, {
+      const response = await AxiosInstance.post('/hotel/employee', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
