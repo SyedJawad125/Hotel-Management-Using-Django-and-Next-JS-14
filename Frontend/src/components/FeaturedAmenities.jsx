@@ -10,8 +10,7 @@ import banner6 from '../../public/images/Hotelbanner6.png';
 
 export default function Home() {
   return (
-    <div className="relative bg-cover bg-center h-screen flex items-center justify-center text-white">
-      
+    <div className="relative bg-cover bg-center h-[calc(100vh-1rem)] flex items-center justify-center text-white my-2">
       {/* Left side: Text content with left margin */}
       <div className="w-1/2 text-left pl-40">
         <h4 className="text-lg text-pink-500 font-semibold mb-2">Welcoming Atmosphere</h4>
