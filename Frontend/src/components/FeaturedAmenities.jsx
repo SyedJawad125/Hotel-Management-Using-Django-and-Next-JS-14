@@ -13,7 +13,7 @@ export default function Home() {
     <div className="relative bg-cover bg-center h-screen flex items-center justify-center text-white">
       
       {/* Left side: Text content with left margin */}
-      <div className="w-1/2 text-left pl-40"> {/* Added left padding (pl-8) for margin */}
+      <div className="w-1/2 text-left pl-40">
         <h4 className="text-lg text-pink-500 font-semibold mb-2">Welcoming Atmosphere</h4>
         <h1 className="text-5xl font-bold mb-4">Featured Amenities</h1>
         <p className="text-xl max-w-xl mb-6 leading-relaxed">
@@ -25,31 +25,28 @@ export default function Home() {
       </div>
 
       {/* Right side: Image grid with right margin */}
-      <div className="w-1/2 grid grid-cols-3 gap-6 pr-40"> {/* Added right padding (pr-8) for margin */}
-        <div className="flex flex-col items-center">
-          <Image src={banner5} alt="Fitness Center" width={180} height={120} objectFit="cover"/>
-          <h3 className="text-lg mt-2">Fitness Center</h3>
-        </div>
-        <div className="flex flex-col items-center">
-          <Image src={banner6} alt="Free Wifi" width={180} height={120} objectFit="cover"/>
-          <h3 className="text-lg mt-2">Free Wifi</h3>
-        </div>
-        <div className="flex flex-col items-center">
-          <Image src={banner5} alt="Free Breakfast Buffet" width={180} height={120} objectFit="cover"/>
-          <h3 className="text-lg mt-2">Free Breakfast Buffet</h3>
-        </div>
-        <div className="flex flex-col items-center">
-          <Image src={banner6} alt="Laundry Service" width={180} height={120} objectFit="cover"/>
-          <h3 className="text-lg mt-2">Laundry Service</h3>
-        </div>
-        <div className="flex flex-col items-center">
-          <Image src={banner5} alt="Meeting Room" width={180} height={120} objectFit="cover"/>
-          <h3 className="text-lg mt-2">Meeting Room</h3>
-        </div>
-        <div className="flex flex-col items-center">
-          <Image src={banner6} alt="Free Parking" width={180} height={120} objectFit="cover"/>
-          <h3 className="text-lg mt-2">Free Parking</h3>
-        </div>
+      <div className="w-1/2 grid grid-cols-3 gap-6 pr-40">
+        {[
+          { src: banner1, alt: 'Fitness Center', title: 'Fitness Center' },
+          { src: banner2, alt: 'Free Wifi', title: 'Free Wifi' },
+          { src: banner3, alt: 'Free Breakfast Buffet', title: 'Free Breakfast Buffet' },
+          { src: banner4, alt: 'Laundry Service', title: 'Laundry Service' },
+          { src: banner5, alt: 'Meeting Room', title: 'Meeting Room' },
+          { src: banner6, alt: 'Free Parking', title: 'Free Parking' },
+        ].map(({ src, alt, title }) => (
+          <div key={title} className="border border-gray-300 rounded-lg overflow-hidden flex flex-col items-center">
+            <div className="relative w-[180px] h-[120px]">
+              <Image 
+                src={src} 
+                alt={alt} 
+                fill 
+                style={{ objectFit: 'cover' }} 
+                priority // Optional: Use this to prioritize loading the image
+              />
+            </div>
+            <h3 className="text-lg mt-2">{title}</h3>
+          </div>
+        ))}
       </div>
       
     </div>
