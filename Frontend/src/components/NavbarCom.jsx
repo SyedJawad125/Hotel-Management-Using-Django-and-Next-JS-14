@@ -18,7 +18,7 @@ const NavbarCom = () => {
             { name: 'About', path: '/about' },
             { name: 'Services', path: '/services' },
             { name: 'Check', path: '/checkpage' },
-            { name: '3Box', path: '/eventimagepage' },
+            // { name: '3Box', path: '/eventimagepage' },
             { name: 'Contact', path: '/contactus' },
             // { name: 'Admin', path: '/admindashboard' },
           ].map((item) => (

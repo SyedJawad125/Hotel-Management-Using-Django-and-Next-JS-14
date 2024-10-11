@@ -1,9 +1,8 @@
 import React from 'react'
 import NavbarCom from "@/components/NavbarCom";
+import ExploreRoomsCom from "@/components/ExploreRoomsCom";
 import TopNavbarCom from "@/components/TopNavbarCom";
-import EventImageCom from "@/components/EventImageCom";
 import FooterCom from "@/components/FooterCom";
-
 
 
 const page = () => {
@@ -11,7 +10,7 @@ const page = () => {
     <div>
       <TopNavbarCom/>
       <NavbarCom/>
-      <EventImageCom/>
+      <ExploreRoomsCom/>
       <FooterCom/>
     </div>
   )
