@@ -17,9 +17,9 @@ export default function HotelPage() {
       </div>
 
       {/* Hotel Main Content */}
-      <div className="flex gap-0 ml-20"> {/* Reduced the gap between main image and thumbnails */}
+      <div className="flex ml-20"> 
         {/* Main Image */}
-        <div className="flex-grow">
+        <div className="flex-grow mr-4"> 
           <Image
             src={banner1}
             alt="Islamabad Marriott Hotel"
@@ -31,8 +31,8 @@ export default function HotelPage() {
         </div>
 
         {/* Thumbnails in two rows of two images */}
-        <div className="w-1/3 flex flex-wrap gap-0"> {/* Removed gaps between thumbnails */}
-          <div className="flex w-full">
+        <div className="w-1/3 flex flex-wrap gap-1"> {/* Set gap-0 to eliminate space between images */}
+          <div className="flex w- gap-2">
             <Image
               src={banner2}
               alt="Restaurant"
@@ -48,7 +48,7 @@ export default function HotelPage() {
               className="shadow-lg"
             />
           </div>
-          <div className="flex w-full mt-1">
+          <div className="flex w-full mt-1 gap-2">
             <Image
               src={banner4}
               alt="Lobby"
