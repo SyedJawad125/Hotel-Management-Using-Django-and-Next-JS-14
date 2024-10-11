@@ -40,7 +40,7 @@ const Contact = () => {
     };
   
   return (
-    <div className="min-h-screen bg-black-100 mt-0 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ml-56 w-3/4">
+    <div className="min-h-screen bg-black-100 mt-0 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ml-56 w-3/4 -mt-10">
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-white-900">Contact Us</h2>
@@ -84,3 +84,7 @@ const Contact = () => {
 };
 
 export default Contact;
+
+
+
+

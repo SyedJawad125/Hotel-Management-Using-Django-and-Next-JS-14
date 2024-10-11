@@ -7,60 +7,60 @@ import banner4 from '../../public/images/Hotelbanner4.jpg';
 
 export default function HotelPage() {
   return (
-    <div className="container mx-auto p-4 overflow-hidden ml-20">
+    <div className="container mx-auto p-4 overflow-hidden overflow-x-hidden"> 
       {/* Breadcrumb Navigation */}
-      <div className="text-sm mb-4">
+      <div className="text-sm mb-6 ml-20 mt-4">
         <a href="/" className="text-blue-600">Home</a> {'>'} 
         <a href="/countries" className="text-blue-600">Countries</a> {'>'} 
         <a href="/countries/pakistan" className="text-blue-600">Pakistan</a> {'>'} 
-        <span className="text-gray-500">Islamabad Marriott Hotel</span>
+        <span className="text-gray-500">Islamabad Hotel</span>
       </div>
 
       {/* Hotel Main Content */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex gap-0 ml-20"> {/* Reduced the gap between main image and thumbnails */}
         {/* Main Image */}
-        <div className="w-2/3">
+        <div className="flex-grow">
           <Image
             src={banner1}
             alt="Islamabad Marriott Hotel"
-            width={800}
-            height={500}
+            width={850}
+            height={700} 
             className="shadow-lg"
             priority={true} // Eagerly load the main banner
           />
         </div>
 
-        {/* Right Side Thumbnails */}
-        <div className="w-1/3 flex flex-col justify-between">
-          <div className="flex gap-2">
+        {/* Thumbnails in two rows of two images */}
+        <div className="w-1/3 flex flex-wrap gap-0"> {/* Removed gaps between thumbnails */}
+          <div className="flex w-full">
             <Image
               src={banner2}
               alt="Restaurant"
-              width={200}
-              height={150}
+              width={220}
+              height={220} 
               className="shadow-lg"
             />
             <Image
               src={banner3}
               alt="Pool"
-              width={200}
-              height={150}
+              width={220}
+              height={220}  
               className="shadow-lg"
             />
           </div>
-          <div className="flex gap-2 mt-2">
+          <div className="flex w-full mt-1">
             <Image
               src={banner4}
               alt="Lobby"
-              width={200}
-              height={180}
+              width={220}
+              height={220}  
               className="shadow-lg"
             />
             <Image
               src={banner2}
               alt="Conference Room"
-              width={200}
-              height={180}
+              width={220}
+              height={220}  
               className="shadow-lg"
             />
           </div>
@@ -68,8 +68,8 @@ export default function HotelPage() {
       </div>
 
       {/* Hotel Details */}
-      <div className="mt-4">
-        <h1 className="text-2xl font-bold">Islamabad Marriott Hotel</h1>
+      <div className="mt-8 ml-20 mb-24">
+        <h1 className="text-2xl font-bold">Islamabad Hotel</h1>
         <p className="text-gray-600">Aga Khan Road, Shalimar 5, Islamabad, 46000, Pakistan</p>
         <div className="flex items-center mt-2">
           {/* Star Ratings */}
