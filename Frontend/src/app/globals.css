@@ -33,3 +33,7 @@ body {
 }
 
 
+.show {
+  opacity: 1 !important; /* Make image visible when class is added */
+  transform: translateY(0); /* Reset the position to default */
+}
