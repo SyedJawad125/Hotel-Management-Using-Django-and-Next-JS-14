@@ -85,7 +85,7 @@ const halls = [
 
 export default function Home() {
   return (
-    <div className="container mx-auto px-20 py-20">
+    <div className="container mx-auto px-24 py-24">
       <h1 className="text-3xl font-bold text-center mb-10">Explore the rooms</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {halls.map((hall) => (
