@@ -19,7 +19,7 @@ const AboutPage = () => {
     <div className="flex flex-wrap justify-center">
       <div className="w-full md:w-1/4 p-2">
         <div className="cardAbout bg-white shadow-lg rounded-lg overflow-hidden">
-          <Image src={img4} className="cardImgTopAbout w-full" width={500} height={500} alt="Service 1" />
+          <Image src={img4} className="cardImgTopAbout w-full" width={500} height={500} alt="Service 1" loading="lazy"/>
           <div className="cardBodyAbout p-4 text-center">
             <h2 className="text-xl font-semibold">John Doe</h2>
             <p className="text-gray-600">Designer</p>
@@ -32,7 +32,7 @@ const AboutPage = () => {
 
       <div className="w-full md:w-1/4 p-2">
         <div className="cardAbout bg-white shadow-lg rounded-lg overflow-hidden">
-          <Image src={img5} className="cardImgTopAbout w-full" width={500} height={500} alt="Service 2" />
+          <Image src={img5} className="cardImgTopAbout w-full" width={500} height={500} alt="Service 2" loading="lazy"/>
           <div className="cardBodyAbout p-4 text-center">
             <h2 className="text-xl font-semibold">John Doe</h2>
             <p className="text-gray-600">Designer</p>
@@ -45,7 +45,7 @@ const AboutPage = () => {
 
       <div className="w-full md:w-1/4 p-2">
         <div className="cardAbout bg-white shadow-lg rounded-lg overflow-hidden">
-          <Image src={img6} className="cardImgTopAbout w-full" width={500} height={500} alt="Service 3" />
+          <Image src={img6} className="cardImgTopAbout w-full" width={500} height={500} alt="Service 3" loading="lazy"/>
           <div className="cardBodyAbout p-4 text-center">
             <h2 className="text-xl font-semibold">John Doe</h2>
             <p className="text-gray-600">Designer</p>
@@ -58,7 +58,7 @@ const AboutPage = () => {
 
       <div className="w-full md:w-1/4 p-2">
         <div className="cardAbout bg-white shadow-lg rounded-lg overflow-hidden">
-          <Image src={img6} className="cardImgTopAbout w-full" width={500} height={500} alt="Service 4" />
+          <Image src={img6} className="cardImgTopAbout w-full" width={500} height={500} alt="Service 4" loading="lazy"/>
           <div className="cardBodyAbout p-4 text-center">
             <h2 className="text-xl font-semibold">John Doe</h2>
             <p className="text-gray-600">Designer</p>

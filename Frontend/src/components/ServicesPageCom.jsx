@@ -36,7 +36,7 @@ const Services = () => {
 
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <Image src={img1} alt="Service 1" className="w-full h-48 object-cover" width={500} height={300} />
+      <Image src={img1} alt="Service 1" className="w-full h-48 object-cover" width={500} height={300} loading="lazy"/>
       <div className="p-4 h-44">
         <h5 className="text-xl font-semibold mb-2 text-black">E-Commerce</h5>
         {/* <Readmore text={text1} maxLength={200} /> */}
@@ -44,7 +44,7 @@ const Services = () => {
     </div>
 
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <Image src={img2} alt="Service 2" className="w-full h-48 object-cover" width={500} height={300} />
+      <Image src={img2} alt="Service 2" className="w-full h-48 object-cover" width={500} height={300} loading="lazy"/>
       <div className="p-4 h-44">
         <h5 className="text-xl font-semibold mb-2 text-black">Web Developing</h5>
         {/* <Readmore text={text2} maxLength={200} /> */}
@@ -52,7 +52,7 @@ const Services = () => {
     </div>
 
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <Image src={img3} alt="Service 3" className="w-full h-48 object-cover" width={500} height={300} />
+      <Image src={img3} alt="Service 3" className="w-full h-48 object-cover" width={500} height={300} loading="lazy"/>
       <div className="p-4 h-44">
         <h5 className="text-xl font-semibold mb-2 text-black">Mobile App Developing</h5>
         {/* <Readmore text={text3} maxLength={200} /> */}
@@ -60,7 +60,7 @@ const Services = () => {
     </div>
 
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <Image src={img3} alt="Service 4" className="w-full h-48 object-cover" width={500} height={300} />
+      <Image src={img3} alt="Service 4" className="w-full h-48 object-cover" width={500} height={300} loading="lazy"/>
       <div className="p-4 h-44">
         <h5 className="text-xl font-semibold mb-2 text-black">Machine Learning</h5>
         {/* <Readmore text={text4} maxLength={200} /> */}

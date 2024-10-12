@@ -10,8 +10,8 @@ const MeetingsSection = () => {
         <Image
           src={img1} 
           alt="Meeting Rooms"
-          fill // This ensures the image fills the container
-          objectFit="cover" // Makes sure the image covers the entire container
+          fill 
+          objectFit="cover" 
           // objectPosition="center" // Centers the image
           priority
         />

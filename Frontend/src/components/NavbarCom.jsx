@@ -18,12 +18,10 @@ const NavbarCom = () => {
             { name: 'About', path: '/about' },
             { name: 'Services', path: '/services' },
             { name: 'Check', path: '/checkpage' },
-            // { name: '3Box', path: '/eventimagepage' },
             { name: 'Contact', path: '/contactus' },
-            // { name: 'Admin', path: '/admindashboard' },
           ].map((item) => (
             <li key={item.path}>
-              <Link href={item.path}>
+              <Link href={item.path} prefetch>
                 <div
                   className={`${
                     pathname === item.path ? 'text-red-500' : 'text-white'
@@ -34,7 +32,6 @@ const NavbarCom = () => {
               </Link>
             </li>
           ))}
-          
         </ul>
       </div>
     </nav>
@@ -42,6 +39,7 @@ const NavbarCom = () => {
 };
 
 export default NavbarCom;
+
 
 
 
