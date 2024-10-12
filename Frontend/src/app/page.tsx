@@ -10,6 +10,7 @@ import EventImageCom from "@/components/EventImageCom";
 // import ContentpageHome from "@/components/ContentpageHome";
 import ExploreRoomsCom from "@/components/ExploreRoomsCom";
 import FeaturedAmenities from "@/components/FeaturedAmenities";
+import AnimatedImages from "@/components/AnimatedImages";
 import MeetingRooms from "@/components/MeetingRooms";
 import AdModal from "@/components/AdModal";
 
@@ -22,6 +23,7 @@ export default function Home() {
     <NavbarCom />
     <BannerSliderHomeCom />
     <InvitationCom/>
+    <AnimatedImages/>
     <EventImageCom />
     <FeaturedAmenities/>
     {/* <ContentpageHome/> */}
