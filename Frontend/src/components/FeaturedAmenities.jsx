@@ -13,7 +13,7 @@ export default function Home() {
     <div className="relative bg-cover bg-center h-[calc(100vh-15rem)] flex items-center justify-center text-white my-2">
       {/* Left side: Text content with left margin */}
       <div className="w-1/2 text-left pl-40">
-        <h4 className="text-lg text-pink-500 font-semibold mb-2">Welcoming Atmosphere</h4>
+        <h4 className="text-lg text-pink-500 font-semibold mb-4">Welcoming Atmosphere</h4>
         <h1 className="text-5xl font-bold mb-4">Featured Amenities</h1>
         <p className="text-xl max-w-xl mb-6 leading-relaxed">
           Free Wi-Fi, Breakfast, Swimming Pool, Fitness Centre, Spa and Wellness

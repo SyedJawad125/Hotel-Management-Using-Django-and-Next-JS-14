@@ -4,7 +4,7 @@ import img1 from '../../public/images/MeetingRoom_Image.jpg';
 
 const MeetingsSection = () => {
   return (
-    <section className="relative h-[600px]">
+    <section className="relative h-[600px] mb-4">
       <div className="absolute inset-0 z-0">
         {/* Background Image */}
         <Image
@@ -12,7 +12,7 @@ const MeetingsSection = () => {
           alt="Meeting Rooms"
           fill // This ensures the image fills the container
           objectFit="cover" // Makes sure the image covers the entire container
-          objectPosition="center" // Centers the image
+          // objectPosition="center" // Centers the image
           priority
         />
         {/* Semi-transparent overlay */}
