@@ -33,7 +33,18 @@ body {
 }
 
 
-.show {
-  opacity: 1 !important; /* Make image visible when class is added */
-  transform: translateY(0); /* Reset the position to default */
+/* Initially hide images */
+.opacity-0 {
+  opacity: 0;
+}
+
+/* Animation when images come into view */
+.glow {
+  opacity: 1;
+  
+}
+
+/* Glow effect on hover (optional, to add interactivity) */
+.glow-effect:hover {
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.9);
 }

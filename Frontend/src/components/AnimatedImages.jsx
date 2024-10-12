@@ -25,7 +25,7 @@ export default function Home() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('show'); // Add class to trigger animation
+            entry.target.classList.add('glow'); // Add class to trigger animation
           }
         });
       },
