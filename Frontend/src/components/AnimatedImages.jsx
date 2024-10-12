@@ -18,7 +18,7 @@ import banner16 from '../../public/images/Hotelbanner4.jpg';
 
 export default function Home() {
   return (
-    <div className="grid grid-cols-4 gap-2 ml-20 mt-4 mr-20">
+    <div className="grid grid-cols-4 gap-2 ml-24 mt-4 mr-24">
       {[banner1, banner2, banner3, banner4, banner5, banner6, banner7, banner8, banner9, banner10,
        banner11, banner12, banner13, banner14, banner15, banner16].map((banner, index) => (
         <div key={index} className="relative w-[300px] h-[200px]">
