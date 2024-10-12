@@ -38,9 +38,9 @@ export default function Home() {
               <Image 
                 src={src} 
                 alt={alt} 
-                fill 
-                style={{ objectFit: 'cover' }} 
-                priority // Optional: Use this to prioritize loading the image
+                width={300} // Fixed width
+                height={200} // Fixed height
+                className="w-full h-full object-cover"
               />
             </div>
             <h3 className="text-lg mt-2">{title}</h3>

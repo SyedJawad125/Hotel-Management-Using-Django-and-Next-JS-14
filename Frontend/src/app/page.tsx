@@ -5,10 +5,12 @@ import NavbarCom from "@/components/NavbarCom";
 import TopNavbarCom from "@/components/TopNavbarCom";
 import FooterCom from "@/components/FooterCom";
 import BannerSliderHomeCom from "@/components/BannerSliderHomeCom";
+import InvitationCom from "@/components/InvitationCom";
 import EventImageCom from "@/components/EventImageCom";
 import ContentpageHome from "@/components/ContentpageHome";
 import ExploreRoomsCom from "@/components/ExploreRoomsCom";
 import FeaturedAmenities from "@/components/FeaturedAmenities";
+import MeetingRooms from "@/components/MeetingRooms";
 import AdModal from "@/components/AdModal";
 
 
@@ -19,10 +21,12 @@ export default function Home() {
     <TopNavbarCom />
     <NavbarCom />
     <BannerSliderHomeCom />
+    <InvitationCom/>
     <EventImageCom />
     <FeaturedAmenities/>
     {/* <ContentpageHome/> */}
     <ExploreRoomsCom/>
+    <MeetingRooms/>
     <FooterCom />
   </>
   );

@@ -94,8 +94,9 @@ export default function Home() {
               <Image
                 src={hall.imgSrc}
                 alt={hall.title}
-                fill
-                style={{ objectFit: 'cover' }}
+                width={500} // Fixed width
+                height={400} // Fixed height
+                className="w-full h-full object-cover"
               />
             </div>
             <div className="p-10">
