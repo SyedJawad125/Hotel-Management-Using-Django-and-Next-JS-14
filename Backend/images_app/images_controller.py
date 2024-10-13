@@ -2,7 +2,7 @@
 from django.contrib.auth import authenticate
 from images_app.images_filter import ImagesFilter
 from images_app.images_serializers import ImagesSerializer
-from hotel_app.models import Images
+from images_app.models import Images
 from user_auth.user_serializer import UserSerializer
 from utils.reusable_methods import get_first_error_message, generate_six_length_random_number
 from rest_framework.response import Response
@@ -41,23 +41,27 @@ class ImagesController:
             images = None  # Initialize images to None
             
             # Check for different query params and filter accordingly
-            if "BannerImagesHome" in request.query_params:
-                images = Images.objects.filter(category='bannerimagaeshome')
-            elif "AnimatedImagesHome" in request.query_params:
-                images = Images.objects.filter(category='animatedimagaeshome')
-            elif "MeetingsAndEventsHome" in request.query_params:
-                images = Images.objects.filter(category='meetingsandeventshome')
-            elif "FeaturedAmenitiesHome" in request.query_params:
-                images = Images.objects.filter(category='featuredamenitieshome')
-            elif "ExploreTheRoomsHome" in request.query_params:
-                images = Images.objects.filter(category='exploretheroomshome')
-            elif "GallerySliderHome" in request.query_params:
-                images = Images.objects.filter(category='gallerysliderhome')
-            elif "MeetingsRoomsGroupsHome" in request.query_params:
-                images = Images.objects.filter(category='meetingsroomsgroupshome')
+            if "category" in request.query_params:
+                if request.query_params.get('category') == "bannerimagaeshome":
+                    images = Images.objects.filter(category='bannerimagaeshome')
+                elif request.query_params.get('category') == "animatedimagaeshome":
+                    images = Images.objects.filter(category='animatedimagaeshome')
+                elif request.query_params.get('category') == "meetingsandeventshome":
+                    images = Images.objects.filter(category='meetingsandeventshome')
+                elif request.query_params.get('category') == "featuredamenitieshome":
+                    images = Images.objects.filter(category='featuredamenitieshome')
+                elif request.query_params.get('category') == "exploretheroomshome":
+                    images = Images.objects.filter(category='exploretheroomshome')
+                elif request.query_params.get('category') == "gallerysliderhome":
+                    images = Images.objects.filter(category='gallerysliderhome')
+                elif request.query_params.get('category') == "meetingsroomsgroupshome":
+                    images = Images.objects.filter(category='meetingsroomsgroupshome')
+            else:
+                images = Images.objects.all()
+
             
-            if images is None:
-                return Response({'error': 'No valid query parameter found.'}, status=400)
+            # if images is None:
+            #     return Response({'error': 'No valid query parameter found.'}, status=400)
 
             # Filtering data
             filtered_data = self.filterset_class(request.GET, queryset=images)

@@ -5,11 +5,11 @@ import django_filters
 
 class ImagesFilter(FilterSet):
     id = CharFilter(field_name='id')
-    name = CharFilter(field_name='name')
-    category = CharFilter(field_name='category')
+    name = CharFilter(field_name='name', lookup_expr='icontains')
+    category = CharFilter(field_name='category', lookup_expr='icontains')
 
     
     class Meta:
         model = Images
-        fields ='__all__'
-        # exclude = ['image']
+        # fields ='__all__'
+        exclude = ['image']
