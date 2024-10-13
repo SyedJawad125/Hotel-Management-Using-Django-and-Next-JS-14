@@ -11,7 +11,7 @@ const MeetingsSection = () => {
           src={img1} 
           alt="Meeting Rooms"
           fill 
-          objectFit="cover" 
+          className="object-cover rounded-md"
           // objectPosition="center" // Centers the image
           priority
         />

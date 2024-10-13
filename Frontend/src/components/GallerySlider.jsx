@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import banner1 from '../../public/images/Hotelbanner1.webp';
 import banner2 from '../../public/images/Hotelbanner2.webp';
@@ -12,6 +12,13 @@ import banner8 from '../../public/images/Hotelbanner2.webp';
 import banner9 from '../../public/images/Hotelbanner3.jpg';
 import banner10 from '../../public/images/Hotelbanner4.jpg';
 
+import banner11 from '../../public/images/Hotelbanner1.webp';
+import banner12 from '../../public/images/Hotelbanner2.webp';
+import banner13 from '../../public/images/Hotelbanner3.jpg';
+import banner14 from '../../public/images/Hotelbanner4.jpg';
+import banner15 from '../../public/images/Hotelbanner5.png';
+import banner16 from '../../public/images/Hotelbanner6.png';
+
 const images = [
   banner1,
   banner2,
@@ -23,6 +30,12 @@ const images = [
   banner8,
   banner9,
   banner10,
+  banner11,
+  banner12,
+  banner13,
+  banner14,
+  banner15,
+  banner16,
 ];
 
 export default function Slider() {
@@ -40,14 +53,9 @@ export default function Slider() {
     );
   };
 
-  useEffect(() => {
-    const interval = setInterval(handleNext, 3000); // Slide every 3 seconds
-    return () => clearInterval(interval); // Cleanup on component unmount
-  }, []);
-
   return (
-    <div className="relative w-full h-[500px] overflow-hidden flex items-center justify-center">
-      <div className="relative flex items-center justify-center w-[80%]">
+    <div className="relative w-full h-[500px] overflow-hidden flex items-center justify-center mb-20">
+      <div className="relative flex items-center justify-center w-[80%] gap-5">
         {images.map((image, index) => {
           // Calculate relative positions and sizes for each image
           let imageClass = "opacity-50 scale-75"; // Smaller, faded image
@@ -62,18 +70,14 @@ export default function Slider() {
               key={index}
               className={`absolute transition-all duration-500 ease-in-out w-[30%] h-[400px] ${imageClass} z-${index === currentIndex ? '10' : '0'}`}
               style={{
-                left: `${50 + (index - currentIndex) * 30}%`,
+                left: `${30 + (index - currentIndex) * 31}%`, // Increased space between images
                 transform: `translateX(-50%)`,
+                backgroundImage: `url(${image.src})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
               }}
             >
-              <Image
-                src={image}
-                alt={`Slide ${index + 1}`}
-                layout="fill"
-                objectFit="cover"
-                priority
-                className="rounded-lg"
-              />
+              <div className="rounded-lg w-full h-full"></div>
             </div>
           );
         })}
@@ -81,20 +85,22 @@ export default function Slider() {
 
       {/* Controls */}
       <button
-        className="absolute left-0 bg-red-500 text-white p-3 rounded-full hover:bg-red-600 focus:outline-none"
-        onClick={handlePrev}
-      >
-        <span className="material-icons">arrow_back_ios</span>
-      </button>
-      <button
-        className="absolute right-0 bg-red-500 text-white p-3 rounded-full hover:bg-red-600 focus:outline-none"
-        onClick={handleNext}
-      >
-        <span className="material-icons">arrow_forward_ios</span>
+          className="absolute left-0 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none text-sm"
+          onClick={handlePrev}
+        >
+          {'<'}
+        </button>
+        <button
+          className="absolute right-0 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none text-sm"
+          onClick={handleNext}
+        >
+          {'>'}
       </button>
 
+
+
       {/* View More button */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-0">
         <button className="bg-red-500 text-white px-6 py-2 rounded-lg">
           View More
         </button>
