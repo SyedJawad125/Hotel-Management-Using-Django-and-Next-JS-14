@@ -11,7 +11,6 @@ import banner7 from '../../public/images/Hotelbanner1.webp';
 import banner8 from '../../public/images/Hotelbanner2.webp';
 import banner9 from '../../public/images/Hotelbanner3.jpg';
 import banner10 from '../../public/images/Hotelbanner4.jpg';
-
 import banner11 from '../../public/images/Hotelbanner1.webp';
 import banner12 from '../../public/images/Hotelbanner2.webp';
 import banner13 from '../../public/images/Hotelbanner3.jpg';
@@ -20,22 +19,9 @@ import banner15 from '../../public/images/Hotelbanner5.png';
 import banner16 from '../../public/images/Hotelbanner6.png';
 
 const images = [
-  banner1,
-  banner2,
-  banner3,
-  banner4,
-  banner5,
-  banner6,
-  banner7,
-  banner8,
-  banner9,
-  banner10,
-  banner11,
-  banner12,
-  banner13,
-  banner14,
-  banner15,
-  banner16,
+  banner1, banner2, banner3, banner4, banner5, banner6,
+  banner7, banner8, banner9, banner10, banner11, banner12,
+  banner13, banner14, banner15, banner16,
 ];
 
 export default function Slider() {
@@ -58,11 +44,14 @@ export default function Slider() {
       <div className="relative flex items-center justify-center w-[80%] gap-5">
         {images.map((image, index) => {
           // Calculate relative positions and sizes for each image
-          let imageClass = "opacity-50 scale-75"; // Smaller, faded image
+          let imageClass = "opacity-100 scale-75"; // Smaller, faded image
           if (index === currentIndex) {
             imageClass = "opacity-100 scale-100"; // Center image, full size
-          } else if (index === (currentIndex + 1) % images.length || index === (currentIndex - 1 + images.length) % images.length) {
-            imageClass = "opacity-75 scale-90"; // Adjacent images, slightly larger
+          } else if (
+            index === (currentIndex + 1) % images.length || 
+            index === (currentIndex - 1 + images.length) % images.length
+          ) {
+            imageClass = "opacity-100 scale-90"; // Adjacent images, slightly larger
           }
 
           return (
@@ -85,19 +74,17 @@ export default function Slider() {
 
       {/* Controls */}
       <button
-          className="absolute left-0 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none text-sm"
-          onClick={handlePrev}
-        >
-          {'<'}
-        </button>
-        <button
-          className="absolute right-0 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none text-sm"
-          onClick={handleNext}
-        >
-          {'>'}
+        className="absolute left-0 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none text-sm"
+        onClick={handlePrev}
+      >
+        {'<'}
       </button>
-
-
+      <button
+        className="absolute right-0 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none text-sm"
+        onClick={handleNext}
+      >
+        {'>'}
+      </button>
 
       {/* View More button */}
       <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-0">
