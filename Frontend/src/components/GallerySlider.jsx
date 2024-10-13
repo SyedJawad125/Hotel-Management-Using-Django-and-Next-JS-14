@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import banner1 from '../../public/images/Hotelbanner1.webp';
 import banner2 from '../../public/images/Hotelbanner2.webp';
@@ -26,6 +26,15 @@ const images = [
 
 export default function Slider() {
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Automatically cycle through the images every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval); // Clear interval on component unmount
+  }, []);
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
