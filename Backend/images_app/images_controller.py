@@ -35,29 +35,49 @@ class ImagesController:
         except Exception as e:
             return Response({'error': str(e)}, 500)
 
-    # mydata = Member.objects.filter(firstname__endswith='s').values()
+    
     def get_images(self, request):
         try:
-             if "AnimatedImagaesHome" in request.query_params:
-                images = Image.objects.filter(category=AnimatedImagaesHome) 
-            # if "CarouselImage" in request.query_params:
-            # instances = self.serializer_class.Meta.model.objects.all()
+            images = None  # Initialize images to None
+            
+            # Check for different query params and filter accordingly
+            if "BannerImagesHome" in request.query_params:
+                images = Images.objects.filter(category='bannerimagaeshome')
+            elif "AnimatedImagesHome" in request.query_params:
+                images = Images.objects.filter(category='animatedimagaeshome')
+            elif "MeetingsAndEventsHome" in request.query_params:
+                images = Images.objects.filter(category='meetingsandeventshome')
+            elif "FeaturedAmenitiesHome" in request.query_params:
+                images = Images.objects.filter(category='featuredamenitieshome')
+            elif "ExploreTheRoomsHome" in request.query_params:
+                images = Images.objects.filter(category='exploretheroomshome')
+            elif "GallerySliderHome" in request.query_params:
+                images = Images.objects.filter(category='gallerysliderhome')
+            elif "MeetingsRoomsGroupsHome" in request.query_params:
+                images = Images.objects.filter(category='meetingsroomsgroupshome')
+            
+            if images is None:
+                return Response({'error': 'No valid query parameter found.'}, status=400)
 
-            filtered_data = self.filterset_class(request.GET, queryset=instances)
+            # Filtering data
+            filtered_data = self.filterset_class(request.GET, queryset=images)
             data = filtered_data.qs
 
+            # Pagination
             paginated_data, count = paginate_data(data, request)
 
+            # Serialize the data
             serialized_data = self.serializer_class(paginated_data, many=True).data
             response_data = {
                 "count": count,
                 "data": serialized_data,
             }
+
+            # Successful response
             return create_response(response_data, "SUCCESSFUL", 200)
 
-
         except Exception as e:
-            return Response({'error': str(e)}, 500)
+            return Response({'error': str(e)}, status=500)
 
     def update_images(self, request):
         try:

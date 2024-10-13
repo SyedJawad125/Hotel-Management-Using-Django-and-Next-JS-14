@@ -15,9 +15,6 @@ class ImagesViews(ModelViewSet):
     
     def get_images(self, request):
         return images_controller.get_images(request)
-        # if "AnimatedImagaesHome" in request.query_params:
-        #     images = Image.objects.filter(category=AnimatedImagaesHome) 
-        # if "CarouselImage" in request.query_params:
     
     def update_images(self, request):
         return images_controller.update_images(request)

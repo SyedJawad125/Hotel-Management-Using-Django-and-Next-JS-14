@@ -24,6 +24,7 @@ urlpatterns = [
     path('user/', include('user_auth.urls')),
     path('permission/', include('permissions.urls')),
     path('hotel/', include('hotel_app.urls')),
+    path('images/', include('images_app.urls')),
 
 ]
 if settings.DEBUG:

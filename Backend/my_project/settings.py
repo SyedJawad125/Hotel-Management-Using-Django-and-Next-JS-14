@@ -67,7 +67,8 @@ INSTALLED_APPS = [
     "corsheaders",
     'user_auth',
     'permissions',
-    'hotel_app'
+    'hotel_app',
+    'images_app'
 ]
 
 
