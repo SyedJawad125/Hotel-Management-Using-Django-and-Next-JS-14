@@ -84,7 +84,7 @@ const ProductsCom = () => {
        {/* {permissions.create_product && ( */}
       <button
         className='btn btn-primary mt-3 bg-blue-500 text-white py-2 px-4 rounded'
-        onClick={() => router.push('/addproductspage')}
+        onClick={() => router.push('/addimagespage')}
       >
         Add Product
       </button>
@@ -118,7 +118,7 @@ const ProductsCom = () => {
                   />
                   <div className="card-body">
                     <h5 className="card-title text-lg font-bold">Name: {item.name}</h5>
-                    <p className="card-text">Category: {item.category}</p>
+                    <p className="card-text">Category: {item.category_name}</p>
           
                     <div className="flex">
                     {/* {permissions.delete_product && ( */}
