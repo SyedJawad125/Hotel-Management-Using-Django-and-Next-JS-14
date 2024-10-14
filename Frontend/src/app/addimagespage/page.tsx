@@ -16,6 +16,8 @@ const AddProduct = () => {
   const [image, setImage] = useState<File | null>(null);
   const [imagescategory, setImagesCategory] = useState('');
   const [categoryRecords, setCategoryRecords] = useState<Category[]>([]);
+  const [description, setDescription] = useState('');
+
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -41,7 +43,8 @@ const AddProduct = () => {
       formData.append('name', name);
       if (image) formData.append('image', image);
       formData.append('imagescategory', imagescategory);
-
+      formData.append('description', description);
+      
       const response = await AxiosInstance.post('/images/images', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -111,6 +114,19 @@ const AddProduct = () => {
               <option value="" className="text-black">No categories available</option>
             )}
           </select>
+        </div>
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-sm font-medium text-gray-1000">
+            Description
+          </label>
+          <input
+            type="text"
+            id="description"
+            className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
+            value={name}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </div>
         <button
           type="submit"
