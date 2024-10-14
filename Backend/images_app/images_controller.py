@@ -43,7 +43,9 @@ class ImagesController:
            # Check for different query params and filter accordingly
             if "category" in request.query_params:
                 category = request.query_params.get('category')
-                if category == "bannerimagaeshome":
+                if category == "invitationbgimage":
+                    images = Images.objects.filter(category='invitationbgimage')
+                elif category == "bannerimagaeshome":
                     images = Images.objects.filter(category='bannerimagaeshome')
                 elif category == "animatedimagaeshome":
                     images = Images.objects.filter(category='animatedimagaeshome')
