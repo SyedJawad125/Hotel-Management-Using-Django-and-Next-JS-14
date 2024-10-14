@@ -12,7 +12,7 @@ import ExploreRoomsCom from "@/components/ExploreRoomsCom";
 import FeaturedAmenities from "@/components/FeaturedAmenities";
 import AnimatedImages from "@/components/AnimatedImages";
 import GallerySlider from "@/components/GallerySlider";
-import MeetingRooms from "@/components/MeetingRooms";
+import MeetingRoomsGroups from "@/components/MeetingRoomsGroups";
 import AdModal from "@/components/AdModal";
 
 
@@ -30,7 +30,7 @@ export default function Home() {
     {/* <ContentpageHome/> */}
     <ExploreRoomsCom/>
     <GallerySlider/>
-    <MeetingRooms/>
+    <MeetingRoomsGroups/>
     <FooterCom />
   </>
   );
