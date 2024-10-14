@@ -49,7 +49,7 @@ const AddProduct = () => {
       });
       if (response) {
         console.log('Response:', response.data);
-        router.push('/products');
+        router.push('/imagespage');
       }
     } catch (error) {
       console.error('Error submitting the form:', error);

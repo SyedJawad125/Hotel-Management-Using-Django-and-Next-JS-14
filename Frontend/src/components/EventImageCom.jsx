@@ -1,52 +1,32 @@
 'use client';
+import React, { useEffect, useState } from 'react';
+import AxiosInstance from "@/components/AxiosInstance";
 import Image from 'next/image';
-import banner1 from '../../public/images/Hotelbanner1.webp';
-import banner2 from '../../public/images/Hotelbanner2.webp';
-import banner3 from '../../public/images/Hotelbanner3.jpg';
-import banner4 from '../../public/images/Hotelbanner4.jpg';
-import banner5 from '../../public/images/Hotelbanner5.png';
-import banner6 from '../../public/images/Hotelbanner6.png';
 
-const halls = [
-  {
-    title: 'Exclusive Board Rooms',
-    description:
-      'The twin board rooms are a value option if you are looking for mid-size meetings or discussion sessions upto 30 invitees.',
-    imgSrc: banner1,
-  },
-  {
-    title: 'Noor Hall',
-    description:
-      'Noor Hall, located in the basement level of Ramada Islamabad is a value option if you are looking for corporate meetings, launch events or sales meets.',
-    imgSrc: banner2,
-  },
-  {
-    title: 'Mashal Hall',
-    description:
-      'Mashal Hall, situated on basement level, shares the same space and service capabilities of Noor Hall at Ramada Islamabad.',
-    imgSrc: banner3,
-  },
-  {
-    title: 'Grand Ballroom',
-    description:
-      'The Grand Ballroom is a perfect option for weddings, large events, and conferences, offering luxurious amenities and a grand setup.',
-    imgSrc: banner4,
-  },
-  {
-    title: 'Emerald Hall',
-    description:
-      'Emerald Hall provides a cozy atmosphere for small-scale meetings, perfect for business discussions and workshops.',
-    imgSrc: banner5,
-  },
-  {
-    title: 'Pearl Hall',
-    description:
-      'Pearl Hall is an excellent choice for private events, offering state-of-the-art facilities in a sleek and modern environment.',
-    imgSrc: banner6,
-  },
-];
+export default function EventImageCom() {
+  const [halls, setHalls] = useState([]);
 
-export default function Home() {
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const res = await AxiosInstance.get('/images/images');
+        if (res && res.data && res.data.data) {
+          // Assuming the API returns an array of images with `imagescategory` field
+          const filteredHalls = res.data.data.data.filter(
+            (hall) => hall.imagescategory === 'meetingsandeventshome'
+          );
+          setHalls(filteredHalls); // Set only the filtered halls to state
+        } else {
+          console.error('Unexpected response structure:', res);
+        }
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
   return (
     <div className="container mx-auto px-24 py-24">
       <h2 className="text-3xl font-bold text-center mb-10">Meetings & Events</h2>
@@ -55,10 +35,10 @@ export default function Home() {
           <div key={index} className="bg-gray-50 shadow-lg rounded-lg overflow-hidden mb-16">
             <div className="relative h-60 w-full">
               <Image
-                src={hall.imgSrc}
+                src={`http://localhost:8000/${hall.image}`} // Adjust according to your API response structure
                 alt={hall.title}
-                width={500} // Fixed width
-                height={400} // Fixed height
+                width={500}
+                height={400}
                 className="w-full h-full object-cover"
               />
             </div>
