@@ -9,13 +9,9 @@ export default function EventImageCom() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const res = await AxiosInstance.get('/images/images');
+        const res = await AxiosInstance.get('/images/images?imagescategory=meetingsandeventshome');
         if (res && res.data && res.data.data) {
-          // Assuming the API returns an array of images with `imagescategory` field
-          const filteredHalls = res.data.data.data.filter(
-            (hall) => hall.imagescategory === 'meetingsandeventshome'
-          );
-          setHalls(filteredHalls); // Set only the filtered halls to state
+          setHalls(res.data.data.data); // Set only the filtered halls to state
         } else {
           console.error('Unexpected response structure:', res);
         }
@@ -42,10 +38,10 @@ export default function EventImageCom() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="p-10">
+            {/* <div className="p-10">
               <h3 className="text-xl text-gray-600 font-bold mb-1">{hall.title}</h3>
               <p className="text-gray-600">{hall.description}</p>
-            </div>
+            </div> */}
           </div>
         ))}
       </div>

@@ -1,31 +1,28 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import banner1 from '../../public/images/Hotelbanner1.webp';
-import banner2 from '../../public/images/Hotelbanner2.webp';
-import banner3 from '../../public/images/Hotelbanner3.jpg';
-import banner4 from '../../public/images/Hotelbanner4.jpg';
-import banner5 from '../../public/images/Hotelbanner5.png';
-import banner6 from '../../public/images/Hotelbanner6.png';
-import banner7 from '../../public/images/Hotelbanner1.webp';
-import banner8 from '../../public/images/Hotelbanner2.webp';
-import banner9 from '../../public/images/Hotelbanner3.jpg';
-import banner10 from '../../public/images/Hotelbanner4.jpg';
-import banner11 from '../../public/images/Hotelbanner1.webp';
-import banner12 from '../../public/images/Hotelbanner2.webp';
-import banner13 from '../../public/images/Hotelbanner3.jpg';
-import banner14 from '../../public/images/Hotelbanner4.jpg';
-import banner15 from '../../public/images/Hotelbanner5.png';
-import banner16 from '../../public/images/Hotelbanner6.png';
-
-const images = [
-  banner1, banner2, banner3, banner4, banner5, banner6,
-  banner7, banner8, banner9, banner10, banner11, banner12,
-  banner13, banner14, banner15, banner16,
-];
+import AxiosInstance from "@/components/AxiosInstance";
 
 export default function Slider() {
+  const [images, setImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const res = await AxiosInstance.get('/images/images?imagescategory=gallerysliderhome');
+        if (res && res.data && res.data.data) {
+          setImages(res.data.data.data); // Assuming `data.data` contains the array of images
+        } else {
+          console.error('Unexpected response structure:', res);
+        }
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
+
+    fetchImages();
+  }, []);
 
   // Automatically cycle through the images every 3 seconds
   useEffect(() => {
@@ -34,7 +31,7 @@ export default function Slider() {
     }, 3000); // Change image every 3 seconds
 
     return () => clearInterval(interval); // Clear interval on component unmount
-  }, []);
+  }, [images.length]);
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
@@ -70,7 +67,7 @@ export default function Slider() {
               style={{
                 left: `${30 + (index - currentIndex) * 31}%`, // Increased space between images
                 transform: `translateX(-50%)`,
-                backgroundImage: `url(${image.src})`,
+                backgroundImage: `url(http://localhost:8000/${image.image})`, // Adjust URL according to API response
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}

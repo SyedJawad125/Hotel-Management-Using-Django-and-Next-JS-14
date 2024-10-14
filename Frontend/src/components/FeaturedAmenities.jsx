@@ -1,14 +1,29 @@
 'use client';
-
+import React, { useEffect, useState } from 'react';
+import AxiosInstance from '@/components/AxiosInstance'; // Import your Axios instance
 import Image from 'next/image';
-import banner1 from '../../public/images/Hotelbanner1.webp';
-import banner2 from '../../public/images/Hotelbanner2.webp';
-import banner3 from '../../public/images/Hotelbanner3.jpg';
-import banner4 from '../../public/images/Hotelbanner4.jpg';
-import banner5 from '../../public/images/Hotelbanner5.png';
-import banner6 from '../../public/images/Hotelbanner6.png';
 
 export default function Home() {
+  const [banners, setBanners] = useState([]);
+
+  // Fetch images from backend API
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const res = await AxiosInstance.get('/images/images?imagescategory=featuredamenitieshome');
+        if (res && res.data && res.data.data) {
+          setBanners(res.data.data.data); // Adjust based on API response structure
+        } else {
+          console.error('Unexpected response structure:', res);
+        }
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
   return (
     <div className="relative bg-cover bg-center h-[calc(100vh-15rem)] flex items-center justify-center text-white my-2">
       {/* Left side: Text content with left margin */}
@@ -25,29 +40,21 @@ export default function Home() {
 
       {/* Right side: Image grid with right margin */}
       <div className="w-1/2 grid grid-cols-3 gap-6 pr-40">
-        {[
-          { src: banner1, alt: 'Fitness Center', title: 'Fitness Center' },
-          { src: banner2, alt: 'Free Wifi', title: 'Free Wifi' },
-          { src: banner3, alt: 'Free Breakfast Buffet', title: 'Free Breakfast Buffet' },
-          { src: banner4, alt: 'Laundry Service', title: 'Laundry Service' },
-          { src: banner5, alt: 'Meeting Room', title: 'Meeting Room' },
-          { src: banner6, alt: 'Free Parking', title: 'Free Parking' },
-        ].map(({ src, alt, title }) => (
-          <div key={title} className="border border-gray-300 rounded-lg overflow-hidden flex flex-col items-center">
+        {banners.map((banner, index) => (
+          <div key={index} className="border border-gray-300 rounded-lg overflow-hidden flex flex-col items-center">
             <div className="relative w-[180px] h-[120px]">
-              <Image 
-                src={src} 
-                alt={alt} 
+              <Image
+                src={`http://localhost:8000/${banner.image}`} // Adjust according to your API response structure
+                alt={banner.title} // Assuming title is part of the API response
                 width={300} // Fixed width
                 height={200} // Fixed height
                 className="w-full h-full object-cover"
               />
             </div>
-            <h3 className="text-lg mt-2">{title}</h3>
+            <h3 className="text-lg mt-2">{banner.name}</h3> {/* Assuming 'title' is a part of the API response */}
           </div>
         ))}
       </div>
-      
     </div>
   );
 }
