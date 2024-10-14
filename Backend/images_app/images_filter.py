@@ -6,7 +6,7 @@ import django_filters
 class ImagesFilter(FilterSet):
     id = CharFilter(field_name='id')
     name = CharFilter(field_name='name', lookup_expr='icontains')
-    imagescategory = CharFilter(field_name='imagescategory', lookup_expr='icontains')
+    imagescategory = CharFilter(field_name='imagescategory__category', lookup_expr='icontains')
 
     
     class Meta:
