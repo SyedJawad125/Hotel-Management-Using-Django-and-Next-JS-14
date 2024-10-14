@@ -7,6 +7,7 @@ interface Category {
   id: number;
   name: string;
   category: string;
+  description: string;
 }
 
 const AddProduct = () => {
@@ -124,7 +125,7 @@ const AddProduct = () => {
             id="description"
             className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={name}
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>

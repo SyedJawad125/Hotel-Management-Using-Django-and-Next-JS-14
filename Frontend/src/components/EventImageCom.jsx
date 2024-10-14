@@ -38,6 +38,7 @@ export default function EventImageCom() {
                 className="w-full h-full object-cover"
               />
             </div>
+            <h3 className="text-lg mt-2 text-gray-800 text-sm ml-2 mr-2 mb-2">{hall.description}</h3>
             {/* <div className="p-10">
               <h3 className="text-xl text-gray-600 font-bold mb-1">{hall.title}</h3>
               <p className="text-gray-600">{hall.description}</p>
