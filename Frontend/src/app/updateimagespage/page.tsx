@@ -86,7 +86,7 @@ const UpdateProduct = () => {
       });
       if (response) {
         console.log('Response:', response.data);
-        router.push('/products');
+        router.push('/imagespage');
       }
     } catch (error) {
       console.error('Error:', error);
