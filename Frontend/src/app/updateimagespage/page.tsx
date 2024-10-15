@@ -14,14 +14,42 @@ interface Category {
 const UpdateProduct = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const imageId = searchParams.get('id'); // Get the id from the query parameters
+  const imageId = searchParams.get('imgid'); // Get the id from the query parameters
 
+  // States for form fields
   const [name, setName] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [imagescategory, setImagesCategory] = useState('');
   const [categoryRecords, setCategoryRecords] = useState<Category[]>([]);
   const [description, setDescription] = useState('');
   const [bulletsdescription, setBulletsdescription] = useState('• '); // Initialize with a bullet
+
+  // Fetch product data based on imgid
+  useEffect(() => {
+    const fetchProductData = async () => {
+      if (imageId) {
+        try {
+          const res = await AxiosInstance.get(`/images/images?id=${imageId}`);
+          const productData = res?.data?.data?.data[0]; // Assuming the data is an array
+          if (productData) {
+            // Set state for the form fields with the fetched product data
+            setName(productData.name);
+            setDescription(productData.description);
+            setImagesCategory(productData.imagescategory);
+            setBulletsdescription(productData.bulletsdescription || '• '); // Default bullet if empty
+            // If the API response contains the image URL, set it accordingly (you can manage the image preview if needed)
+            // Optionally set the image if it's editable
+          } else {
+            console.error('No product found with this ID:', imageId);
+          }
+        } catch (error) {
+          console.error('Error fetching product data:', error);
+        }
+      }
+    };
+
+    fetchProductData();
+  }, [imageId]);
 
   // Fetch categories for the dropdown list
   useEffect(() => {
@@ -109,6 +137,7 @@ const UpdateProduct = () => {
             id="imagescategory"
             className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
                       focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-black"
+            value={imagescategory}
             onChange={(e) => setImagesCategory(e.target.value)}>
             <option value="" className="text-black">Select Category</option>
             {categoryRecords.length > 0 ? (

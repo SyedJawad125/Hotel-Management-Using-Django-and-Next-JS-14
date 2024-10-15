@@ -46,8 +46,8 @@ const ProductsCom = () => {
     }
   };
 
-  const updateRecord = async (item) => {
-    router.push(`/updateimagespage?id=${item.id}`);
+  const updateRecord = async (imgid) => {
+    router.push(`/updateimagespage?imgid=${imgid}`);
   };
 
   const handleSearch = (e) => {
@@ -134,7 +134,7 @@ const ProductsCom = () => {
                     {/* {permissions.update_product && ( */}
                       <button
                         className="btn btn-primary bg-blue-500 text-white py-2 px-4 rounded"
-                        onClick={() => updateRecord(item)}
+                        onClick={() => updateRecord(item.id)}
                       >
                         Update
                       </button>
