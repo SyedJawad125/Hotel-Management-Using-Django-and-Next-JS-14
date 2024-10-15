@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import AxiosInstance from "@/components/AxiosInstance";
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 
 export default function Slider() {
   const [images, setImages] = useState([]);
@@ -12,7 +13,7 @@ export default function Slider() {
       try {
         const res = await AxiosInstance.get('/images/publicimages?imagescategory=gallerysliderhome');
         if (res && res.data && res.data.data) {
-          setImages(res.data.data.data); // Assuming `data.data` contains the array of images
+          setImages(res.data.data.data); 
         } else {
           console.error('Unexpected response structure:', res);
         }
@@ -24,13 +25,12 @@ export default function Slider() {
     fetchImages();
   }, []);
 
-  // Automatically cycle through the images every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
-    }, 3000); // Change image every 3 seconds
+    }, 3000); 
 
-    return () => clearInterval(interval); // Clear interval on component unmount
+    return () => clearInterval(interval); 
   }, [images.length]);
 
   const handleNext = () => {
@@ -48,31 +48,30 @@ export default function Slider() {
   return (
     <div className='ml-10 mr-10'>
       <div className="relative w-full h-[500px] overflow-hidden flex items-center justify-center mb-20">
-        <div className="relative flex items-center justify-center w-[80%] gap-5">
+        <div className="relative flex items-center justify-center w-[80%] gap-3"> {/* Adjusted gap */}
           {images.map((image, index) => {
-            // Calculate relative positions and sizes for each image
-            let imageClass = "opacity-100 scale-75"; // Smaller, faded image
+            let imageClass = "opacity-100 scale-75";
             if (index === currentIndex) {
-              imageClass = "opacity-100 scale-100"; // Center image, full size
+              imageClass = "opacity-100 scale-100"; 
             } else if (
               index === (currentIndex + 1) % images.length || 
               index === (currentIndex - 1 + images.length) % images.length
             ) {
-              imageClass = "opacity-100 scale-90"; // Adjacent images, slightly larger
+              imageClass = "opacity-100 scale-90"; 
             }
 
             return (
               <div
                 key={index}
-                className={`absolute transition-all duration-500 ease-in-out w-[30%] h-[400px] ${imageClass} z-${index === currentIndex ? '10' : '0'}`}
+                className={`absolute transition-all duration-500 ease-in-out w-[24%] h-[400px] ${imageClass} z-${index === currentIndex ? '10' : '0'}`} // Changed width to 22%
                 style={{
-                  left: `${30 + (index - currentIndex) * 31}%`, // Increased space between images
+                  left: `${25 + (index - currentIndex) * 25}%`, // Adjusted for 4 images
                   transform: `translateX(-50%)`,
-                  backgroundImage: `url(http://localhost:8000/${image.image})`, // Adjust URL according to API response
+                  backgroundImage: `url(http://localhost:8000/${image.image})`, 
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
-                  borderRadius: '20px', // Added rounded corners
-                  overflow: 'hidden', // Ensure overflow is hidden for rounded corners
+                  borderRadius: '20px', 
+                  overflow: 'hidden', 
                 }}
               >
                 <div className="rounded-lg w-full h-full"></div>
@@ -81,21 +80,19 @@ export default function Slider() {
           })}
         </div>
 
-        {/* Controls */}
         <button
-          className="absolute left-0 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none text-sm"
-          onClick={handlePrev}
-        >
-          {'<'}
-        </button>
-        <button
-          className="absolute right-0 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none text-sm"
-          onClick={handleNext}
-        >
-          {'>'}
+            className="absolute left-0 bg-black-500 text-white p-4 rounded-full hover:bg-black-600 focus:outline-none transition-all duration-300 shadow-lg transform hover:scale-105"
+            onClick={handlePrev}
+          >
+            <ChevronLeftIcon className="h-6 w-6" />
+          </button>
+          <button
+            className="absolute right-0 bg-black-500 text-white p-4 rounded-full hover:bg-black-600 focus:outline-none transition-all duration-300 shadow-lg transform hover:scale-105"
+            onClick={handleNext}
+          >
+            <ChevronRightIcon className="h-6 w-6" />
         </button>
 
-        {/* View More button */}
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-0">
           <button className="bg-red-500 text-white px-6 py-2 rounded-lg">
             View More
