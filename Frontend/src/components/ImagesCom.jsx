@@ -19,7 +19,7 @@ const ProductsCom = () => {
   useEffect(() => {
     const receiveData = async () => {
       try {
-        const res = await AxiosInstance.get('/images/images');
+        const res = await AxiosInstance.get('/images/publicimages');
         if (res && res.data && res.data.data && res.data.data.data) {
           setRecords(res.data.data.data);
           setFilteredRecords(res.data.data.data); // Initialize filteredRecords with all records
@@ -36,7 +36,7 @@ const ProductsCom = () => {
 
   const deleteRecord = async (id) => {
     try {
-      const res = await AxiosInstance.delete(`/images/publicimages?id=${id}`);
+      const res = await AxiosInstance.delete(`/images/images?id=${id}`);
       if (res) {
         setFilteredRecords(filteredRecords.filter(record => record.id !== id));
         toast.success('Product deleted successfully!');
