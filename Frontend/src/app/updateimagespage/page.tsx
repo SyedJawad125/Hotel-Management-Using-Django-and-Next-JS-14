@@ -8,7 +8,7 @@ interface Category {
   name: string;
   price: number;
   category: string;
-  // Add other fields if necessary
+  description: string;
 }
 
 const UpdateProduct = () => {
@@ -20,21 +20,12 @@ const UpdateProduct = () => {
   const [image, setImage] = useState<File | null>(null);
   const [imagescategory, setImagesCategory] = useState('');
   const [categoryRecords, setCategoryRecords] = useState<Category[]>([]);
+  const [description, setDescription] = useState('');
+  const [bulletsdescription, setBulletsdescription] = useState('• '); // Initialize with a bullet
 
-  // const [name, setName] = useState('');
-  // const [description, setDescription] = useState('');
-  // const [price, setPrice] = useState('');
-  // const [image, setImage] = useState<File | null>(null);
-  // const [prodHasCategory, setProdHasCategory] = useState('');
-  // const [categoryRecords, setCategoryRecords] = useState<Category[]>([]);
-
-  // Fetch product details if there's an ID
+  // Fetch categories for the dropdown list
   useEffect(() => {
-
-    // Fetch categories for the dropdown list
-    console.log('id')
-    console.log(imageId)
-    const fetchMenu = async () => {
+    const fetchCategories = async () => {
       try {
         const res = await AxiosInstance.get('/images/categories');
         console.log('Category API response:', res.data); // Check the response
@@ -47,16 +38,18 @@ const UpdateProduct = () => {
         console.error('Error occurred while fetching categories:', error);
       }
     };
-    fetchMenu();
+    fetchCategories();
   }, []);
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const formData = new FormData();
       formData.append('name', name);
       if (image) formData.append('image', image);
       formData.append('imagescategory', imagescategory);
+      formData.append('description', description);
+      formData.append('bulletsdescription', bulletsdescription);
 
       const response = await AxiosInstance.patch(`/images/images/?id=${imageId}`, formData, {
         headers: {
@@ -72,14 +65,24 @@ const UpdateProduct = () => {
     }
   };
 
+  const handleBulletsInput = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    let value = (e.target as HTMLTextAreaElement).value;
+
+    // If the user presses "Enter", insert a bullet point
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Prevent the default action of a new line
+      setBulletsdescription(value + '\n• '); // Add a new bullet point with a new line
+    } else {
+      setBulletsdescription(value); // Update the state for other input
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 ml-20">
-      <h2 className="mt-4 text-2xl font-bold mt-5 mb-10">Update Product Here:</h2>
+      <h2 className="mt-4 text-2xl font-bold mb-10">Update Product Here:</h2>
       <form className="mt-3" onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-1000">
-            Name
-          </label>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-1000">Name</label>
           <input
             type="text"
             id="name"
@@ -90,9 +93,7 @@ const UpdateProduct = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="image" className="block text-sm font-medium text-gray-1000">
-            Upload Image
-          </label>
+          <label htmlFor="image" className="block text-sm font-medium text-gray-1000">Upload Image</label>
           <input
             type="file"
             id="image"
@@ -103,9 +104,7 @@ const UpdateProduct = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="category" className="block text-sm font-medium text-black">
-            Select Category
-          </label>
+          <label htmlFor="imagescategory" className="block text-sm font-medium text-black">Select Category</label>
           <select
             id="imagescategory"
             className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
@@ -118,15 +117,38 @@ const UpdateProduct = () => {
                   {index > 0 && (
                     <option disabled className="text-gray-500">───────────────</option> 
                   )}
-                  <option value={item.id} className="text-black">
-                    {item.category}
-                  </option>
+                  <option value={item.id} className="text-black">{item.category}</option>
                 </React.Fragment>
               ))
             ) : (
               <option value="" className="text-black">No categories available</option>
             )}
           </select>
+        </div>
+        <div className="mb-4">
+          <label htmlFor="description" className="block text-sm font-medium text-gray-1000">Description</label>
+          <input
+            type="text"
+            id="description"
+            className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="• Type Description here if need"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="bulletsdescription" className="block text-sm font-medium text-gray-1000">Bullets Description</label>
+          <textarea
+            id="bulletsdescription"
+            className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
+            value={bulletsdescription}
+            onChange={(e) => setBulletsdescription(e.target.value)}
+            onKeyDown={handleBulletsInput}
+            placeholder="• Type your first bullet here, then press Enter for the next..."
+            rows={5}
+          />
         </div>
         <button
           type="submit"

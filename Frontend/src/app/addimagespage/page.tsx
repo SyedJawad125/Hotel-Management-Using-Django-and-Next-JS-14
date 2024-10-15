@@ -8,6 +8,7 @@ interface Category {
   name: string;
   category: string;
   description: string;
+  bulletsdescription: string;
 }
 
 const AddProduct = () => {
