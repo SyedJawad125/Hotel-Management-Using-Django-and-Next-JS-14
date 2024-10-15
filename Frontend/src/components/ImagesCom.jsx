@@ -36,7 +36,7 @@ const ProductsCom = () => {
 
   const deleteRecord = async (id) => {
     try {
-      const res = await AxiosInstance.delete(`/images/images?id=${id}`);
+      const res = await AxiosInstance.delete(`/images/publicimages?id=${id}`);
       if (res) {
         setFilteredRecords(filteredRecords.filter(record => record.id !== id));
         toast.success('Product deleted successfully!');

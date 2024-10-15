@@ -29,7 +29,7 @@ const UpdateProduct = () => {
     const fetchProductData = async () => {
       if (imageId) {
         try {
-          const res = await AxiosInstance.get(`/images/images?id=${imageId}`);
+          const res = await AxiosInstance.get(`/images/publicimages?id=${imageId}`);
           const productData = res?.data?.data?.data[0]; // Assuming the data is an array
           if (productData) {
             // Set state for the form fields with the fetched product data
