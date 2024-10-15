@@ -10,7 +10,7 @@ export default function MeetingsSection() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const res = await AxiosInstance.get('/images/images?imagescategory=meetingsroomsgroupshome');
+        const res = await AxiosInstance.get('/images/publicimages?imagescategory=meetingsroomsgroupshome');
         if (res && res.data && res.data.data) {
           setHalls(res.data.data.data); // Set the fetched images
         } else {

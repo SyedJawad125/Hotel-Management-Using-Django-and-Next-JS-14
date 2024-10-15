@@ -10,7 +10,7 @@ export default function Slider() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const res = await AxiosInstance.get('/images/images?imagescategory=gallerysliderhome');
+        const res = await AxiosInstance.get('/images/publicimages?imagescategory=gallerysliderhome');
         if (res && res.data && res.data.data) {
           setImages(res.data.data.data); // Assuming `data.data` contains the array of images
         } else {

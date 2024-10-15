@@ -9,7 +9,7 @@ export default function EventImageCom() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const res = await AxiosInstance.get('/images/images?imagescategory=meetingsandeventshome');
+        const res = await AxiosInstance.get('/images/publicimages?imagescategory=meetingsandeventshome');
         if (res && res.data && res.data.data) {
           setHalls(res.data.data.data); // Set only the filtered halls to state
         } else {

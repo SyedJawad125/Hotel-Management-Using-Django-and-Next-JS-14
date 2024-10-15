@@ -11,7 +11,7 @@ const NextJsCarousel = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const res = await AxiosInstance.get('/images/images?imagescategory=bannerimagaeshome');
+        const res = await AxiosInstance.get('/images/publicimages?imagescategory=bannerimagaeshome');
         if (res && res.data && res.data.data) {
           setBanners(res.data.data.data); // Assuming 'data' contains the image data
         } else {

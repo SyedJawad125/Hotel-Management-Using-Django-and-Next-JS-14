@@ -9,7 +9,7 @@ const Overview = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const res = await AxiosInstance.get('/images/images?imagescategory=invitationbgimage');
+        const res = await AxiosInstance.get('/images/publicimages?imagescategory=invitationbgimage');
         if (res && res.data && res.data.data) {
           setImages(res.data.data.data); // Assuming the API response has a data structure with a list of images
         } else {

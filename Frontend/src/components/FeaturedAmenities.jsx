@@ -10,7 +10,7 @@ export default function Home() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const res = await AxiosInstance.get('/images/images?imagescategory=featuredamenitieshome');
+        const res = await AxiosInstance.get('/images/publicimages?imagescategory=featuredamenitieshome');
         if (res && res.data && res.data.data) {
           setBanners(res.data.data.data); // Adjust based on API response structure
         } else {

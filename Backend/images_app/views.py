@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
-from .images_controller import ImagesController, CategoriesController
+from .images_controller import ImagesController, CategoriesController, PublicImagesController
 from utils.base_authentication import JWTAuthentication
 
 # Create your views here.
@@ -8,7 +8,7 @@ from utils.base_authentication import JWTAuthentication
 
 images_controller = ImagesController()
 categories_controller = CategoriesController()
-
+publicimages_controller=PublicImagesController()
 
 
 class ImagesViews(ModelViewSet):
@@ -25,7 +25,12 @@ class ImagesViews(ModelViewSet):
     
     def delete_images(self, request):
         return images_controller.delete_images(request)
-    
+
+
+class PublicImagesViews(ModelViewSet):
+
+    def get_publicimages(self, request):
+        return publicimages_controller.get_publicimages(request)
 
 class CategoriesViews(ModelViewSet):
     authentication_classes = [JWTAuthentication]
