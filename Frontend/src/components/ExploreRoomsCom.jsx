@@ -1,98 +1,38 @@
 'use client'; // Ensure this component is client-side rendered
 
+import React, { useEffect, useState } from 'react';
+import AxiosInstance from "@/components/AxiosInstance"; // Assuming you have AxiosInstance set up
 import Image from 'next/image';
-import banner1 from '../../public/images/Hotelbanner1.webp';
-import banner2 from '../../public/images/Hotelbanner2.webp';
-import banner3 from '../../public/images/Hotelbanner3.jpg';
-import banner4 from '../../public/images/Hotelbanner4.jpg';
-import banner5 from '../../public/images/Hotelbanner5.png';
-import banner6 from '../../public/images/Hotelbanner6.png';
-
-const halls = [
-  {
-    id: 1, // Unique identifier for each hall
-    title: 'Deluxe Rooms',
-    description: (
-      <ul className="list-disc list-inside text-sm">
-        <li>Max Occupancy: 3</li>
-        <li>Beds: 1 Master bed, 2 single (Optional)</li>
-        <li>Views: City view / Hill View</li>
-      </ul>
-    ),
-    imgSrc: banner1,
-  },
-  {
-    id: 2,
-    title: 'Executive Rooms',
-    description: (
-      <ul className="list-disc list-inside text-sm">
-        <li>Max Occupancy: 2</li>
-        <li>Beds: 1 King, 2 Twin (Optional)</li>
-        <li>Views: City view/Hill View</li>
-      </ul>
-    ),
-    imgSrc: banner2,
-  },
-  {
-    id: 3,
-    title: 'Deluxe Suites',
-    description: (
-      <ul className="list-disc list-inside text-sm">
-        <li>Max Occupancy: 3</li>
-        <li>Beds: 1 king, 1 sofa set</li>
-        <li>Views: City view</li>
-      </ul>
-    ),
-    imgSrc: banner3,
-  },
-  {
-    id: 4,
-    title: 'Panoramic Suites',
-    description: (
-      <ul className="list-disc list-inside text-sm">
-        <li>Max Occupancy: 3</li>
-        <li>Beds: 1 King</li>
-        <li>Views: Lake view</li>
-      </ul>
-    ),
-    imgSrc: banner4,
-  },
-  {
-    id: 5,
-    title: 'Royal Suites',
-    description: (
-      <ul className="list-disc list-inside text-sm">
-        <li>Max Occupancy: 3</li>
-        <li>Beds: 1 King</li>
-        <li>Views: City with lake view / Margalla hills Lake view</li>
-      </ul>
-    ),
-    imgSrc: banner5,
-  },
-  {
-    id: 6,
-    title: 'Luxury Suites',
-    description: (
-      <ul className="list-disc list-inside text-sm">
-        <li>Max Occupancy: 3</li>
-        <li>Beds: 1 King</li>
-        <li>Views: City with lake view / Margalla hills Lake view</li>
-      </ul>
-    ),
-    imgSrc: banner6,
-  },
-];
 
 export default function Home() {
+  const [halls, setHalls] = useState([]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const res = await AxiosInstance.get('/images/publicimages?imagescategory=exploretheroomshome');
+        if (res && res.data && res.data.data) {
+          setHalls(res.data.data.data); // Assuming API response structure has a nested data array
+        } else {
+          console.error('Unexpected response structure:', res);
+        }
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
   return (
-    <div className="container mx-auto px-24 py-24">
-      <h1 className="text-3xl font-bold text-center mb-10">Explore the rooms</h1>
+    <div className="container mx-auto px-32 py-32">
+      <h1 className="text-3xl font-bold text-center mb-10">Explore the Rooms</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {halls.map((hall) => (
-          <div key={hall.id} className="bg-gray-50 shadow-lg rounded-lg overflow-hidden mb-16">
+        {halls.map((hall, index) => (
+          <div key={index} className="bg-gray-50 shadow-lg rounded-lg overflow-hidden mb-16">
             <div className="relative h-60 w-full">
               <Image
-                src={hall.imgSrc}
+                src={`http://localhost:8000/${hall.image}`} // Adjust based on your API's response
                 alt={hall.title}
                 width={500} // Fixed width
                 height={400} // Fixed height
@@ -100,8 +40,26 @@ export default function Home() {
               />
             </div>
             <div className="p-10">
-              <h3 className="text-xl text-gray-600 font-bold mb-4">{hall.title}</h3>
-              <div className="text-gray-600">{hall.description}</div>
+              <h2 className="text-xl text-gray-900 font-bold mb-4">{hall.name}</h2>
+              <div>
+                {/* Check if bulletsdescription exists and is a string */}
+                {hall.bulletsdescription && typeof hall.bulletsdescription === 'string' && (
+                  hall.bulletsdescription.split(',').map((bullet, index) => (
+                    <h4 key={index} className="text-sm text-gray-700 mb-4">
+                      {bullet.trim()} {/* Trim to remove extra spaces */}
+                    </h4>
+                  ))
+                )}
+              </div>
+
+              {/* Uncomment if needed for additional details
+              <div className="text-gray-600">
+                <ul className="list-disc list-inside text-sm">
+                  <li>Max Occupancy: {hall.name}</li> 
+                  <li>Beds: {hall.beds}</li>
+                  <li>Views: {hall.views}</li> 
+                </ul>
+              </div> */}
             </div>
           </div>
         ))}

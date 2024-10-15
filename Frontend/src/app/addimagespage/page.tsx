@@ -18,7 +18,7 @@ const AddProduct = () => {
   const [imagescategory, setImagesCategory] = useState('');
   const [categoryRecords, setCategoryRecords] = useState<Category[]>([]);
   const [description, setDescription] = useState('');
-
+  const [bulletsdescription, setBulletsdescription] = useState('• '); // Initialize with a bullet
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -45,7 +45,8 @@ const AddProduct = () => {
       if (image) formData.append('image', image);
       formData.append('imagescategory', imagescategory);
       formData.append('description', description);
-      
+      formData.append('bulletsdescription', bulletsdescription);
+
       const response = await AxiosInstance.post('/images/images', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -57,6 +58,19 @@ const AddProduct = () => {
       }
     } catch (error) {
       console.error('Error submitting the form:', error);
+    }
+  };
+
+  const handleBulletsInput = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Get the current value of the textarea
+    let value = (e.target as HTMLTextAreaElement).value;
+
+    // If the user presses "Enter", insert a bullet point
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Prevent the default action of a new line
+      setBulletsdescription(value + '\n• '); // Add a new bullet point with a new line
+    } else {
+      setBulletsdescription(value); // Update the state for other input
     }
   };
 
@@ -127,6 +141,22 @@ const AddProduct = () => {
             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            placeholder="• Type Description here if need"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="bulletsdescription" className="block text-sm font-medium text-gray-1000">
+            Bullets Description
+          </label>
+          <textarea
+            id="bulletsdescription"
+            className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
+            value={bulletsdescription}
+            onChange={(e) => setBulletsdescription(e.target.value)} // Update the state with the current value
+            onKeyDown={handleBulletsInput} // Handle "Enter" key for adding bullets
+            placeholder="• Type your first bullet here, then press Enter for the next..."
+            rows={5}
           />
         </div>
         <button

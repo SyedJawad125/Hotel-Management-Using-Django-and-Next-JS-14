@@ -46,57 +46,61 @@ export default function Slider() {
   };
 
   return (
-    <div className="relative w-full h-[500px] overflow-hidden flex items-center justify-center mb-20">
-      <div className="relative flex items-center justify-center w-[80%] gap-5">
-        {images.map((image, index) => {
-          // Calculate relative positions and sizes for each image
-          let imageClass = "opacity-100 scale-75"; // Smaller, faded image
-          if (index === currentIndex) {
-            imageClass = "opacity-100 scale-100"; // Center image, full size
-          } else if (
-            index === (currentIndex + 1) % images.length || 
-            index === (currentIndex - 1 + images.length) % images.length
-          ) {
-            imageClass = "opacity-100 scale-90"; // Adjacent images, slightly larger
-          }
+    <div className='ml-10 mr-10'>
+      <div className="relative w-full h-[500px] overflow-hidden flex items-center justify-center mb-20">
+        <div className="relative flex items-center justify-center w-[80%] gap-5">
+          {images.map((image, index) => {
+            // Calculate relative positions and sizes for each image
+            let imageClass = "opacity-100 scale-75"; // Smaller, faded image
+            if (index === currentIndex) {
+              imageClass = "opacity-100 scale-100"; // Center image, full size
+            } else if (
+              index === (currentIndex + 1) % images.length || 
+              index === (currentIndex - 1 + images.length) % images.length
+            ) {
+              imageClass = "opacity-100 scale-90"; // Adjacent images, slightly larger
+            }
 
-          return (
-            <div
-              key={index}
-              className={`absolute transition-all duration-500 ease-in-out w-[30%] h-[400px] ${imageClass} z-${index === currentIndex ? '10' : '0'}`}
-              style={{
-                left: `${30 + (index - currentIndex) * 31}%`, // Increased space between images
-                transform: `translateX(-50%)`,
-                backgroundImage: `url(http://localhost:8000/${image.image})`, // Adjust URL according to API response
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }}
-            >
-              <div className="rounded-lg w-full h-full"></div>
-            </div>
-          );
-        })}
-      </div>
+            return (
+              <div
+                key={index}
+                className={`absolute transition-all duration-500 ease-in-out w-[30%] h-[400px] ${imageClass} z-${index === currentIndex ? '10' : '0'}`}
+                style={{
+                  left: `${30 + (index - currentIndex) * 31}%`, // Increased space between images
+                  transform: `translateX(-50%)`,
+                  backgroundImage: `url(http://localhost:8000/${image.image})`, // Adjust URL according to API response
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  borderRadius: '20px', // Added rounded corners
+                  overflow: 'hidden', // Ensure overflow is hidden for rounded corners
+                }}
+              >
+                <div className="rounded-lg w-full h-full"></div>
+              </div>
+            );
+          })}
+        </div>
 
-      {/* Controls */}
-      <button
-        className="absolute left-0 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none text-sm"
-        onClick={handlePrev}
-      >
-        {'<'}
-      </button>
-      <button
-        className="absolute right-0 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none text-sm"
-        onClick={handleNext}
-      >
-        {'>'}
-      </button>
-
-      {/* View More button */}
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-0">
-        <button className="bg-red-500 text-white px-6 py-2 rounded-lg">
-          View More
+        {/* Controls */}
+        <button
+          className="absolute left-0 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none text-sm"
+          onClick={handlePrev}
+        >
+          {'<'}
         </button>
+        <button
+          className="absolute right-0 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none text-sm"
+          onClick={handleNext}
+        >
+          {'>'}
+        </button>
+
+        {/* View More button */}
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-0">
+          <button className="bg-red-500 text-white px-6 py-2 rounded-lg">
+            View More
+          </button>
+        </div>
       </div>
     </div>
   );
