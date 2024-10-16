@@ -73,17 +73,19 @@ const UpdateProduct = () => {
     e.preventDefault();
     try {
       const formData = new FormData();
+      formData.append('id', imageId as string); // Directly append the imageId as a string
       formData.append('name', name);
       if (image) formData.append('image', image);
       formData.append('imagescategory', imagescategory);
       formData.append('description', description);
       formData.append('bulletsdescription', bulletsdescription);
-
-      const response = await AxiosInstance.patch(`/images/images/?id=${imageId}`, formData, {
+  
+      const response = await AxiosInstance.patch(`/images/images`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
+      
       if (response) {
         console.log('Response:', response.data);
         router.push('/imagespage');
@@ -92,6 +94,7 @@ const UpdateProduct = () => {
       console.error('Error:', error);
     }
   };
+  
 
   const handleBulletsInput = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     let value = (e.target as HTMLTextAreaElement).value;
