@@ -24,7 +24,7 @@ export default function EventImageCom() {
   }, []);
 
   return (
-    <div className="container mx-auto px-24 py-24">
+    <div className="container mx-auto px-32 py-32">
       <h2 className="text-3xl font-bold text-center mb-10">Meetings & Events</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {halls.map((hall, index) => (
@@ -38,7 +38,7 @@ export default function EventImageCom() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <h3 className="text-lg mt-2 text-gray-800 text-sm ml-2 mr-2 mb-2">{hall.description}</h3>
+            <h3 className="text-lg mt-2 text-gray-800 text-sm ml-6 mr-6 mb-6">{hall.description}</h3>
             {/* <div className="p-10">
               <h3 className="text-xl text-gray-600 font-bold mb-1">{hall.title}</h3>
               <p className="text-gray-600">{hall.description}</p>
