@@ -5,6 +5,7 @@ import NavbarCom from "@/components/NavbarCom";
 import TopNavbarCom from "@/components/TopNavbarCom";
 import FooterCom from "@/components/FooterCom";
 import BannerSliderHomeCom from "@/components/BannerSliderHomeCom";
+import CheckInOut from "@/components/CheckInOut";
 import InvitationCom from "@/components/InvitationCom";
 import EventImageCom from "@/components/EventImageCom";
 // import ContentpageHome from "@/components/ContentpageHome";
@@ -23,6 +24,7 @@ export default function Home() {
     <TopNavbarCom />
     <NavbarCom />
     <BannerSliderHomeCom />
+    {/* <CheckInOut/> */}
     <InvitationCom/>
     <AnimatedImages/>
     <EventImageCom />
