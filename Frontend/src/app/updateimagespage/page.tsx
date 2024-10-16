@@ -36,7 +36,16 @@ const UpdateProduct = () => {
             setDescription(productData.description);
             setImagesCategory(productData.imagescategory);
             setBulletsdescription(productData.bulletsdescription || '• ');
-            setImagePreview(productData.image); // Assuming productData.image contains the image URL
+
+            // Log the image URL to check what is being returned
+            console.log('Image data:', productData.image);
+
+            // Ensure the correct path for image preview
+            if (productData.image) {
+              setImagePreview(`/images/${productData.image}`); // Ensure the path is correct
+              console.log('++++++++++++')
+              console.log(imagePreview)
+            }
           } else {
             console.error('No product found with this ID:', imageId);
           }
@@ -69,6 +78,13 @@ const UpdateProduct = () => {
   // Handle image input and preview
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
+
+    // Validate image type
+    if (file && !file.type.startsWith("image/")) {
+      alert("Please select a valid image file.");
+      return;
+    }
+
     setImage(file);
 
     if (file) {
@@ -88,7 +104,7 @@ const UpdateProduct = () => {
       const formData = new FormData();
       formData.append('id', imageId as string); // Directly append the imageId as a string
       formData.append('name', name);
-      if (image) formData.append('image', image);
+      if (image) formData.append('image', image); // Append new image only if selected
       formData.append('imagescategory', imagescategory);
       formData.append('description', description);
       formData.append('bulletsdescription', bulletsdescription);
@@ -158,7 +174,6 @@ const UpdateProduct = () => {
             </div>
           )}
         </div>
-
         <div className="mb-4">
           <label htmlFor="imagescategory" className="block text-sm font-medium text-black">Select Category</label>
           <select
@@ -192,7 +207,7 @@ const UpdateProduct = () => {
             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="• Type Description here if need"
+            placeholder="• Type Description here if needed"
           />
         </div>
 
