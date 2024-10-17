@@ -131,148 +131,162 @@ const UpdateEmployee = () => {
 
   return (
     <div className="container mx-auto px-4 ml-20">
-      <h2 className="mt-4 text-2xl font-bold mb-10">Update Employee Details:</h2>
-      <form className="mt-2" onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="first_name" className="block text-sm font-medium text-gray-1000">First Name</label>
-          <input
-            type="text"
-            id="first_name"
-            className="mt-1 block w-1/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
-            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={first_name}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="last_name" className="block text-sm font-medium text-gray-1000">Last Name</label>
-          <input
-            type="text"
-            id="last_name"
-            className="mt-1 block w-1/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
-            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={last_name}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-1000">Email</label>
-          <input
-            type="email"
-            id="email"
-            className="mt-1 block w-1/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
-            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="phone_number" className="block text-sm font-medium text-gray-1000">Phone Number</label>
-          <input
-            type="text"
-            id="phone_number"
-            className="mt-1 block w-1/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
-            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={phone_number}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="date_of_birth" className="block text-sm font-medium text-gray-1000">Date of Birth</label>
-          <input
-            type="date"
-            id="date_of_birth"
-            className="mt-1 block w-1/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
-            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={date_of_birth}
-            onChange={(e) => setDateOfBirth(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="hire_date" className="block text-sm font-medium text-gray-1000">Hire Date</label>
-          <input
-            type="date"
-            id="hire_date"
-            className="mt-1 block w-1/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
-            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={hire_date}
-            onChange={(e) => setHireDate(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="position" className="block text-sm font-medium text-gray-1000">Position</label>
-          <input
-            type="text"
-            id="position"
-            className="mt-1 block w-1/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
-            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={position}
-            onChange={(e) => setPosition(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="department" className="block text-sm font-medium text-gray-1000">Department</label>
-          <input
-            type="text"
-            id="department"
-            className="mt-1 block w-1/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
-            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="salary" className="block text-sm font-medium text-gray-1000">Salary</label>
-          <input
-            type="number"
-            id="salary"
-            className="mt-1 block w-1/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
-            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={salary}
-            onChange={(e) => setSalary(e.target.value)}
-          />
-        </div>
-        <div className="mb-4 flex items-center space-x-4">
-          <div>
-            <label htmlFor="image" className="block text-sm font-medium text-gray-1000">Employee Image</label>
-            <input
-              type="file"
-              id="image"
-              className="mt-1 text-gray-100"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
-          </div>
-
-          {imagePreview && (
-            <div className="flex items-center space-x-4">
-              <div className="w-40 h-25">
-                <img src={imagePreview} alt="Employee" className="h-24 w-24 object-cover" />
-              </div>
-              {/* {image && (
-                <span className="text-sm text-gray-100">{image.name}</span>
-              )} */}
-            </div>
-          )}
-        </div>
-
-
-        <button
-          type="submit"
-          className="px-6 py-2 mb-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
-        >
-          Update Employee
-        </button>
-      </form>
+  <h2 className="mt-4 text-2xl font-bold mb-10">Update Employee Details:</h2>
+  <form className="mt-2" onSubmit={handleSubmit}>
+    {/* First Name and Last Name */}
+    <div className="flex mb-4 space-x-20">
+      <div className="w-1/3">
+        <label htmlFor="first_name" className="block text-sm font-medium text-gray-1000">First Name</label>
+        <input
+          type="text"
+          id="first_name"
+          className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+          focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
+          value={first_name}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+      </div>
+      <div className="w-1/3">
+        <label htmlFor="last_name" className="block text-sm font-medium text-gray-1000">Last Name</label>
+        <input
+          type="text"
+          id="last_name"
+          className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+          focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
+          value={last_name}
+          onChange={(e) => setLastName(e.target.value)}
+        />
+      </div>
     </div>
+
+    {/* Email and Phone Number */}
+    <div className="flex mb-4 space-x-20">
+      <div className="w-1/3">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-1000">Email</label>
+        <input
+          type="email"
+          id="email"
+          className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+          focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+      <div className="w-1/3">
+        <label htmlFor="phone_number" className="block text-sm font-medium text-gray-1000">Phone Number</label>
+        <input
+          type="text"
+          id="phone_number"
+          className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+          focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
+          value={phone_number}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+        />
+      </div>
+    </div>
+
+    {/* Date of Birth and Hire Date */}
+    <div className="flex mb-4 space-x-20">
+      <div className="w-1/3">
+        <label htmlFor="date_of_birth" className="block text-sm font-medium text-gray-1000">Date of Birth</label>
+        <input
+          type="date"
+          id="date_of_birth"
+          className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+          focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
+          value={date_of_birth}
+          onChange={(e) => setDateOfBirth(e.target.value)}
+        />
+      </div>
+      <div className="w-1/3">
+        <label htmlFor="hire_date" className="block text-sm font-medium text-gray-1000">Hire Date</label>
+        <input
+          type="date"
+          id="hire_date"
+          className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+          focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
+          value={hire_date}
+          onChange={(e) => setHireDate(e.target.value)}
+        />
+      </div>
+    </div>
+
+    {/* Position and Department */}
+    <div className="flex mb-4 space-x-20">
+      <div className="w-1/3">
+        <label htmlFor="position" className="block text-sm font-medium text-gray-1000">Position</label>
+        <input
+          type="text"
+          id="position"
+          className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+          focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
+          value={position}
+          onChange={(e) => setPosition(e.target.value)}
+        />
+      </div>
+      <div className="w-1/3">
+        <label htmlFor="department" className="block text-sm font-medium text-gray-1000">Department</label>
+        <input
+          type="text"
+          id="department"
+          className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+          focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
+          value={department}
+          onChange={(e) => setDepartment(e.target.value)}
+        />
+      </div>
+    </div>
+
+    {/* Salary */}
+    <div className="mb-4 w-2/3">
+      <label htmlFor="salary" className="block text-sm font-medium text-gray-1000">Salary</label>
+      <input
+        type="number"
+        id="salary"
+        className="mt-1 block w-1/2 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+        focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
+        value={salary}
+        onChange={(e) => setSalary(e.target.value)}
+      />
+    </div>
+
+    {/* Image Upload */}
+    <div className="mb-4 flex items-center space-x-4">
+      <div className="relative">
+        <label htmlFor="image" className="block text-sm font-medium text-gray-1000">Employee Image</label>
+        <input
+          type="file"
+          id="image"
+          className="hidden"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+        <label
+          htmlFor="image"
+          className="mt-1 inline-block px-4 py-2 border text-white rounded-lg cursor-pointer hover:bg-blue-600"
+        >
+          Choose Image
+        </label>
+        <span className="ml-4 text-sm text-gray-600">
+          {image ? image.name : "No file chosen"}
+        </span>
+      </div>
+      {imagePreview && (
+        <div className="w-40 h-25">
+          <img src={imagePreview} alt="Employee" className="h-24 w-24 object-cover" />
+        </div>
+      )}
+    </div>
+
+    <button
+      type="submit"
+      className="px-6 py-2 mb-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+    >
+      Update Employee
+    </button>
+  </form>
+</div>
+
   );
 };
 

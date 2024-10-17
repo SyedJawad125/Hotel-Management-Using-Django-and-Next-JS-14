@@ -87,7 +87,7 @@ const EmployeeCom = () => {
       {/* Conditionally render the Add Employee button based on user permissions */}
       {permissions.create_employee && (
         <button
-          className="btn btn-primary mt-3 bg-blue-500 text-white py-2 px-4 rounded"
+          className="btn btn-primary mt-3 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
           onClick={() => router.push('/addemployeepage')}
         >
           Add Employee
@@ -134,7 +134,7 @@ const EmployeeCom = () => {
 
                   <div className="col-span-6 flex justify-end space-x-2 mb-1 mr-5">
                     <button
-                      className="btn btn-danger bg-green-500 text-white py-1 px-2 rounded"
+                      className="btn btn-danger bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600"
                       onClick={() => DetailRecord(item.id)}
                     >
                       Detail
@@ -143,7 +143,7 @@ const EmployeeCom = () => {
                     {/* Conditionally render the Update and Delete buttons based on user permissions */}
                     {permissions.update_employee && (
                       <button
-                        className="btn btn-primary bg-blue-500 text-white py-1 px-2 rounded"
+                        className="btn btn-primary bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
                         onClick={() => updateRecord(item.id)}
                       >
                         Update
@@ -151,7 +151,7 @@ const EmployeeCom = () => {
                      )} 
                     {permissions.delete_employee && (
                       <button
-                        className="btn btn-danger bg-red-500 text-white py-1 px-2 rounded"
+                        className="btn btn-danger bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600"
                         onClick={() => deleteRecord(item.id)}
                       >
                         Delete

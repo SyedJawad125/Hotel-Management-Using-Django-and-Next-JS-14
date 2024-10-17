@@ -83,10 +83,10 @@ const ImagesCom = () => {
        {/* Conditionally render the Add Employee button based on user permissions */}
        {/* {permissions.create_product && ( */}
       <button
-        className='btn btn-primary mt-3 bg-blue-500 text-white py-2 px-4 rounded'
+        className='btn btn-primary mt-3 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600'
         onClick={() => router.push('/addimagespage')}
       >
-        Add Product
+        Add Images
       </button>
       {/* )} */}
 
@@ -123,7 +123,7 @@ const ImagesCom = () => {
                     <div className="flex">
                     {/* {permissions.delete_product && ( */}
                       <button
-                        className="btn btn-danger bg-red-500 text-white py-2 px-4 rounded mr-2"
+                        className="btn btn-danger bg-red-500 text-white py-2 px-4 rounded mr-2 hover:bg-red-600"
                         onClick={() => deleteRecord(item.id)}
                       >
                         Delete
@@ -133,7 +133,7 @@ const ImagesCom = () => {
                       {/* Conditionally render the Update and Delete buttons based on user permissions */}
                     {/* {permissions.update_product && ( */}
                       <button
-                        className="btn btn-primary bg-blue-500 text-white py-2 px-4 rounded"
+                        className="btn btn-primary bg-blue-500 text-white py-2 px-4 rounded  hover:bg-blue-600"
                         onClick={() => updateRecord(item.id)}
                       >
                         Update
