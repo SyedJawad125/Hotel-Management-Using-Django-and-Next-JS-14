@@ -40,11 +40,12 @@ const UpdateImage = () => {
             // Log the image URL to check what is being returned
             console.log('Image data:', productData.image);
 
-            // Ensure the correct path for image preview
             if (productData.image) {
-              setImagePreview(`/images/${productData.image}`); // Ensure the path is correct
-              console.log('++++++++++++')
-              console.log(imagePreview)
+              // Assuming `employeeData.image` contains just the image filename
+              const baseUrl = ' http://127.0.0.1:8000/'; 
+              setImagePreview(`${baseUrl}${productData.image}`);
+            } else {
+              console.log('No image found for this employee.');
             }
           } else {
             console.error('No product found with this ID:', imageId);
