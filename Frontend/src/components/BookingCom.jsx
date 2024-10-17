@@ -116,7 +116,7 @@ const BookingCom = () => {
                     <p className="card-text">Total Price: {item.total_price}</p>
                     <p className="card-text">Adults: {item.adults}</p>
                     <p className="card-text">Children: {item.children}</p>
-                    <p className="card-text">Room Category: {item.room_category}</p>
+                    {/* <p className="card-text">Room Category: {item.room_category}</p> */}
                     <p className="card-text">Room Number: {item.room_num}</p>
 
                     <div className="flex">
