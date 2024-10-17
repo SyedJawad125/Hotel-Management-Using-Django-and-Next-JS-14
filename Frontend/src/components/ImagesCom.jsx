@@ -19,7 +19,7 @@ const ImagesCom = () => {
   useEffect(() => {
     const receiveData = async () => {
       try {
-        const res = await AxiosInstance.get('/images/publicimages');
+        const res = await AxiosInstance.get('/images/images');
         if (res && res.data && res.data.data && res.data.data.data) {
           setRecords(res.data.data.data);
           setFilteredRecords(res.data.data.data); // Initialize filteredRecords with all records

@@ -54,7 +54,7 @@ class BookingSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         # data['room_category'] = instance.rooms.category if instance.rooms else None
-        # data['room_num'] = instance.rooms.room_number if instance.rooms else None
+        data['room_num'] = RoomSerializer(instance.rooms.all(), many=True).data if instance.rooms else None
         data['created_by'] = UserListingSerializer(instance.created_by).data if instance.created_by else None
         data['updated_by'] = UserListingSerializer(instance.updated_by).data if instance.updated_by else None
 

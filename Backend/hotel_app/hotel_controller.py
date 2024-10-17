@@ -445,6 +445,76 @@ class BookingController:
 
  
 
+    # def create(self, request, *args, **kwargs):
+    #     try:
+    #         # Make POST data mutable
+    #         request.POST._mutable = True
+
+    #         # Get the list of room IDs from the request data
+    #         room_ids = request.data.get('rooms', [])
+    #         if not room_ids:
+    #             return Response({'error': 'At least one room ID is required'}, 400)
+
+    #         total_price = 0
+    #         rooms = []
+    #         room_details = []  # To store room details with price
+
+    #         for room_id in room_ids:
+    #             try:
+    #                 # Fetch the room object
+    #                 room = Room.objects.get(id=room_id)
+    #             except Room.DoesNotExist:
+    #                 return Response({'error': f'Room with ID {room_id} does not exist'}, 404)
+
+    #             if not room.is_available:
+    #                 return Response({'error': f'Room with ID {room_id} is not available'}, 400)
+
+    #             # Add room price to total price
+    #             total_price += room.price_per_night
+    #             rooms.append(room)
+
+    #             # Append room price details
+    #             room_details.append({
+    #                 'room_id': room.id,
+    #                 'room_price': room.price_per_night
+    #             })
+
+    #         # Set the total price and created_by field
+    #         request.data["total_price"] = total_price
+    #         request.data["created_by"] = request.user.guid
+
+    #         # Proceed with validating and saving the booking
+    #         validated_data = BookingSerializer(data=request.data)
+    #         if validated_data.is_valid():
+    #             # Save the booking and associate rooms
+    #             booking = validated_data.save()
+
+    #             # Link rooms to the booking
+    #             booking.rooms.set(rooms)
+    #             booking.save()
+
+    #             # Mark the rooms as unavailable
+    #             for room in rooms:
+    #                 room.is_available = False
+    #                 room.save()
+
+    #             response_data = BookingSerializer(booking).data
+    #             # Add the room details and total price to the response
+    #             response_data['room_details'] = room_details
+    #             response_data['total_price'] = total_price
+
+    #             return Response({'data': response_data}, 200)
+    #         else:
+    #             error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
+    #             return Response({'data': error_message}, 400)
+
+    #     except Exception as e:
+    #         return Response({'error': str(e)}, 500)
+        
+
+
+    from datetime import date
+
     def create(self, request, *args, **kwargs):
         try:
             # Make POST data mutable
@@ -459,6 +529,7 @@ class BookingController:
             rooms = []
             room_details = []  # To store room details with price
 
+            # Check the check_out date and availability of each room
             for room_id in room_ids:
                 try:
                     # Fetch the room object
@@ -466,8 +537,12 @@ class BookingController:
                 except Room.DoesNotExist:
                     return Response({'error': f'Room with ID {room_id} does not exist'}, 404)
 
-                if not room.is_available:
-                    return Response({'error': f'Room with ID {room_id} is not available'}, 400)
+                # Get the most recent booking for the room to check its availability
+                latest_booking = Booking.objects.filter(rooms=room).order_by('-check_out').first()
+
+                # If the latest booking has a check_out date in the future, the room is not available
+                if latest_booking and latest_booking.check_out >= date.today():
+                    return Response({'error': f'Room with ID {room_id} is not available until {latest_booking.check_out}'}, 400)
 
                 # Add room price to total price
                 total_price += room.price_per_night
@@ -493,11 +568,6 @@ class BookingController:
                 booking.rooms.set(rooms)
                 booking.save()
 
-                # Mark the rooms as unavailable
-                for room in rooms:
-                    room.is_available = False
-                    room.save()
-
                 response_data = BookingSerializer(booking).data
                 # Add the room details and total price to the response
                 response_data['room_details'] = room_details
@@ -510,7 +580,9 @@ class BookingController:
 
         except Exception as e:
             return Response({'error': str(e)}, 500)
-        
+
+
+
     # mydata = Member.objects.filter(firstname__endswith='s').values()
     def get_booking(self, request):
         try:
