@@ -240,18 +240,21 @@ const UpdateEmployee = () => {
             onChange={(e) => setSalary(e.target.value)}
           />
         </div>
-
-        <div className="mb-6">
-          <label htmlFor="image" className="block text-sm font-medium text-gray-1000">Employee Image</label>
-          <input
-            type="file"
-            id="image"
-            className="mt-1 block w-1/4 text-gray-900"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
+        <div className="mb-4 flex items-center space-x-4">
+          <div>
+            <label htmlFor="image" className="block text-sm font-medium text-gray-1000">Employee Image</label>
+            <input
+              type="file"
+              id="image"
+              className="mt-1 text-gray-900"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </div>
           {imagePreview && (
-            <img src={imagePreview} alt="Employee" className="mt-3 h-48 w-48 object-cover" />
+            <div className="w-40 h-25">
+              <img src={imagePreview} alt="Employee" className="h-24 w-24 object-cover" />
+            </div>
           )}
         </div>
 

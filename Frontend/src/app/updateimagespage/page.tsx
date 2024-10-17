@@ -167,11 +167,7 @@ const UpdateImage = () => {
 
           {imagePreview && (
             <div className="w-40 h-25">
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="object-cover w-full h-full rounded-lg"
-              />
+              <img src={imagePreview} alt="Preview" className="object-cover w-full h-full rounded-lg"/>
             </div>
           )}
         </div>
