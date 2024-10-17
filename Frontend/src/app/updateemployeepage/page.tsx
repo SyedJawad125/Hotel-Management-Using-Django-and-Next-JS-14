@@ -38,10 +38,11 @@ const UpdateEmployee = () => {
   useEffect(() => {
     const fetchEmployeeData = async () => {
       if (employeeId) {
-        try {     
+        try {
           const res = await AxiosInstance.get(`/hotel/employee?id=${employeeId}`);
           const employeeData = res?.data?.data?.data[0]; // Assuming the data is an array
           if (employeeData) {
+            // Set employee details
             setFirstName(employeeData.first_name);
             setLastName(employeeData.last_name);
             setEmail(employeeData.email);
@@ -51,10 +52,14 @@ const UpdateEmployee = () => {
             setPosition(employeeData.position);
             setDepartment(employeeData.department);
             setSalary(employeeData.salary.toString());
-
+  
             // Handle image preview if employee has an image
             if (employeeData.image) {
-              setImagePreview(`/employee/${employeeData.image}`);
+              // Assuming `employeeData.image` contains just the image filename
+              const baseUrl = ' http://127.0.0.1:8000/'; // Replace with your actual backend base URL
+              setImagePreview(`${baseUrl}${employeeData.image}`);
+            } else {
+              console.log('No image found for this employee.');
             }
           } else {
             console.error('No employee found with this ID:', employeeId);
@@ -64,9 +69,10 @@ const UpdateEmployee = () => {
         }
       }
     };
-
+  
     fetchEmployeeData();
   }, [employeeId]);
+  
 
   // Handle image input and preview
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -251,7 +257,7 @@ const UpdateEmployee = () => {
 
         <button
           type="submit"
-          className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+          className="px-6 py-2 mb-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
         >
           Update Employee
         </button>
