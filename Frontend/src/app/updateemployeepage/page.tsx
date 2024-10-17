@@ -246,17 +246,24 @@ const UpdateEmployee = () => {
             <input
               type="file"
               id="image"
-              className="mt-1 text-gray-900"
+              className="mt-1 text-gray-100"
               accept="image/*"
               onChange={handleImageChange}
             />
           </div>
+
           {imagePreview && (
-            <div className="w-40 h-25">
-              <img src={imagePreview} alt="Employee" className="h-24 w-24 object-cover" />
+            <div className="flex items-center space-x-4">
+              <div className="w-40 h-25">
+                <img src={imagePreview} alt="Employee" className="h-24 w-24 object-cover" />
+              </div>
+              {/* {image && (
+                <span className="text-sm text-gray-100">{image.name}</span>
+              )} */}
             </div>
           )}
         </div>
+
 
         <button
           type="submit"
