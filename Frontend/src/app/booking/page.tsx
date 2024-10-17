@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import CheckInOut from "@/components/CheckInOut";
+import BookingCom from "@/components/BookingCom";
 import AdminSideNavbarCom from "@/components/AdminSideNavbarCom";
 
 const page = () => {
@@ -10,7 +10,7 @@ const page = () => {
       <AdminSideNavbarCom />
     </div>
     <div className="w-[85%] p-6 bg-black">
-    <CheckInOut/> 
+    <BookingCom/> 
     </div>
   </div> 
   )
