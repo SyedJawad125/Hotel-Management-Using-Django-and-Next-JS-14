@@ -53,8 +53,8 @@ const EmployeeCom = () => {
     }
   };
 
-  const updateRecord = (item) => {
-    router.push(`/updateemployeepage?id=${item.id}`);
+  const updateRecord = (empid) => {
+    router.push(`/updateemployeepage?empid=${empid}`);
   };
 
   const DetailRecord = (employeeId) => {
@@ -144,7 +144,7 @@ const EmployeeCom = () => {
                     {permissions.update_employee && (
                       <button
                         className="btn btn-primary bg-blue-500 text-white py-1 px-2 rounded"
-                        onClick={() => updateRecord(item)}
+                        onClick={() => updateRecord(item.id)}
                       >
                         Update
                       </button>

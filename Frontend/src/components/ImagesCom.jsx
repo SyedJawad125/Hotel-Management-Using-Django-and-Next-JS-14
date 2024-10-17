@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { AuthContext } from '@/components/AuthContext';
 
 
-const ProductsCom = () => {
+const ImagesCom = () => {
   const router = useRouter();
   const { permissions = {} } = useContext(AuthContext); // Provide a default value for permissions
   const [records, setRecords] = useState([]);
@@ -78,7 +78,7 @@ const ProductsCom = () => {
 
   return (
     <div className="container mx-auto my-4 w-full bg-black ml-5">
-      <h2 className="text-2xl font-bold mb-4">List Of Products</h2>
+      <h2 className="text-2xl font-bold mb-4">List Of Images</h2>
 
        {/* Conditionally render the Add Employee button based on user permissions */}
        {/* {permissions.create_product && ( */}
@@ -174,4 +174,4 @@ const ProductsCom = () => {
   );
 };
 
-export default ProductsCom;
+export default ImagesCom;

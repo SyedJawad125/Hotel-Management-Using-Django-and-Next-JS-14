@@ -11,7 +11,7 @@ interface Category {
   description: string;
 }
 
-const UpdateProduct = () => {
+const UpdateImage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const imageId = searchParams.get('imgid'); // Get the id from the query parameters
@@ -137,7 +137,7 @@ const UpdateProduct = () => {
 
   return (
     <div className="container mx-auto px-4 ml-20">
-      <h2 className="mt-4 text-2xl font-bold mb-10">Update Product Here:</h2>
+      <h2 className="mt-4 text-2xl font-bold mb-10">Update Images Here:</h2>
       <form className="mt-3" onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium text-gray-1000">Name</label>
@@ -238,4 +238,4 @@ const UpdateProduct = () => {
   );
 };
 
-export default UpdateProduct;
+export default UpdateImage;
