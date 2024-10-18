@@ -17,7 +17,7 @@ const AddBooking = () => {
   const [check_out, setCheck_out] = useState('');
   const [adults, setAdults] = useState('1'); // Default value set to '1'
   const [children, setChildren] = useState('1'); // Default value set to '1'
-  const [rooms, setRooms] = useState('');
+  const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
   const [roomRecords, setRoomRecords] = useState<Booking[]>([]);
 
   useEffect(() => {
@@ -37,10 +37,20 @@ const AddBooking = () => {
     fetchMenu();
   }, []);
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleRoomSelection = (roomId: number) => {
+    if (selectedRooms.includes(roomId)) {
+      // If room is already selected, remove it
+      setSelectedRooms(selectedRooms.filter(id => id !== roomId));
+    } else {
+      // Otherwise, add it to the selection
+      setSelectedRooms([...selectedRooms, roomId]);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const payload = { check_in, check_out, adults, children, rooms };
+      const payload = { check_in, check_out, adults, children, rooms: selectedRooms }; // Send the array of room IDs
       const response = await AxiosInstance.post('/hotel/booking', payload, {
         headers: {
           'Content-Type': 'application/json',
@@ -61,6 +71,11 @@ const AddBooking = () => {
         {num}
       </option>
     ));
+  };
+
+  // Function to handle removal of selected rooms
+  const handleRemoveRoom = (roomId: number) => {
+    setSelectedRooms(prevSelected => prevSelected.filter(id => id !== roomId));
   };
 
   return (
@@ -127,31 +142,49 @@ const AddBooking = () => {
         </div>
 
         <div className="mb-4">
-            <label htmlFor="category" className="block text-sm font-medium text-black">
-              Select Room
-            </label>
-            <select
-              id="imagescategory"
-              className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
-                        focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-black"
-              onChange={(e) => setRooms(e.target.value)}>
-              <option value="" className="text-black">Select Room</option>
-              {roomRecords.length > 0 ? (
-                roomRecords.map((item, index) => (
-                  <React.Fragment key={item.id}>
-                    {index > 0 && (
-                      <option disabled className="text-gray-500">───────────────</option> 
-                    )}
-                    <option value={item.id} className="text-black">
-                      {item.room_number} - {item.category}
-                    </option>
-                  </React.Fragment>
-                ))
-              ) : (
-                <option value="" className="text-black">No categories available</option>
-              )}
-            </select>
+          <label htmlFor="category" className="block text-sm font-medium text-black">
+            Select Room(s)
+          </label>
+          <select
+            id="roomSelection"
+            className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+            focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-black"
+            onChange={(e) => handleRoomSelection(Number(e.target.value))}>
+            <option value="" className="text-black">Select Room</option>
+            {roomRecords.length > 0 ? (
+              roomRecords.map((item) => (
+                <option key={item.id} value={item.id} className="text-black">
+                  {item.room_number} - {item.category}
+                </option>
+              ))
+            ) : (
+              <option value="" className="text-black">No rooms available</option>
+            )}
+          </select>
         </div>
+
+        {/* Display Selected Rooms */}
+        {selectedRooms.length > 0 && (
+          <div className="mb-4">
+            <h3 className="text-sm font-medium text-gray-1000">Selected Rooms:</h3>
+            <ul className="mt-2">
+              {selectedRooms.map(roomId => {
+                const room = roomRecords.find(item => item.id === roomId);
+                return room ? (
+                  <li key={room.id} className="text-gray-100 flex justify-between items-center">
+                    <p>Room Id is {room.id} - Number is {room.room_number} - {room.category}</p>
+                    <button
+                      onClick={() => handleRemoveRoom(room.id)} // Call function to remove the room
+                      className="ml-4 text-red-500 hover:text-red-700"
+                    >
+                      Remove
+                    </button>
+                  </li>
+                ) : null;
+              })}
+            </ul>
+          </div>
+        )}
 
         <button
           type="submit"
