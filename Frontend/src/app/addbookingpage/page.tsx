@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Next.js router
 import AxiosInstance from "@/components/AxiosInstance";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
 
 interface Booking {
   id: number;
@@ -15,8 +17,8 @@ const AddBooking = () => {
 
   const [check_in, setCheck_in] = useState('');
   const [check_out, setCheck_out] = useState('');
-  const [adults, setAdults] = useState('1'); // Default value set to '1'
-  const [children, setChildren] = useState('1'); // Default value set to '1'
+  const [adults, setAdults] = useState(''); // Default value set to '1'
+  const [children, setChildren] = useState(''); // Default value set to '1'
   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
   const [roomRecords, setRoomRecords] = useState<Booking[]>([]);
 
@@ -32,6 +34,7 @@ const AddBooking = () => {
         }
       } catch (error) {
         console.error('Error occurred while fetching categories:', error);
+        toast.error('Error fetching room data!'); // Show toast notification for fetch error
       }
     };
     fetchMenu();
@@ -56,12 +59,21 @@ const AddBooking = () => {
           'Content-Type': 'application/json',
         },
       });
+      
       if (response) {
         console.log('Response:', response.data);
+        toast.success('Booking successful!');
         router.push('/imagespage');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting the form:', error);
+
+      // Display error message in toast if there's a response from the server
+      if (error.response && error.response.data && error.response.data.error) {
+        toast.error(error.response.data.error); // Show the error message in toast
+      } else {
+        toast.error('Something went wrong. Please try again later.');
+      }
     }
   };
 
@@ -79,8 +91,9 @@ const AddBooking = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 ml-20">
-      <h2 className="mt-4 text-2xl font-bold mt-5 mb-10">Add Product Here:</h2>
+    <div className="container mx-auto px-4 ml-24">
+      <ToastContainer /> {/* Toast container to display notifications */}
+      <h2 className="mt-4 text-2xl font-bold mt-5 mb-10">Room Booking Here:</h2>
       <form className="mt-3" onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="check_in" className="block text-sm font-medium text-gray-1000">
@@ -121,6 +134,7 @@ const AddBooking = () => {
             value={adults}
             onChange={(e) => setAdults(e.target.value)}
           >
+            <option value="">Select Adults</option>
             {generateOptions(10)}
           </select>
         </div>
@@ -137,6 +151,8 @@ const AddBooking = () => {
             value={children}
             onChange={(e) => setChildren(e.target.value)}
           >
+            <option value="">Select Children</option>
+            <option value="0">0</option>
             {generateOptions(10)}
           </select>
         </div>
@@ -175,7 +191,7 @@ const AddBooking = () => {
                     <p>Room Id is {room.id} - Number is {room.room_number} - {room.category}</p>
                     <button
                       onClick={() => handleRemoveRoom(room.id)} // Call function to remove the room
-                      className="ml-4 text-red-500 hover:text-red-700"
+                      className="ml-4 mr-80 text-red-500 hover:text-red-700"
                     >
                       Remove
                     </button>
