@@ -7,8 +7,7 @@ interface Booking {
   id: number;
   name: string;
   category: string;
-  description: string;
-  bulletsdescription: string;
+  room_number: string;
 }
 
 const AddBooking = () => {
@@ -128,30 +127,30 @@ const AddBooking = () => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="category" className="block text-sm font-medium text-black">
-            Select Room
-          </label>
-          <select
-            id="imagescategory"
-            className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
-                      focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-black"
-            onChange={(e) => setRooms(e.target.value)}>
-            <option value="" className="text-black">Select Room</option>
-            {roomRecords.length > 0 ? (
-              roomRecords.map((item, index) => (
-                <React.Fragment key={item.id}>
-                  {index > 0 && (
-                    <option disabled className="text-gray-500">───────────────</option> 
-                  )}
-                  <option value={item.id} className="text-black">
-                    {item.category}
-                  </option>
-                </React.Fragment>
-              ))
-            ) : (
-              <option value="" className="text-black">No categories available</option>
-            )}
-          </select>
+            <label htmlFor="category" className="block text-sm font-medium text-black">
+              Select Room
+            </label>
+            <select
+              id="imagescategory"
+              className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
+                        focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-black"
+              onChange={(e) => setRooms(e.target.value)}>
+              <option value="" className="text-black">Select Room</option>
+              {roomRecords.length > 0 ? (
+                roomRecords.map((item, index) => (
+                  <React.Fragment key={item.id}>
+                    {index > 0 && (
+                      <option disabled className="text-gray-500">───────────────</option> 
+                    )}
+                    <option value={item.id} className="text-black">
+                      {item.room_number} - {item.category}
+                    </option>
+                  </React.Fragment>
+                ))
+              ) : (
+                <option value="" className="text-black">No categories available</option>
+              )}
+            </select>
         </div>
 
         <button
