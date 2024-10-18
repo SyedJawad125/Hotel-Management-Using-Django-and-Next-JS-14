@@ -110,36 +110,52 @@ const BookingCom = () => {
             currentRecords.map((item) => (
               <div key={item.id} className="col mb-4">
                 <div className="card">
-                  <div className="card-body">
-                    <h5 className="card-title text-lg font-bold">Check In: {item.check_in}</h5>
-                    <p className="card-text">Check Out: {item.check_out}</p>
-                    <p className="card-text">Total Price: {item.total_price}</p>
-                    <p className="card-text">Adults: {item.adults}</p>
-                    <p className="card-text">Children: {item.children}</p>
-                    {/* <p className="card-text">Room Category: {item.room_category}</p> */}
-                    {/* <p className="card-text">Room Number: {item.room_num}</p> */}
+                <div className="card-body">
+                  <h5 className="card-title text-lg font-bold">Check In: {item.check_in}</h5>
+                  <p className="card-text">Check Out: {item.check_out}</p>
+                  <p className="card-text">Total Price: {item.total_price}</p>
+                  <p className="card-text">Adults: {item.adults}</p>
+                  <p className="card-text">Children: {item.children}</p>
+                  <p className="card-text">
+                      Room Category: {item.room_category && item.room_category.length > 0 ? (
+                          item.room_category.map((category, index) => (
+                              <span key={index}>
+                                  {category}{index < item.room_category.length - 1 && ', '}
+                              </span>
+                          ))
+                      ) : (
+                          'No category available'
+                      )}
+                  </p>
 
-                    <div className="flex">
-                      {/* {permissions.delete_booking && ( */}
-                      <button
-                        className="btn btn-danger bg-red-500 text-white py-2 px-4 rounded mr-2"
-                        onClick={() => deleteRecord(item.id)}
-                      >
-                        Delete
-                      </button>
-                      {/* )} */}
+                  {/* Display room numbers */}
+                  <p className="card-text">
+                    Room Numbers: {item.room_num && item.room_num.length > 0 ? (
+                      item.room_num.map((room, index) => (
+                        <span key={index}>
+                          {room.room_number}{index < item.room_num.length - 1 && ', '}
+                        </span>
+                      ))
+                    ) : (
+                      'No rooms assigned'
+                    )}
+                  </p>
 
-                      {/* Conditionally render the Update button based on user permissions */}
-                      {/* {permissions.update_booking && ( */}
-                      <button
-                        className="btn btn-primary bg-blue-500 text-white py-2 px-4 rounded"
-                        onClick={() => updateRecord(item.id)}
-                      >
-                        Update
-                      </button>
-                      {/* )} */}
-                    </div>
+                  <div className="flex">
+                    <button
+                      className="btn btn-danger bg-red-500 text-white py-2 px-4 rounded mr-2"
+                      onClick={() => deleteRecord(item.id)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="btn btn-primary bg-blue-500 text-white py-2 px-4 rounded"
+                      onClick={() => updateRecord(item.id)}
+                    >
+                      Update
+                    </button>
                   </div>
+                </div>
                 </div>
               </div>
             ))

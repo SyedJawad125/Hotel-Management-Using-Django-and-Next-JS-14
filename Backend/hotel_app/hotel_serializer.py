@@ -55,8 +55,14 @@ class BookingSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         # data['room_category'] = instance.rooms.category if instance.rooms else None
         data['room_num'] = RoomSerializer(instance.rooms.all(), many=True).data if instance.rooms else None
+        data['room_category'] = [room.category for room in instance.rooms.all()] if instance.rooms else None
         data['created_by'] = UserListingSerializer(instance.created_by).data if instance.created_by else None
         data['updated_by'] = UserListingSerializer(instance.updated_by).data if instance.updated_by else None
+
+        # Add room_category for each room
+        # data['room_category'] = [
+        #     room.category.name if room.category else "No category" for room in instance.rooms.all()
+        # ] if instance.rooms else None
 
         return data
     
