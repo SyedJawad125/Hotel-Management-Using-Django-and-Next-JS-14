@@ -13,7 +13,7 @@ const BookingCom = () => {
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 10;
+  const recordsPerPage = 12;
 
   useEffect(() => {
     const receiveData = async () => {
