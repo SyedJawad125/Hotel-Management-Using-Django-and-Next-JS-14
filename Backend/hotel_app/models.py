@@ -115,7 +115,9 @@ class Booking(models.Model):
             raise ValidationError("Check-in date cannot be in the past.")
     def __str__(self):
         return f"Booking {self.id} by {self.guest}"
-    
+
+    class Meta:
+        ordering = ['-id']
    
 class Payment(models.Model):
     PAYMENT_METHODS = [

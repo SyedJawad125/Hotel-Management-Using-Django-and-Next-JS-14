@@ -63,7 +63,7 @@ const AddBooking = () => {
       if (response) {
         console.log('Response:', response.data);
         toast.success('Booking successful!');
-        router.push('/imagespage');
+        router.push('/bookingpage');
       }
     } catch (error: any) {
       console.error('Error submitting the form:', error);
