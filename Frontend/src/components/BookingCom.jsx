@@ -111,6 +111,7 @@ const BookingCom = () => {
               <div key={item.id} className="col mb-4">
                 <div className="card">
                 <div className="card-body">
+                  <p className="card-text">Id: {item.id}</p>
                   <h5 className="card-title text-lg font-bold">Check In: {item.check_in}</h5>
                   <p className="card-text">Check Out: {item.check_out}</p>
                   <p className="card-text">Total Price: {item.total_price}</p>
