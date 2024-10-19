@@ -45,8 +45,8 @@ const BookingCom = () => {
     }
   };
 
-  const updateRecord = async (bookingId) => {
-    router.push(`/updatebookingpage?bookingId=${bookingId}`);
+  const updateRecord = async (bookingid) => {
+    router.push(`/updatebookingpage?bookingid=${bookingid}`);
   };
 
   const handleSearch = (e) => {
