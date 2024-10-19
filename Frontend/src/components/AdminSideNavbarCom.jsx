@@ -53,6 +53,11 @@ const Sidebar = () => {
                   Images
                 </div>
               </Link>
+              <Link href="/roomspage">
+                <div className={`block py-2.5 px-4 rounded ${isActive('/roomspage') ? 'bg-gray-700' : 'hover:text-red-500 px-3 py-2'}`}>
+                  Rooms
+                </div>
+              </Link>
               <Link href="/bookingpage">
                 <div className={`block py-2.5 px-4 rounded ${isActive('/bookingpage') ? 'bg-gray-700' : 'hover:text-red-500 px-3 py-2'}`}>
                   Booking
