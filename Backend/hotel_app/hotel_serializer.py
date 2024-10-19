@@ -21,7 +21,7 @@ class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         # fields = '__all__'
-        fields = ['id', 'room_number', 'category']
+        fields = ['id', 'room_number', 'category', 'price_per_night', 'capacity']
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['created_by'] = UserListingSerializer(instance.created_by).data if instance.created_by else None

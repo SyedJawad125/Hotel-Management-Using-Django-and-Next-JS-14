@@ -1,30 +1,28 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'; // Next.js router
 import AxiosInstance from "@/components/AxiosInstance";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
 
-interface Booking {
-  id: number;
-  name: string;
-  category: string;
-  room_number: string;
-}
+const ROOM_CATEGORIES = [
+  { value: 'SINGLE', label: 'Single Room' },
+  { value: 'DOUBLE', label: 'Double Room' },
+  { value: 'SUITE', label: 'Suite' },
+];
 
 const AddRoom = () => {
   const router = useRouter();
 
   const [room_number, setRoom_number] = useState('');
-  const [category, setCategory] = useState('');
-  const [price_per_night, setPrice_per_night] = useState(''); // Default value set to '1'
-  const [capacity, setCapacity] = useState(''); // Default value set to '1'
+  const [category, setCategory] = useState('SINGLE'); // Default category set to 'SINGLE'
+  const [price_per_night, setPrice_per_night] = useState('');
+  const [capacity, setCapacity] = useState('');
 
-  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const payload = { room_number, category, price_per_night, capacity }; // Send the array of room IDs
+      const payload = { room_number, category, price_per_night, capacity };
       const response = await AxiosInstance.post('/hotel/room', payload, {
         headers: {
           'Content-Type': 'application/json',
@@ -33,40 +31,31 @@ const AddRoom = () => {
       
       if (response) {
         console.log('Response:', response.data);
-        toast.success('Booking successful!');
+        toast.success('Room added successfully!');
         router.push('/bookingpage');
       }
     } catch (error: any) {
       console.error('Error submitting the form:', error);
 
-      // Display error message in toast if there's a response from the server
       if (error.response && error.response.data && error.response.data.error) {
-        toast.error(error.response.data.error); // Show the error message in toast
+        toast.error(error.response.data.error);
       } else {
         toast.error('Something went wrong. Please try again later.');
       }
     }
   };
 
-  const generateOptions = (count: number) => {
-    return Array.from({ length: count }, (_, i) => i + 1).map((num) => (
-      <option key={num} value={num}>
-        {num}
-      </option>
-    ));
-  };
-
   return (
     <div className="container mx-auto px-4 ml-24">
-      <ToastContainer /> {/* Toast container to display notifications */}
+      <ToastContainer />
       <h2 className="mt-4 text-2xl font-bold mt-5 mb-10">Add Room Here:</h2>
       <form className="mt-3" onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="check_in" className="block text-sm font-medium text-gray-1000">
+          <label htmlFor="room_number" className="block text-sm font-medium text-gray-1000">
             Room Number
           </label>
           <input
-            type="room_number" // Add date picker
+            type="text"
             id="room_number"
             className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
@@ -74,46 +63,56 @@ const AddRoom = () => {
             onChange={(e) => setRoom_number(e.target.value)}
           />
         </div>
+        
+        {/* Room Category Dropdown */}
         <div className="mb-4">
-          <label htmlFor="check_out" className="block text-sm font-medium text-gray-1000">
-            Room Category
+          <label htmlFor="category" className="block text-sm font-medium text-gray-1000">
+            Select Category
           </label>
-          <input
-            type="category" // Add date picker
+          <select
             id="category"
             className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-          />
+          >
+            <option value="" className="text-black">Select Category</option>
+            {ROOM_CATEGORIES.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* Adults Dropdown */}
+        {/* Price Per Night */}
         <div className="mb-4">
-          <label htmlFor="adults" className="block text-sm font-medium text-gray-1000">
+          <label htmlFor="price_per_night" className="block text-sm font-medium text-gray-1000">
             Price Per Night
           </label>
-          <select
-            id="adults"
+          <input
+            type="text"
+            id="price_per_night"
             className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
             value={price_per_night}
-            onChange={(e) => setPrice_per_night(e.target.value)}>
-          </select>
+            onChange={(e) => setPrice_per_night(e.target.value)}
+          />
         </div>
 
-        {/* Children Dropdown */}
+        {/* Capacity */}
         <div className="mb-4">
-          <label htmlFor="children" className="block text-sm font-medium text-gray-1000">
+          <label htmlFor="capacity" className="block text-sm font-medium text-gray-1000">
             Capacity
           </label>
-          <select
-            id="children"
+          <input
+            type="number"
+            id="capacity"
             className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
             value={capacity}
-            onChange={(e) => setCapacity(e.target.value)}>
-          </select>
+            onChange={(e) => setCapacity(e.target.value)}
+          />
         </div>
 
         <button
