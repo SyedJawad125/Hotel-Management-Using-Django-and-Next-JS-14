@@ -59,10 +59,11 @@ class BookingSerializer(serializers.ModelSerializer):
         data['created_by'] = UserListingSerializer(instance.created_by).data if instance.created_by else None
         data['updated_by'] = UserListingSerializer(instance.updated_by).data if instance.updated_by else None
 
-        # Add room_category for each room
-        # data['room_category'] = [
-        #     room.category.name if room.category else "No category" for room in instance.rooms.all()
-        # ] if instance.rooms else None
+        # Adding username and email to the response
+        if instance.created_by:
+            data['username'] = instance.created_by.username  # Assuming you have a username field
+            data['phone'] = instance.created_by.phone  # Assuming you have a username field
+            data['email'] = instance.created_by.email  # Assuming you have an email field
 
         return data
     

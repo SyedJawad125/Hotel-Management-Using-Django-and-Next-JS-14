@@ -1,18 +1,3 @@
-// 'use client'
-// import React from 'react'
-// import AddEmployeeCom from "@/components/AddEmployeeCom";
-
-// const page = () => {
-//   return (
-//     <div>
-//       <AddEmployeeCom/>
-//     </div>
-//   )
-// }
-
-// export default page
-
-
 'use client'
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'; // Next.js router

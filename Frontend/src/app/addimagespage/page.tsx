@@ -11,7 +11,7 @@ interface Category {
   bulletsdescription: string;
 }
 
-const AddProduct = () => {
+const AddImages = () => {
   const router = useRouter();
 
   const [name, setName] = useState('');
@@ -173,4 +173,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default AddImages;
