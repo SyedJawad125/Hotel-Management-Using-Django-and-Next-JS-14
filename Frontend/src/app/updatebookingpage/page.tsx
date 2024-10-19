@@ -5,11 +5,10 @@ import AxiosInstance from "@/components/AxiosInstance";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
 
-interface Booking {
+interface RoomDetails {
   id: number;
-  name: string;
-  category: string;
   room_number: string;
+  category: string;
 }
 
 const UpdateBooking = () => {
@@ -21,8 +20,8 @@ const UpdateBooking = () => {
   const [check_out, setCheck_out] = useState('');
   const [adults, setAdults] = useState(''); 
   const [children, setChildren] = useState(''); 
-  const [selectedRooms, setSelectedRooms] = useState<number[]>([]); // Ensure this is always initialized
-  const [roomRecords, setRoomRecords] = useState<Booking[]>([]);
+  const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
+  const [roomRecords, setRoomRecords] = useState<RoomDetails[]>([]);
   const [availableRooms, setAvailableRooms] = useState<string>(''); // For displaying selected room numbers
 
   // Fetch booking data based on bookingId
@@ -31,16 +30,20 @@ const UpdateBooking = () => {
       if (bookingId) {
         try {
           const res = await AxiosInstance.get(`/hotel/booking?id=${bookingId}`);
-          const bookingData = res.data.data; // Adjust according to your API response structure
-          
+          const bookingData = res.data.data.data[0]; // Adjust according to your API response structure
+
           if (bookingData) {
             console.log("Booking Data: ", bookingData); // DEBUGGING
             setCheck_in(bookingData.check_in);
             setCheck_out(bookingData.check_out);
             setAdults(bookingData.adults);
             setChildren(bookingData.children);
-            setSelectedRooms(bookingData.rooms || []); // Default to an empty array if undefined
-            console.log("Selected Room IDs: ", bookingData.rooms); // DEBUGGING
+            
+            // Extract selected room IDs from room_num array
+            const roomIds = bookingData.room_num.map((room: RoomDetails) => room.id);
+            setSelectedRooms(roomIds);
+            
+            console.log("Selected Room IDs: ", roomIds); // DEBUGGING
           } else {
             console.error('No booking found with this ID:', bookingId);
           }
@@ -102,7 +105,14 @@ const UpdateBooking = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const payload = { id: bookingId as string, check_in, check_out, adults, children, rooms: selectedRooms };
+      const payload = { 
+        id: bookingId as string, 
+        check_in, 
+        check_out, 
+        adults, 
+        children, 
+        rooms: selectedRooms // Make sure this is correctly structured for your API
+      };
       const response = await AxiosInstance.patch(`/hotel/booking`, payload, {
         headers: {
           'Content-Type': 'application/json',
@@ -200,22 +210,19 @@ const UpdateBooking = () => {
                   checked={selectedRooms.includes(room.id)}
                   onChange={() => handleRoomSelection(room.id)}
                 />
-                <label htmlFor={`room-${room.id}`} className="ml-2 text-sm font-medium text-gray-700">
-                  {room.room_number}
+                <label htmlFor={`room-${room.id}`} className="ml-2 text-sm">
+                  {room.room_number} - {room.category}
                 </label>
               </div>
             ))}
           </div>
         </div>
 
-        <button
-          type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-        >
+        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600">
           Update Booking
         </button>
       </form>
-      <ToastContainer />
+      <ToastContainer /> {/* Toast notifications */}
     </div>
   );
 };
