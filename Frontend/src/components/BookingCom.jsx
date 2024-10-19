@@ -83,14 +83,14 @@ const BookingCom = () => {
       <h2 className="text-2xl font-bold mb-4">List Of Bookings</h2>
 
       {/* Conditionally render the Add Booking button based on user permissions */}
-      {permissions.create_booking && (
+      {/* {permissions.create_booking && ( */}
         <button
           className='btn btn-primary mt-3 bg-blue-500 text-white py-2 px-4 rounded'
           onClick={() => router.push('/addbookingpage')}
         >
           Add Booking
         </button>
-      )}
+      {/* )} */}
 
       <br />
       <br />
