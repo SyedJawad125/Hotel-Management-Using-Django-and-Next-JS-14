@@ -15,7 +15,7 @@ interface Booking {
 const UpdateBooking = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const bookingId = searchParams.get('id'); // Get the booking id from the query parameters
+  const bookingId = searchParams.get('bookingid'); // Get the booking id from the query parameters
 
   const [check_in, setCheck_in] = useState('');
   const [check_out, setCheck_out] = useState('');
@@ -30,22 +30,17 @@ const UpdateBooking = () => {
     const fetchBookingData = async () => {
       if (bookingId) {
         try {
-          const res = await AxiosInstance.get(`/hotel/booking/${bookingId}`);
+          const res = await AxiosInstance.get(`/hotel/booking?id=${bookingId}`);
           const bookingData = res.data.data; // Adjust according to your API response structure
           
           if (bookingData) {
+            console.log("Booking Data: ", bookingData); // DEBUGGING
             setCheck_in(bookingData.check_in);
             setCheck_out(bookingData.check_out);
             setAdults(bookingData.adults);
             setChildren(bookingData.children);
             setSelectedRooms(bookingData.rooms || []); // Default to an empty array if undefined
-
-            // Convert selected room IDs to room numbers
-            const roomNumbers = bookingData.rooms?.map((roomId: number) => {
-              const room = roomRecords.find(r => r.id === roomId);
-              return room ? room.room_number : '';
-            }).join(', ') || ''; // Join with commas, default to empty string
-            setAvailableRooms(roomNumbers);
+            console.log("Selected Room IDs: ", bookingData.rooms); // DEBUGGING
           } else {
             console.error('No booking found with this ID:', bookingId);
           }
@@ -57,15 +52,17 @@ const UpdateBooking = () => {
     };
 
     fetchBookingData();
-  }, [bookingId, roomRecords]);
+  }, [bookingId]);
 
+  // Fetch available rooms
   useEffect(() => {
     const fetchRooms = async () => {
       try {
         const res = await AxiosInstance.get('/hotel/room');
-        console.log('Room API response:', res.data);
+        console.log('Room API response:', res.data); // DEBUGGING
         if (res?.data?.data?.data) {
           setRoomRecords(res.data.data.data);
+          console.log('Room Records: ', res.data.data.data); // DEBUGGING
         } else {
           console.error('Unexpected response structure:', res.data);
         }
@@ -77,29 +74,36 @@ const UpdateBooking = () => {
     fetchRooms();
   }, []);
 
-  const handleRoomSelection = (roomId: number) => {
-    // Prevents errors when selectedRooms is undefined
-    if (selectedRooms) {
-      if (selectedRooms.includes(roomId)) {
-        setSelectedRooms(selectedRooms.filter(id => id !== roomId)); // Remove if already selected
-      } else {
-        setSelectedRooms([...selectedRooms, roomId]); // Add to selection
-      }
-  
-      // Update the available rooms string
-      const updatedRoomNumbers = selectedRooms.includes(roomId)
-        ? availableRooms.split(', ').filter(num => num !== roomRecords.find(r => r.id === roomId)?.room_number).join(', ')
-        : `${availableRooms}, ${roomRecords.find(r => r.id === roomId)?.room_number}`.replace(/, ,/g, ', ').trim();
+  // Update available room numbers based on selectedRooms and roomRecords
+  useEffect(() => {
+    if (selectedRooms.length > 0 && roomRecords.length > 0) {
+      const roomNumbers = selectedRooms
+        .map(roomId => {
+          const foundRoom = roomRecords.find(room => room.id === roomId);
+          console.log('Mapping Room ID:', roomId, 'to Room Number:', foundRoom?.room_number); // DEBUGGING
+          return foundRoom?.room_number || ''; // If no room is found, return an empty string
+        })
+        .filter(roomNumber => roomNumber !== '') // Filter out any undefined room numbers
+        .join(', ');
       
-      setAvailableRooms(updatedRoomNumbers);
+      console.log('Mapped Room Numbers: ', roomNumbers); // DEBUGGING
+      setAvailableRooms(roomNumbers);
+    }
+  }, [selectedRooms, roomRecords]);
+
+  const handleRoomSelection = (roomId: number) => {
+    if (selectedRooms.includes(roomId)) {
+      setSelectedRooms(selectedRooms.filter(id => id !== roomId)); // Remove if already selected
+    } else {
+      setSelectedRooms([...selectedRooms, roomId]); // Add to selection
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const payload = { check_in, check_out, adults, children, rooms: selectedRooms };
-      const response = await AxiosInstance.patch(`/hotel/booking/${bookingId}`, payload, {
+      const payload = { id: bookingId as string, check_in, check_out, adults, children, rooms: selectedRooms };
+      const response = await AxiosInstance.patch(`/hotel/booking`, payload, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -196,7 +200,9 @@ const UpdateBooking = () => {
                   checked={selectedRooms.includes(room.id)}
                   onChange={() => handleRoomSelection(room.id)}
                 />
-                <label htmlFor={`room-${room.id}`} className="ml-2 text-gray-900">{room.room_number}</label>
+                <label htmlFor={`room-${room.id}`} className="ml-2 text-sm font-medium text-gray-700">
+                  {room.room_number}
+                </label>
               </div>
             ))}
           </div>
@@ -204,14 +210,12 @@ const UpdateBooking = () => {
 
         <button
           type="submit"
-          className="mt-3 w-1/4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm 
-          text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none 
-          focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
         >
           Update Booking
         </button>
       </form>
-      <ToastContainer /> {/* Toast notifications */}
+      <ToastContainer />
     </div>
   );
 };
