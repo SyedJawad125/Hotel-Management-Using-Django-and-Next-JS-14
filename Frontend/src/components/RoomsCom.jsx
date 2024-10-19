@@ -120,7 +120,7 @@ const RoomCom = () => {
               <span className="text-left -ml-28">{room.room_number}</span>
               <span className="text-left -ml-28">{room.category}</span>
 
-              <div className="flex justify-end space-x-2 mb-1">
+              <div className="flex justify-end space-x-2 mb-1 mr-10">
                 <button
                   className="btn btn-danger bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600"
                   onClick={() => detailRoom(room.id)}
