@@ -105,8 +105,8 @@ const RoomCom = () => {
         {/* Header Row */}
         <div className="grid grid-cols-5 gap-4 text-white font-bold bg-gray-900 p-2 rounded-t-lg">
           <span className="text-left">S.No</span>
-          <span className="text-left -ml-24">ID</span>
-          <span className="text-left -ml-52">Room Number</span>
+          <span className="text-left -ml-32">ID</span>
+          <span className="text-left -ml-64">Room Number</span>
           <span className="text-left -ml-60">Category</span>
           <span className="text-left -ml-60">Price</span>
           {/* <span className="text-left">Actions</span> */}
@@ -117,13 +117,13 @@ const RoomCom = () => {
           {filteredRooms.map((room, index) => (
             <li key={room.id} className="grid grid-cols-6 gap-4 bg-gray-800 text-white p-2 border-t border-gray-700 mt-4">
               <span className="text-left">{(currentPage - 1) * recordsPerPage + index + 1}</span>
-              <span className="text-left -ml-20">{room.id}</span>
+              <span className="text-left -ml-24">{room.id}</span>
               <span className="text-left -ml-52">{room.room_number}</span>
               <span className="text-left -ml-60">{room.category}</span>
               <span className="text-left -ml-60">{room.price_per_night}</span>
 
 
-              <div className="flex justify-end space-x-2 mb-1">
+              <div className="flex justify-end space-x-2 mb-1 mr-2">
                 <button
                   className="btn btn-danger bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600"
                   onClick={() => detailRoom(room.id)}

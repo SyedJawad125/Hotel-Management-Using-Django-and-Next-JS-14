@@ -125,14 +125,14 @@ const EmployeeCom = () => {
             {/* Data Rows */}
             <ul className="list-none">
               {filteredRecords.map((item, index) => (
-                <li key={item.id} className="grid grid-cols-6 bg-gray-800 text-white p-0 border-t border-gray-700 mt-4">
+                <li key={item.id} className="grid grid-cols-6 gap-4 bg-gray-800 text-white p-2 border-t border-gray-700 mt-4">
                   <span className="text-left ml-2 mt-4">{(currentPage - 1) * recordsPerPage + index + 1}</span>
                   <span className="text-left -ml-20 mt-4">{item.id}</span>
                   <span className="text-left -ml-36 mt-4">{item.first_name} {item.last_name}</span>
                   <span className="text-left -ml-36 mt-4">{item.position}</span>
                   <span className="text-left -ml-32 mt-4">{item.department}</span>
 
-                  <div className="col-span-6 flex justify-end space-x-2 mb-1 mr-5">
+                  <div className="flex justify-end space-x-2 mb-1">
                     <button
                       className="btn btn-danger bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600"
                       onClick={() => DetailRecord(item.id)}
