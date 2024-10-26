@@ -68,7 +68,8 @@ INSTALLED_APPS = [
     'user_auth',
     'permissions',
     'hotel_app',
-    'images_app'
+    'images_app',
+    # 'rest_framework.authtoken',
 ]
 
 
@@ -186,3 +187,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+
+
+# SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Stores sessions in the database
+# SESSION_COOKIE_NAME = 'sessionid'  # Default cookie name, can be customized if needed
+# SESSION_COOKIE_HTTPONLY = True
+# SESSION_COOKIE_SECURE = True  # Set to True if using HTTPS

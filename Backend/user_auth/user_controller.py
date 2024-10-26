@@ -185,7 +185,12 @@ class RegisterController:
 #             return create_response({'error': str(e)}, "Unsuccessful", 500)
 
 
-class LoginController():
+from django.middleware import csrf
+from django.conf import settings
+from django.utils.http import http_date
+from datetime import datetime, timedelta
+
+class LoginController:
     serializer_class = LoginSerializer
 
     def login(self, request):
@@ -233,9 +238,9 @@ class LoginController():
                 "name": user.get_full_name(),
                 "username": user.username,
                 "email": user.email,
-                "role_id": user.role.id if user.role else None,  # Include role ID if it exists
-                "role_name": user.role.name if user.role else None,  # Include role name if it exists
-                "permissions": permissions_dict  # Ensure permissions are included in the response
+                "role_id": user.role.id if user.role else None,
+                "role_name": user.role.name if user.role else None,
+                "permissions": permissions_dict
             }
 
             # Update or create the user's token
@@ -247,17 +252,163 @@ class LoginController():
             user.last_login = timezone.now()
             user.save()
 
-            # Return response data including permissions and role ID
-            return Response({
+            # Set session cookie with CSRF token and expiration
+            response = Response({
                 "message": "Successful",
                 "data": response_data
             }, status=status.HTTP_200_OK)
+
+            # Create a session cookie with the token, secure and with expiration
+            expires = datetime.now() + timedelta(days=settings.SESSION_COOKIE_AGE // (24 * 3600))
+            response.set_cookie(
+                key="sessionid",
+                value=response_data.get("token"),
+                httponly=True,
+                secure=settings.SESSION_COOKIE_SECURE,
+                expires=http_date(expires.timestamp()),
+                samesite='Strict'
+            )
+
+            # Set CSRF token as well
+            response["X-CSRFToken"] = csrf.get_token(request)
+
+            return response
         
         except Exception as e:
             return Response({
                 "message": "Unsuccessful",
                 "error": str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class LogoutController:
+    def logout(self,request):
+        try:
+            user = request.user.guid
+            token = Token.objects.filter(user=user)
+            if not token:
+                return create_response({},UNSUCCESSFUL, status_code=400)
+            token.delete()
+            return create_response({}, SUCCESSFUL, status_code=200)
+        except Exception as e:
+            return create_response({'error':str(e)}, UNSUCCESSFUL, 500)
+
+# For Sessions
+
+# from rest_framework.authtoken.models import Token
+# from django.middleware import csrf
+# from django.conf import settings
+# from django.utils.http import http_date
+# from datetime import datetime, timedelta
+# from django.utils import timezone
+# from django.contrib.auth import authenticate
+# from django.contrib.auth.models import Permission
+# from rest_framework.response import Response
+# from rest_framework import status
+
+# class LoginController:
+#     serializer_class = LoginSerializer
+
+#     def login(self, request):
+#         try:
+#             # Validate the input data
+#             serialized_data = self.serializer_class(data=request.data)
+#             if not serialized_data.is_valid():
+#                 return Response({
+#                     "message": "Unsuccessful",
+#                     "errors": serialized_data.errors
+#                 }, status=status.HTTP_400_BAD_REQUEST)
+
+#             # Authenticate the user
+#             user = authenticate(username=request.data['username'], password=request.data['password'])
+#             if not user:
+#                 return Response({
+#                     "message": "Incorrect email or password"
+#                 }, status=status.HTTP_400_BAD_REQUEST)
+
+#             # Check if the user is active
+#             if not user.is_active:
+#                 return Response({
+#                     "message": "Account is disabled"
+#                 }, status=status.HTTP_403_FORBIDDEN)
+
+#             # Check or create the user's auth token
+#             token, created = Token.objects.get_or_create(user=user)
+
+#             # Initialize permissions dynamically
+#             permissions_dict = {perm.codename: False for perm in Permission.objects.all()}
+#             if user.is_superuser:
+#                 for perm in permissions_dict:
+#                     permissions_dict[perm] = True
+#             elif user.groups.exists():
+#                 for perm in user.user_permissions.all():
+#                     permissions_dict[perm.codename] = True
+
+#             response_data = {
+#                 "token": token.key,
+#                 "name": user.get_full_name(),
+#                 "username": user.username,
+#                 "email": user.email,
+#                 "permissions": permissions_dict
+#             }
+
+#             # Update token and reset login attempts
+#             user.failed_login_attempts = 0
+#             user.last_failed_time = None
+#             user.last_login = timezone.now()
+#             user.save()
+
+#             # Prepare response and set session cookie
+#             response = Response({
+#                 "message": "Successful",
+#                 "data": response_data
+#             }, status=status.HTTP_200_OK)
+
+#             expires = datetime.now() + timedelta(days=settings.SESSION_COOKIE_AGE // (24 * 3600))
+#             response.set_cookie(
+#                 key="sessionid",
+#                 value=response_data["token"],
+#                 httponly=True,
+#                 secure=settings.SESSION_COOKIE_SECURE,
+#                 expires=http_date(expires.timestamp()),
+#                 samesite='Strict'
+#             )
+
+#             response["X-CSRFToken"] = csrf.get_token(request)
+#             return response
+
+#         except Exception as e:
+#             return Response({
+#                 "message": "Unsuccessful",
+#                 "error": str(e)
+#             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        
+        
+
+# For Sessions
+# from rest_framework.response import Response
+# from rest_framework.views import APIView
+# from rest_framework import status
+# from django.contrib.auth.models import User
+# from rest_framework.permissions import IsAuthenticated
+
+# class SessionCheckView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request):
+#         user = request.user
+#         if user.is_authenticated:
+#             return Response({
+#                 "message": "Session is active",
+#                 "username": user.username
+#             }, status=status.HTTP_200_OK)
+#         return Response({
+#             "message": "Session has expired or is invalid"
+#         }, status=status.HTTP_401_UNAUTHORIZED)
+
+
+
 
 
 
@@ -293,17 +444,3 @@ class LoginController():
 #             return create_response(response_data, SUCCESSFUL, status_code=200)
 #         except Exception as e:
 #             return create_response({'error':str(e)}, UNSUCCESSFUL, 500)
-        
-
-class LogoutController:
-    def logout(self,request):
-        try:
-            user = request.user.guid
-            token = Token.objects.filter(user=user)
-            if not token:
-                return create_response({},UNSUCCESSFUL, status_code=400)
-            token.delete()
-            return create_response({}, SUCCESSFUL, status_code=200)
-        except Exception as e:
-            return create_response({'error':str(e)}, UNSUCCESSFUL, 500)
-        

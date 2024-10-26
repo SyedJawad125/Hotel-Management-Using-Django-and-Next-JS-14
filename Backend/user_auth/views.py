@@ -17,7 +17,6 @@ class RegisterAPIView(ModelViewSet):
         return register_controller.create(request)
 
 
-
 class LoginAPIView(ModelViewSet):
     def login(self,request):
         return login_controller.login(request)
