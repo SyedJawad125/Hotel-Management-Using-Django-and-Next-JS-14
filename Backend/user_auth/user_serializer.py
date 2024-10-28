@@ -89,63 +89,6 @@ class ForgetPasswordSerializer(serializers.Serializer):
         write_only=True
     )
 
-# class LoginSerializer(serializers.Serializer):  (Last Wala)
-#     username = serializers.CharField(
-#         label="username",
-#         trim_whitespace=True,
-#         write_only=True
-#     )
-#     password = serializers.CharField(
-#         label="password",
-#         style={"input_type": "password"},
-#         trim_whitespace=True,
-#         write_only=True
-#     )
-
-#     def validate(self, data):
-#         username = data.get('username')
-#         password = data.get('password')
-
-#         # Check if the user exists
-#         try:
-#             user = User.objects.get(username=username)
-#         except User.DoesNotExist:
-#             raise serializers.ValidationError("Invalid username or password.", code='authentication')
-
-#         # Check if the account is active and not locked
-#         if not user.is_active or user.is_locked:
-#             raise serializers.ValidationError("Your account has been deactivated or locked.", code='authentication')
-
-#         # Check the password
-#         if not user.check_password(password):
-#             raise serializers.ValidationError("Invalid username or password.", code='authentication')
-
-#         # Attach the user to the data for use in to_representation
-#         data['user'] = user
-#         return data
-
-#     def to_representation(self, data):
-#         user = data['user']
-
-#         # Include user details in the response
-#         response_data = {
-#             'username': user.username,
-#             'email': user.email,
-#             'first_name': user.first_name,
-#             'last_name': user.last_name,
-#             'token': user.get_access_token(),
-            
-#         }
-
-#         # Fetch and include the permissions related to the user's role
-#         if user.role:
-#             permissions = Permission.objects.filter(role=user.role)
-#             response_data['permissions'] = PermissionSerializer(permissions, many=True).data
-#         else:
-#             response_data['permissions'] = []
-
-#         return response_data
-
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(
@@ -221,6 +164,11 @@ class LoginSerializer(serializers.Serializer):
         return response_data
 
 
+class UserListingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['guid','get_full_name','username','email','role']
+
 
 
 
@@ -249,8 +197,59 @@ class LoginSerializer(serializers.Serializer):
     #         raise serializers.ValidationError("Your account has been deactivated.", 400)
     #     return instance
 
+# class LoginSerializer(serializers.Serializer):  (Last Wala)
+#     username = serializers.CharField(
+#         label="username",
+#         trim_whitespace=True,
+#         write_only=True
+#     )
+#     password = serializers.CharField(
+#         label="password",
+#         style={"input_type": "password"},
+#         trim_whitespace=True,
+#         write_only=True
+#     )
 
-class UserListingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['guid','get_full_name','username','email','role']
+#     def validate(self, data):
+#         username = data.get('username')
+#         password = data.get('password')
+
+#         # Check if the user exists
+#         try:
+#             user = User.objects.get(username=username)
+#         except User.DoesNotExist:
+#             raise serializers.ValidationError("Invalid username or password.", code='authentication')
+
+#         # Check if the account is active and not locked
+#         if not user.is_active or user.is_locked:
+#             raise serializers.ValidationError("Your account has been deactivated or locked.", code='authentication')
+
+#         # Check the password
+#         if not user.check_password(password):
+#             raise serializers.ValidationError("Invalid username or password.", code='authentication')
+
+#         # Attach the user to the data for use in to_representation
+#         data['user'] = user
+#         return data
+
+#     def to_representation(self, data):
+#         user = data['user']
+
+#         # Include user details in the response
+#         response_data = {
+#             'username': user.username,
+#             'email': user.email,
+#             'first_name': user.first_name,
+#             'last_name': user.last_name,
+#             'token': user.get_access_token(),
+            
+#         }
+
+#         # Fetch and include the permissions related to the user's role
+#         if user.role:
+#             permissions = Permission.objects.filter(role=user.role)
+#             response_data['permissions'] = PermissionSerializer(permissions, many=True).data
+#         else:
+#             response_data['permissions'] = []
+
+#         return response_data

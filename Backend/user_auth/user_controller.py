@@ -85,20 +85,6 @@ class ForgetPasswordController:
         return create_response({}, EMAIL_SUCCESSFULLY_SENT, status_code=200)
 
 
-# class RegisterController:
-#     serializer_class = UserSerializer
-#     def create(self,request):
-#         try:
-#             serialized_data = self.serializer_class(data=request.data)
-#             if serialized_data.is_valid():
-#                 instance = serialized_data.save()
-#                 return create_response(self.serializer_class(instance).data, SUCCESSFUL, status_code=200)
-#             else:
-#                 return create_response({}, get_first_error_message(serialized_data.errors, UNSUCCESSFUL), status_code=400)
-#         except Exception as e:
-#             return create_response({'error':str(e)}, UNSUCCESSFUL, 500)
-
-
 from .models import Role  # Import the Role model
 
 class RegisterController:
@@ -122,6 +108,110 @@ class RegisterController:
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
     
+
+
+from rest_framework import status
+from rest_framework.response import Response
+from django.utils import timezone
+from django.contrib.auth import authenticate
+
+class LoginController:
+    serializer_class = LoginSerializer
+
+    def login(self, request):
+        try:
+            # Validate the input data
+            serialized_data = self.serializer_class(data=request.data)
+            if not serialized_data.is_valid():
+                return Response({
+                    "message": "Unsuccessful",
+                    "errors": serialized_data.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            # Authenticate the user
+            user = authenticate(username=request.data['username'], password=request.data['password'])
+            if not user:
+                return Response({
+                    "message": "Incorrect email or password"
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Check if the user is active
+            if not user.is_active:
+                return Response({
+                    "message": "Account is disabled"
+                }, status=status.HTTP_403_FORBIDDEN)
+
+            # Initialize the permissions dictionary dynamically
+            permissions_dict = {perm.code: False for perm in Permission.objects.all()}
+
+            # Check if the user is a superuser or has a role with permissions
+            if user.is_superuser:
+                for perm in Permission.objects.all():
+                    permissions_dict[perm.code] = True
+            elif user.role:
+                for perm in user.role.permissions.all():
+                    permissions_dict[perm.code] = True
+
+            # Prepare the response data
+            response_data = {
+                "token": user.get_access_token(),
+                "name": user.get_full_name(),
+                "username": user.username,
+                "email": user.email,
+                "role_id": user.role.id if user.role else None,
+                "role_name": user.role.name if user.role else None,
+                "permissions": permissions_dict
+            }
+
+            # Update or create the user's token
+            Token.objects.update_or_create(defaults={"token": response_data.get("token")}, user_id=user.guid)
+            
+            # Reset failed login attempts and update last login time
+            user.failed_login_attempts = 0
+            user.last_failed_time = None
+            user.last_login = timezone.now()
+            user.save()
+
+            # Return the response without setting session or CSRF cookies
+            return Response({
+                "message": "Successful",
+                "data": response_data
+            }, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({
+                "message": "Unsuccessful",
+                "error": str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+class LogoutController:
+    def logout(self,request):
+        try:
+            user = request.user.guid
+            token = Token.objects.filter(user=user)
+            if not token:
+                return create_response({},UNSUCCESSFUL, status_code=400)
+            token.delete()
+            return create_response({}, SUCCESSFUL, status_code=200)
+        except Exception as e:
+            return create_response({'error':str(e)}, UNSUCCESSFUL, 500)
+        
+
+
+# class RegisterController:
+#     serializer_class = UserSerializer
+#     def create(self,request):
+#         try:
+#             serialized_data = self.serializer_class(data=request.data)
+#             if serialized_data.is_valid():
+#                 instance = serialized_data.save()
+#                 return create_response(self.serializer_class(instance).data, SUCCESSFUL, status_code=200)
+#             else:
+#                 return create_response({}, get_first_error_message(serialized_data.errors, UNSUCCESSFUL), status_code=400)
+#         except Exception as e:
+#             return create_response({'error':str(e)}, UNSUCCESSFUL, 500)
 
 # class LoginController:   (Last Wala)
 #     serializer_class = LoginSerializer
@@ -185,116 +275,7 @@ class RegisterController:
 #             return create_response({'error': str(e)}, "Unsuccessful", 500)
 
 
-from django.middleware import csrf
-from django.conf import settings
-from django.utils.http import http_date
-from datetime import datetime, timedelta
-
-class LoginController:
-    serializer_class = LoginSerializer
-
-    def login(self, request):
-        try:
-            # Validate the input data
-            serialized_data = self.serializer_class(data=request.data)
-            if not serialized_data.is_valid():
-                return Response({
-                    "message": "Unsuccessful",
-                    "errors": serialized_data.errors
-                }, status=status.HTTP_400_BAD_REQUEST)
-
-            # Authenticate the user
-            user = authenticate(username=request.data['username'], password=request.data['password'])
-            if not user:
-                return Response({
-                    "message": "Incorrect email or password"
-                }, status=status.HTTP_400_BAD_REQUEST)
-            
-            # Check if the user is active
-            if not user.is_active:
-                return Response({
-                    "message": "Account is disabled"
-                }, status=status.HTTP_403_FORBIDDEN)
-
-            # Initialize the permissions dictionary dynamically
-            permissions_dict = {perm.code: False for perm in Permission.objects.all()}
-
-            # Check if the user is a superuser
-            if user.is_superuser:
-                all_permissions = Permission.objects.all()
-                for perm in all_permissions:
-                    if perm.code in permissions_dict:
-                        permissions_dict[perm.code] = True
-            elif user.role:
-                # Fetch permissions based on the user's role
-                role_permissions = user.role.permissions.all()
-                for perm in role_permissions:
-                    if perm.code in permissions_dict:
-                        permissions_dict[perm.code] = True
-
-            # Prepare the response data
-            response_data = {
-                "token": user.get_access_token(),
-                "name": user.get_full_name(),
-                "username": user.username,
-                "email": user.email,
-                "role_id": user.role.id if user.role else None,
-                "role_name": user.role.name if user.role else None,
-                "permissions": permissions_dict
-            }
-
-            # Update or create the user's token
-            Token.objects.update_or_create(defaults={"token": response_data.get("token")}, user_id=user.guid)
-            
-            # Reset failed login attempts and update last login time
-            user.failed_login_attempts = 0
-            user.last_failed_time = None
-            user.last_login = timezone.now()
-            user.save()
-
-            # Set session cookie with CSRF token and expiration
-            response = Response({
-                "message": "Successful",
-                "data": response_data
-            }, status=status.HTTP_200_OK)
-
-            # Create a session cookie with the token, secure and with expiration
-            expires = datetime.now() + timedelta(days=settings.SESSION_COOKIE_AGE // (24 * 3600))
-            response.set_cookie(
-                key="sessionid",
-                value=response_data.get("token"),
-                httponly=True,
-                secure=settings.SESSION_COOKIE_SECURE,
-                expires=http_date(expires.timestamp()),
-                samesite='Strict'
-            )
-
-            # Set CSRF token as well
-            response["X-CSRFToken"] = csrf.get_token(request)
-
-            return response
-        
-        except Exception as e:
-            return Response({
-                "message": "Unsuccessful",
-                "error": str(e)
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-class LogoutController:
-    def logout(self,request):
-        try:
-            user = request.user.guid
-            token = Token.objects.filter(user=user)
-            if not token:
-                return create_response({},UNSUCCESSFUL, status_code=400)
-            token.delete()
-            return create_response({}, SUCCESSFUL, status_code=200)
-        except Exception as e:
-            return create_response({'error':str(e)}, UNSUCCESSFUL, 500)
-
 # For Sessions
-
 # from rest_framework.authtoken.models import Token
 # from django.middleware import csrf
 # from django.conf import settings
@@ -407,40 +388,3 @@ class LogoutController:
 #             "message": "Session has expired or is invalid"
 #         }, status=status.HTTP_401_UNAUTHORIZED)
 
-
-
-
-
-
-# class LoginController:
-#     serializer_class = LoginSerializer
-
-#     def login(self, request):
-#         try:
-#             serialized_data = self.serializer_class(data=request.data)
-
-#             if not serialized_data.is_valid():
-#                 return create_response({},get_first_error_message(serialized_data.errors, UNSUCCESSFUL), 400)
-
-#             user = authenticate(username=request.data['username'], password=request.data['password'])
-#             if not user:
-#                 return create_response({}, message=INCORRECT_EMAIL_OR_PASSWORD, status_code=400)
-            
-#             permissions = Permission.objects.filter()
-
-#             response_data = {
-#                 "token": user.get_access_token(),
-#                 "name": user.get_full_name(),
-#                 "username":user.username,
-#                 "email": user.email,
-#                 "permissions": ""
-#             }
-
-#             Token.objects.update_or_create(defaults={"token": response_data.get("token")},user_id=user.guid)
-#             user.failed_login_attempts = 0
-#             user.last_failed_time = None
-#             user.last_login = timezone.now()
-#             user.save()
-#             return create_response(response_data, SUCCESSFUL, status_code=200)
-#         except Exception as e:
-#             return create_response({'error':str(e)}, UNSUCCESSFUL, 500)
