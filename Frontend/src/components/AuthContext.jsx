@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
 
-    if (storedPermissions) {
+    if (storedPermissions && storedPermissions !== "undefined") { // Check if storedPermissions is not "undefined"
       try {
         const parsedPermissions = JSON.parse(storedPermissions);
         setPermissions(parsedPermissions);
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
 
-    if (storedRole) {
+    if (storedRole && storedRole !== "undefined") { // Check if storedRole is not "undefined"
       try {
         const parsedRole = JSON.parse(storedRole);
         setRole(parsedRole);
@@ -97,7 +97,6 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
 
 
 
