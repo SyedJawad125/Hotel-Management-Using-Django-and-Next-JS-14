@@ -18,19 +18,27 @@ def validate_total_price(value):
 def validate_amount(value):
     if value <= 0:
         raise ValidationError('Amount must be greater than zero.') 
+# def validate_image(image):
+#     try:
+#         img = Image.open(image)
+#         img.verify()
+#         # Check file size (in bytes), e.g., max 5MB
+#         max_file_size = 5 * 1024 * 1024
+#         if image.size > max_file_size:
+#             raise ValidationError("Image file size must be under 5MB.")
+        
+#         # Optional: Check for allowed formats
+#         allowed_formats = ['JPEG','jpeg', 'PNG', 'png', 'JPG', 'jpg', 'WEBP', 'webp']
+#         if img.format not in allowed_formats:
+#             raise ValidationError(f"Allowed formats are: {', '.join(allowed_formats)}")
+        
+#     except (IOError, SyntaxError) as e:
+#         raise ValidationError("Invalid image file.")
+
+
 def validate_image(image):
     try:
         img = Image.open(image)
         img.verify()
-        # Check file size (in bytes), e.g., max 5MB
-        max_file_size = 5 * 1024 * 1024
-        if image.size > max_file_size:
-            raise ValidationError("Image file size must be under 5MB.")
-        
-        # Optional: Check for allowed formats
-        allowed_formats = ['JPEG','jpeg', 'PNG', 'png', 'JPG', 'jpg', 'WEBP', 'webp']
-        if img.format not in allowed_formats:
-            raise ValidationError(f"Allowed formats are: {', '.join(allowed_formats)}")
-        
     except (IOError, SyntaxError) as e:
-        raise ValidationError("Invalid image file.")
+        raise ValidationError("Invalid image file.")   

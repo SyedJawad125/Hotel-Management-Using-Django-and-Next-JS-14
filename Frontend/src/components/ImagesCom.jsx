@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AxiosInstance from "@/components/AxiosInstance";
 import { useRouter } from 'next/navigation';
 import { AuthContext } from '@/components/AuthContext';
+import Image from 'next/image';
 
 
 const ImagesCom = () => {
@@ -112,10 +113,10 @@ const ImagesCom = () => {
             currentRecords.map((item) => (
               <div key={item.id} className="col mb-4">
                 <div className="card">
-                  <img
+                <Image
                     src={`http://localhost:8000/${item.image}`}
                     className="card-image w-full h-48 object-cover"
-                    alt=""
+                    alt="imagesCom"
                   />
                   <div className="card-body">
                     <h5 className="card-title text-lg font-bold">Name: {item.name}</h5>

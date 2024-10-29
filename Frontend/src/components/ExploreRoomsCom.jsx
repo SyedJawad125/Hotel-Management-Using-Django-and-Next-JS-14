@@ -32,7 +32,7 @@ export default function Home() {
           <div key={index} className="bg-gray-50 shadow-lg rounded-lg overflow-hidden mb-16">
             <div className="relative h-60 w-full">
               <Image
-                src={`http://localhost:8000/${hall.image}`} // Adjust based on your API's response
+                src={`http://localhost:8000${hall.image}`} // Adjust based on your API's response
                 alt={hall.title}
                 width={500} // Fixed width
                 height={400} // Fixed height

@@ -37,7 +37,7 @@ const NextJsCarousel = () => {
         {banners.map((banner, index) => (
           <div key={index}>
             <Image
-              src={`http://localhost:8000/${banner.image}`} // Adjust according to your API structure
+              src={`http://localhost:8000${banner.image}`} // Adjust according to your API structure
               alt={`Banner ${index + 1}`}
               className="w-full h-[87vh] object-cover"
               width={1920}

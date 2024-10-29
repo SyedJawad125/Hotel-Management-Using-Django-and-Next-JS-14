@@ -67,7 +67,7 @@ export default function Slider() {
                 style={{
                   left: `${25 + (index - currentIndex) * 25}%`, // Adjusted for 4 images
                   transform: `translateX(-50%)`,
-                  backgroundImage: `url(http://localhost:8000/${image.image})`, 
+                  backgroundImage: `url(http://localhost:8000${image.image})`, 
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   borderRadius: '20px', 

@@ -60,7 +60,7 @@ export default function Home() {
           className="relative w-[300px] h-[200px] opacity-0 transition-opacity duration-700 ease-in-out transform translate-y-5"
         >
           <Image
-            src={`http://localhost:8000/${image.image}`} // Adjust according to your API response
+            src={`http://localhost:8000${image.image}`} // Adjust according to your API response
             alt={image.title || `Image ${index + 1}`}
             fill
             className="object-cover rounded-md"

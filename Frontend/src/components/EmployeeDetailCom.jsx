@@ -39,7 +39,7 @@ const EmployeeDetail = () => {
             {employee.image && (
               <div className="flex flex-col items-center md:items-start mt-5">
                 <img 
-                  src={`http://localhost:8000/${employee.image}`} 
+                  src={`http://localhost:8000${employee.image}`} 
                   alt={`${employee.first_name} ${employee.last_name}`} 
                   className="rounded-lg shadow-lg w-48 h-48 object-cover mb-2" 
                 />

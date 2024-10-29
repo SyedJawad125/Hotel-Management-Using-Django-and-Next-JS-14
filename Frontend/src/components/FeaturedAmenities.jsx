@@ -44,7 +44,7 @@ export default function Home() {
           <div key={index} className="border border-gray-300 rounded-lg overflow-hidden flex flex-col items-center">
             <div className="relative w-[180px] h-[120px]">
               <Image
-                src={`http://localhost:8000/${banner.image}`} // Adjust according to your API response structure
+                src={`http://localhost:8000${banner.image}`} // Adjust according to your API response structure
                 alt={banner.title} // Assuming title is part of the API response
                 width={300} // Fixed width
                 height={200} // Fixed height

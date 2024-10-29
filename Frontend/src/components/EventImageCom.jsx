@@ -31,7 +31,7 @@ export default function EventImageCom() {
           <div key={index} className="bg-gray-50 shadow-lg rounded-lg overflow-hidden mb-16">
             <div className="relative h-60 w-full">
               <Image
-                src={`http://localhost:8000/${hall.image}`} // Adjust according to your API response structure
+                src={`http://localhost:8000${hall.image}`} // Adjust according to your API response structure
                 alt={hall.title}
                 width={500}
                 height={400}
