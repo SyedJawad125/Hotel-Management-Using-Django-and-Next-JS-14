@@ -115,6 +115,7 @@ const ImagesCom = () => {
                   <img
                     src={`http://localhost:8000/${item.image}`}
                     className="card-image w-full h-48 object-cover"
+                    alt=""
                   />
                   <div className="card-body">
                     <h5 className="card-title text-lg font-bold">Name: {item.name}</h5>

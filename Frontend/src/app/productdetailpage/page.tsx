@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import ProductDetailsCom from "@/components/ProductDetailsCom";
+// import ProductDetailsCom from "@/components/ProductDetailsCom";
 import NavbarCom from "@/components/NavbarCom";
 import TopNavbarCom from "@/components/TopNavbarCom";
 
@@ -9,7 +9,7 @@ const page = () => {
     <div>
       <TopNavbarCom/>
       <NavbarCom/>
-      <ProductDetailsCom/>
+      {/* <ProductDetailsCom/> */}
     </div>
   )
 }
