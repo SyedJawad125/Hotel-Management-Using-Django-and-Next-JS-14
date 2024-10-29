@@ -4,8 +4,7 @@ import './globals.css';
 import { ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import SessionProviderWrapper from '@/components/SessionProviderWrapper';
-import AuthProvider from '@/components/AuthProvider'; // Keep AuthProvider
+import AuthProvider from '@/components/AuthProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,23 +15,21 @@ export const metadata: Metadata = {
 
 interface RootLayoutProps {
   children: ReactNode;
-  session: any; // Adjust according to your session type
 }
 
-export default function RootLayout({ children, session }: RootLayoutProps) {
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    // <SessionProviderWrapper session={session}>
-      <AuthProvider>
-          <html lang="en" className={inter.className}>
-            <body>
-              {children}
-              <ToastContainer />
-            </body>
-          </html>
-      </AuthProvider>
-    // </SessionProviderWrapper>
+    <AuthProvider>
+      <html lang="en" className={inter.className}>
+        <body>
+          {children}
+          <ToastContainer />
+        </body>
+      </html>
+    </AuthProvider>
   );
 }
+
 
 
 
