@@ -29,7 +29,7 @@ const Overview = () => {
       {images.length > 0 && (
         <div className="absolute inset-0 z-0">
           <Image
-            src={`http://localhost:8000/${images[0].image}`} // Adjust the API response path
+            src={`http://localhost:8000${images[0].image}`} // Adjust the API response path
             alt={images[0].title} // Provide a default title or alt text
             fill
             className="object-cover object-center"

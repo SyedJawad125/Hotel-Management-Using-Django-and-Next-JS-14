@@ -30,7 +30,7 @@ export default function MeetingsSection() {
         <div className="absolute inset-0 z-0">
           {/* Display the first image from the API as the background */}
           <Image
-            src={`http://localhost:8000/${halls[0].image}`} // Adjust the API path if needed
+            src={`http://localhost:8000${halls[0].image}`} // Adjust the API path if needed
             alt={halls[0].title}
             fill
             className="object-cover rounded-md"

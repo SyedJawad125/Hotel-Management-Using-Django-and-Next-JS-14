@@ -114,7 +114,9 @@ const ImagesCom = () => {
               <div key={item.id} className="col mb-4">
                 <div className="card">
                 <Image
-                    src={`http://localhost:8000/${item.image}`}
+                    src={`http://localhost:8000${item.image}`}
+                    width={200} // Set appropriate width
+                    height={200} // Set appropriate height
                     className="card-image w-full h-48 object-cover"
                     alt="imagesCom"
                   />
