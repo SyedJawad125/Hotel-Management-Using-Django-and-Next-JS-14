@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'; // Next.js router
 import AxiosInstance from "@/components/AxiosInstance";
+import Image from 'next/image';
 
 interface Employee {
   id: number;
@@ -273,7 +274,7 @@ const UpdateEmployee = () => {
       </div>
       {imagePreview && (
         <div className="w-40 h-25">
-          <img src={imagePreview} alt="Employee" className="h-24 w-24 object-cover" />
+          <Image src={imagePreview} alt="Employee" className="h-24 w-24 object-cover" />
         </div>
       )}
     </div>

@@ -45,7 +45,7 @@ const Contact = () => {
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-white-900">Contact Us</h2>
           <p className="mt-2 text-center text-sm text-white-600">
-            We'd love to hear from you!
+             We&apos;d love to hear from you!
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

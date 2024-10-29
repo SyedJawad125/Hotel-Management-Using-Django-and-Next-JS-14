@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'; // Next.js router
 import AxiosInstance from "@/components/AxiosInstance";
+import Image from 'next/image';
 
 interface Category {
   id: number;
@@ -167,7 +168,7 @@ const UpdateImage = () => {
 
           {imagePreview && (
             <div className="w-40 h-25">
-              <img src={imagePreview} alt="Preview" className="object-cover w-full h-full rounded-lg"/>
+              <Image src={imagePreview} alt="Preview" className="object-cover w-full h-full rounded-lg"/>
             </div>
           )}
         </div>
