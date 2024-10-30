@@ -37,3 +37,5 @@ export default function Home() {
   </>
   );
 }
+
+// "next": "^15.0.2",
