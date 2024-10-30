@@ -43,8 +43,8 @@ const UpdateImage = () => {
 
             if (productData.image) {
               // Assuming `employeeData.image` contains just the image filename
-              const baseUrl = ' http://127.0.0.1:8000/'; 
-              setImagePreview(`${baseUrl}${productData.image}`);
+              const baseUrl = 'http://127.0.0.1:8000/'; 
+              setImagePreview(`${baseUrl}${productData.image}`.trim());
             } else {
               console.log('No image found for this employee.');
             }
@@ -167,10 +167,17 @@ const UpdateImage = () => {
           </div>
 
           {imagePreview && (
-            <div className="w-40 h-25">
-              <Image src={imagePreview} alt="Preview" className="object-cover w-full h-full rounded-lg"/>
-            </div>
-          )}
+              <div className="w-40 h-25">
+                <Image
+                  src={imagePreview.trim()}
+                  alt="Preview"
+                  width={160} // Specify width here
+                  height={100} // Specify height here
+                  className="object-cover w-full h-full rounded-lg"
+                />
+              </div>
+            )}
+
         </div>
         <div className="mb-4">
           <label htmlFor="imagescategory" className="block text-sm font-medium text-black">Select Category</label>
