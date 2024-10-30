@@ -26,7 +26,7 @@ const UpdateImage = () => {
   const [imageId, setimageId] = useState<string | null>(null);
 
   useEffect(() => {
-    const id = searchParams.get('imgid');
+    const id = searchParams?.get('imgid') || null;
     setimageId(id);
   }, [searchParams]);
 
