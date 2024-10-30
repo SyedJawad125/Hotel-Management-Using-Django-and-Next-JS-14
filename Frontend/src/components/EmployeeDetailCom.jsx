@@ -8,6 +8,13 @@ const EmployeeDetail = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [employees, setEmployees] = useState([]);
+  const [EpmloyeeId, setEpmloyeeId] = useState(null);
+
+  useEffect(() => {
+    // Get booking ID from search params
+    const id = searchParams.get('EpmloyeeId');
+    setEpmloyeeId(id);
+  }, [searchParams]);
 
   useEffect(() => {
     const EpmloyeeId = searchParams.get('EpmloyeeId');
@@ -27,7 +34,7 @@ const EmployeeDetail = () => {
       };
       fetchEmployees();
     }
-  }, [searchParams]);
+  }, [EpmloyeeId]);
 
   return (
     <div className="container mx-auto my-0 p-6 bg-gray-800 rounded-lg shadow-lg">
@@ -42,9 +49,11 @@ const EmployeeDetail = () => {
                 <Image 
                   src={`http://localhost:8000${employee.image}`} 
                   alt={`${employee.first_name} ${employee.last_name}`} 
+                  width={240} // Fixed width
+                  height={180} // Fixed height
                   className="rounded-lg shadow-lg w-48 h-48 object-cover mb-2" 
                 />
-                <p className="text-white font-semibold mb-5">{`${employee.first_name} ${employee.last_name}`}</p>
+                <p className="text-white font-semibold mb-5 ml-2">{`${employee.first_name} ${employee.last_name}`}</p>
               </div>
             )}
           </div>

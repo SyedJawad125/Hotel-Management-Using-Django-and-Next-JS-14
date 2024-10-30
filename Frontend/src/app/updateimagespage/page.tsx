@@ -15,7 +15,6 @@ interface Category {
 const UpdateImage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const imageId = searchParams.get('imgid');
 
   const [name, setName] = useState('');
   const [image, setImage] = useState<File | null>(null);
@@ -24,6 +23,12 @@ const UpdateImage = () => {
   const [categoryRecords, setCategoryRecords] = useState<Category[]>([]);
   const [description, setDescription] = useState('');
   const [bulletsdescription, setBulletsdescription] = useState('• ');
+  const [imageId, setimageId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const id = searchParams.get('imgid');
+    setimageId(id);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -38,7 +43,7 @@ const UpdateImage = () => {
             setBulletsdescription(productData.bulletsdescription || '• ');
             if (productData.image) {
               const baseUrl = 'http://127.0.0.1:8000/';
-              setImagePreview(`${baseUrl}${productData.image}`.trim());
+              setImagePreview(`${baseUrl}${productData.image}`);
             }
           }
         } catch (error) {
@@ -87,7 +92,7 @@ const UpdateImage = () => {
     e.preventDefault();
     try {
       const formData = new FormData();
-      formData.append('id', imageId as string);
+      formData.append('id', imageId || '');
       formData.append('name', name || '');
       if (image) formData.append('image', image);
       formData.append('imagescategory', imagescategory || '');
@@ -129,7 +134,7 @@ const UpdateImage = () => {
             id="name"
             className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={name || ''}
+            value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
@@ -139,7 +144,7 @@ const UpdateImage = () => {
             id="description"
             className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={description || ''}
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
@@ -150,7 +155,7 @@ const UpdateImage = () => {
             id="imagescategory"
             className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={imagescategory || ''}
+            value={imagescategory}
             onChange={(e) => setImagesCategory(e.target.value)}
           />
         </div>
@@ -160,7 +165,7 @@ const UpdateImage = () => {
             id="bulletsdescription"
             className="mt-1 block w-2/4 px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm 
             focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-md text-gray-900"
-            value={bulletsdescription || ''}
+            value={bulletsdescription}
             onChange={(e) => setBulletsdescription(e.target.value)}
             onKeyDown={handleBulletsInput}
           />
@@ -178,7 +183,7 @@ const UpdateImage = () => {
         {imagePreview && (
           <div className="mb-4">
             <Image
-              src={imagePreview}
+              src={imagePreview.trim()}
               alt="Image Preview"
               width={160}
               height={120}

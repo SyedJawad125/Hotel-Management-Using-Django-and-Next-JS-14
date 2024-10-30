@@ -274,7 +274,12 @@ const UpdateEmployee = () => {
       </div>
       {imagePreview && (
         <div className="w-40 h-25">
-          <Image src={imagePreview} alt="Employee" className="h-24 w-24 object-cover" />
+          <Image src={imagePreview.trim()}
+          alt="Employee" 
+          className="h-24 w-24 object-cover"
+          width={160}
+          height={120}
+           />
         </div>
       )}
     </div>
