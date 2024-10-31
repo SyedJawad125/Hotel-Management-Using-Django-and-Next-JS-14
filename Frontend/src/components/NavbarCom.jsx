@@ -1,10 +1,26 @@
 'use client';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const NavbarCom = () => {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const navItems = useMemo(
+    () => [
+      { name: 'Home', path: '/' },
+      { name: 'About', path: '/about' },
+      { name: 'Services', path: '/services' },
+      { name: 'Check', path: '/checkpage' },
+      { name: 'Contact', path: '/contactus' },
+    ],
+    []
+  );
+
+  const handleNavigation = useCallback((path) => {
+    if (pathname !== path) router.push(path);
+  }, [pathname, router]);
 
   return (
     <nav className="bg-blue-700 w-full">
@@ -13,23 +29,16 @@ const NavbarCom = () => {
           <Link href="/">HOTEL MANAGEMENT SYSTEM</Link>
         </div>
         <ul className="flex space-x-10 ml-auto mr-10">
-          {[
-            { name: 'Home', path: '/' },
-            { name: 'About', path: '/about' },
-            { name: 'Services', path: '/services' },
-            { name: 'Check', path: '/checkpage' },
-            { name: 'Contact', path: '/contactus' },
-          ].map((item) => (
+          {navItems.map((item) => (
             <li key={item.path}>
-              <Link href={item.path} prefetch>
-                <div
-                  className={`${
-                    pathname === item.path ? 'text-red-500' : 'text-white'
-                  } hover:text-black px-3 py-2 text-lg`}
-                >
-                  {item.name}
-                </div>
-              </Link>
+              <button
+                onClick={() => handleNavigation(item.path)}
+                className={`${
+                  pathname === item.path ? 'text-red-500' : 'text-white'
+                } hover:text-black px-3 py-2 text-lg`}
+              >
+                {item.name}
+              </button>
             </li>
           ))}
         </ul>
