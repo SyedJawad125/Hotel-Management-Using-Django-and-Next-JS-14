@@ -605,36 +605,83 @@ class BookingController:
         except Exception as e:
             return Response({'error': str(e)}, 500)
 
+    from datetime import date
+
     def update_booking(self, request):
         try:
-            if "id" in request.data:
-                # finding instance
-                instance = Booking.objects.filter(id=request.data["id"]).first()
-
-                if instance:
-                    request.POST._mutable = True
-                    request.data["updated_by"] = request.user.guid
-                    request.POST._mutable = False
-
-                    # updating the instance/record
-                    serialized_data = BookingSerializer(instance, data=request.data, partial=True)
-                    # if request.user.role in ['admin', 'manager'] or request.user.is_superuser:  # roles
-                    if serialized_data.is_valid():
-                        response = serialized_data.save()
-                        response_data = BookingSerializer(response).data
-                        return Response({"data": response_data}, 200)
-                    else:
-                        error_message = get_first_error_message(serialized_data.errors, "UNSUCCESSFUL")
-                        return Response({'data': error_message}, 400)
-                    # else:
-                    #     return Response({'data': "Permission Denaied"}, 400)
-                else:
-                    return Response({"data": "NOT FOUND"}, 404)
-            else:
+            if "id" not in request.data:
                 return Response({"data": "ID NOT PROVIDED"}, 400)
+
+            # Find the booking instance
+            instance = Booking.objects.filter(id=request.data["id"]).first()
+
+            if not instance:
+                return Response({"data": "NOT FOUND"}, 404)
+
+            # Make POST data mutable
+            request.POST._mutable = True
+            request.data["updated_by"] = request.user.guid
+
+            # Get the list of room IDs from the request data
+            room_ids = request.data.get('rooms', [])
+            if room_ids:
+                total_price = 0
+                rooms = []
+                room_details = []  # To store room details with price
+
+                # Check the availability and calculate the price for each room
+                for room_id in room_ids:
+                    try:
+                        # Fetch the room object
+                        room = Room.objects.get(id=room_id)
+                    except Room.DoesNotExist:
+                        return Response({'error': f'Room with ID {room_id} does not exist'}, 404)
+
+                    # Get the most recent booking for the room to check its availability
+                    latest_booking = Booking.objects.filter(rooms=room).order_by('-check_out').first()
+
+                    # If the latest booking has a check_out date in the future, the room is not available
+                    if latest_booking and latest_booking.check_out >= date.today() and latest_booking.id != instance.id:
+                        return Response({'error': f'Room with ID {room_id} is not available until {latest_booking.check_out}'}, 400)
+
+                    # Add room price to total price
+                    total_price += room.price_per_night
+                    rooms.append(room)
+
+                    # Append room price details
+                    room_details.append({
+                        'room_id': room.id,
+                        'room_price': room.price_per_night
+                    })
+
+                # Set the total price in the data
+                request.data["total_price"] = total_price
+
+            request.POST._mutable = False
+
+            # Update the instance with the new data
+            serialized_data = BookingSerializer(instance, data=request.data, partial=True)
+            if serialized_data.is_valid():
+                response = serialized_data.save()
+
+                # Update the rooms associated with the booking if provided
+                if room_ids:
+                    response.rooms.set(rooms)
+                    response.save()
+
+                response_data = BookingSerializer(response).data
+                # Add the room details and total price to the response
+                response_data['room_details'] = room_details
+                response_data['total_price'] = total_price
+
+                return Response({"data": response_data}, 200)
+            else:
+                error_message = get_first_error_message(serialized_data.errors, "UNSUCCESSFUL")
+                return Response({'data': error_message}, 400)
 
         except Exception as e:
             return Response({'error': str(e)}, 500)
+
 
     def delete_booking(self, request):
         try:
