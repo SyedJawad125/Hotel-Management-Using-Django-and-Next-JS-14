@@ -113,6 +113,12 @@ class Booking(models.Model):
             raise ValidationError("Check-out date must be after the check-in date.")
         if self.check_in < timezone.now().date():
             raise ValidationError("Check-in date cannot be in the past.")
+        
+    def save(self, *args, **kwargs):
+        # Ensure clean is called before saving
+        self.full_clean()  # Calls clean() and field validations
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"Booking {self.id} by {self.guest}"
 
