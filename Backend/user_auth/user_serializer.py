@@ -169,6 +169,13 @@ class UserListingSerializer(serializers.ModelSerializer):
         model = User
         fields = ['guid','get_full_name','username','email','role']
 
+class UserDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        # fields = ['guid','get_full_name','username','email','role']
+        fields = '__all__'
+
+
 
 
 

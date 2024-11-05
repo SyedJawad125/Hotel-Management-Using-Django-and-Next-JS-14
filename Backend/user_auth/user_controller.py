@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
 
 from my_project.settings import EMAIL_HOST_USER
+from user_auth.user_filter import UserDetailsFilter
 from user_auth.user_serializer import *
 from user_auth.models import Token, User
 from utils.reusable_methods import get_first_error_message, generate_six_length_random_number
@@ -198,7 +199,33 @@ class LogoutController:
         except Exception as e:
             return create_response({'error':str(e)}, UNSUCCESSFUL, 500)
         
+class UserDetailsController:
+    serializer_class = UserDetailsSerializer
+    filterset_class = UserDetailsFilter
 
+
+
+    # mydata = Member.objects.filter(firstname__endswith='s').values()
+    def get_user_detail(self, request):
+        try:
+
+            instances = self.serializer_class.Meta.model.objects.all()
+
+            filtered_data = self.filterset_class(request.GET, queryset=instances)
+            data = filtered_data.qs
+
+            paginated_data, count = paginate_data(data, request)
+
+            serialized_data = self.serializer_class(paginated_data, many=True).data
+            response_data = {
+                "count": count,
+                "data": serialized_data,
+            }
+            return create_response(response_data, "SUCCESSFUL", 200)
+
+
+        except Exception as e:
+            return Response({'error': str(e)}, 500)
 
 # class RegisterController:
 #     serializer_class = UserSerializer
