@@ -32,7 +32,7 @@ const AddRoom = () => {
       if (response) {
         console.log('Response:', response.data);
         toast.success('Room added successfully!');
-        router.push('/bookingpage');
+        router.push('/roomspage');
       }
     } catch (error: any) {
       console.error('Error submitting the form:', error);

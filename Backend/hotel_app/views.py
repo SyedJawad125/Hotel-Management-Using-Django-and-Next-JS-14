@@ -56,15 +56,19 @@ class GuestViews(ModelViewSet):
 class RoomViews(ModelViewSet):
     authentication_classes = [JWTAuthentication]
 
+    @permission_required(['create_room'])
     def post_room(self, request):
         return room_controller.create(request)
     
+    @permission_required(['read_room'])
     def get_room(self, request):
         return room_controller.get_room(request)
-
+    
+    @permission_required(['update_room'])
     def update_room(self, request):
         return room_controller.update_room(request)
-
+    
+    @permission_required(['delete_room'])
     def delete_room(self, request):
         return room_controller.delete_room(request)
     
@@ -72,15 +76,19 @@ class RoomViews(ModelViewSet):
 class BookingViews(ModelViewSet):
     authentication_classes = [JWTAuthentication]
 
+    @permission_required(['create_booking'])
     def post_booking(self, request):
         return booking_controller.create(request)
     
+    @permission_required(['read_booking'])
     def get_booking(self, request):
         return booking_controller.get_booking(request)
-
+    
+    @permission_required(['update_booking'])
     def update_booking(self, request):
         return booking_controller.update_booking(request)
-
+    
+    @permission_required(['delete_booking'])
     def delete_booking(self, request):
         return booking_controller.delete_booking(request)
     

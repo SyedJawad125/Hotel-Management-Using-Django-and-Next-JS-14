@@ -19,7 +19,18 @@ permissions = [
     Permission(name='Read Employee', code='read_employee', module_name='Employee', description='User can read Employee'),
     Permission(name='Update Employee', code='update_employee', module_name='Employee', description='User can update Employee'),
     Permission(name='Delete Employee', code='delete_employee', module_name='Employee', description='User can delete Employee'),
+    
+    Permission(name='Create Booking', code='create_booking', module_name='Booking', description='User can create Booking'),
+    Permission(name='Read Booking', code='read_booking', module_name='Booking', description='User can read Booking'),
+    Permission(name='Update Booking', code='update_booking', module_name='Booking', description='User can update Booking'),
+    Permission(name='Delete Booking', code='delete_booking', module_name='Booking', description='User can delete Booking'),
+
+    Permission(name='Create Images', code='create_images', module_name='Images', description='User can create Images'),
+    Permission(name='Read Images', code='read_images', module_name='Images', description='User can read images'),
+    Permission(name='Update Images', code='update_images', module_name='Images', description='User can update Images'),
+    Permission(name='Delete Images', code='delete_images', module_name='Images', description='User can delete Images'),
 ]
+
 
 
 def add_permission():

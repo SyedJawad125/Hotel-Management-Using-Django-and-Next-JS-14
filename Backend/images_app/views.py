@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from .images_controller import ImagesController, CategoriesController, PublicImagesController
 from utils.base_authentication import JWTAuthentication
+from permissions.decorator import permission_required
 
 # Create your views here.
 
@@ -13,15 +14,19 @@ publicimages_controller=PublicImagesController()
 
 class ImagesViews(ModelViewSet):
     authentication_classes = [JWTAuthentication]
-
+    @permission_required(['create_images'])
+    
     def post_images(self, request):
         return images_controller.create(request)
+    @permission_required(['read_images'])
     
     def get_images(self, request):
         return images_controller.get_images(request)
+    @permission_required(['update_images'])
     
     def update_images(self, request):
         return images_controller.update_images(request)
+    @permission_required(['delete_images'])
     
     def delete_images(self, request):
         return images_controller.delete_images(request)
