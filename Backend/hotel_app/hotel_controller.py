@@ -547,16 +547,17 @@ class BookingController:
                 except Room.DoesNotExist:
                     return Response({'error': f'Room with ID {room_id} does not exist'}, 404)
 
-                # Check if there are any overlapping bookings within the requested date range
-                overlapping_bookings = Booking.objects.filter(
+                # Check for any overlapping bookings within the requested date range
+                overlapping_booking = Booking.objects.filter(
                     rooms=room,
                     check_out__gte=check_in_date,
                     check_in__lte=check_out_date
-                ).exists()
+                ).order_by('-check_out').first()
 
-                if overlapping_bookings:
+                if overlapping_booking:
+                    latest_booking = overlapping_booking
                     return Response({
-                        'error': f'Room with ID {room_id} is already booked between the requested dates'
+                        'error': f'Room with ID {room_id} is not available until {latest_booking.check_out}'
                     }, 400)
 
                 # Add room price to total price
@@ -595,6 +596,7 @@ class BookingController:
 
         except Exception as e:
             return Response({'error': str(e)}, 500)
+
 
 
 
