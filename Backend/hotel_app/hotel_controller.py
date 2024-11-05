@@ -514,6 +514,7 @@ class BookingController:
 
 
     from datetime import date
+    from rest_framework.response import Response
 
     def create(self, request, *args, **kwargs):
         try:
@@ -522,14 +523,23 @@ class BookingController:
 
             # Get the list of room IDs from the request data
             room_ids = request.data.get('rooms', [])
+            check_in_date = request.data.get('check_in')
+            check_out_date = request.data.get('check_out')
+            
             if not room_ids:
                 return Response({'error': 'At least one room ID is required'}, 400)
+            if not check_in_date or not check_out_date:
+                return Response({'error': 'Check-in and check-out dates are required'}, 400)
 
             total_price = 0
             rooms = []
             room_details = []  # To store room details with price
 
-            # Check the check_out date and availability of each room
+            # Convert check-in and check-out dates to date objects
+            check_in_date = date.fromisoformat(check_in_date)
+            check_out_date = date.fromisoformat(check_out_date)
+
+            # Check the availability of each room for the entire requested date range
             for room_id in room_ids:
                 try:
                     # Fetch the room object
@@ -537,12 +547,17 @@ class BookingController:
                 except Room.DoesNotExist:
                     return Response({'error': f'Room with ID {room_id} does not exist'}, 404)
 
-                # Get the most recent booking for the room to check its availability
-                latest_booking = Booking.objects.filter(rooms=room).order_by('-check_out').first()
+                # Check if there are any overlapping bookings within the requested date range
+                overlapping_bookings = Booking.objects.filter(
+                    rooms=room,
+                    check_out__gte=check_in_date,
+                    check_in__lte=check_out_date
+                ).exists()
 
-                # If the latest booking has a check_out date in the future, the room is not available
-                if latest_booking and latest_booking.check_out >= date.today():
-                    return Response({'error': f'Room with ID {room_id} is not available until {latest_booking.check_out}'}, 400)
+                if overlapping_bookings:
+                    return Response({
+                        'error': f'Room with ID {room_id} is already booked between the requested dates'
+                    }, 400)
 
                 # Add room price to total price
                 total_price += room.price_per_night
