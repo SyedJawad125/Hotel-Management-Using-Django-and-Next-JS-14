@@ -8,6 +8,6 @@ urlpatterns = [
     path('forget-password', ForgetPasswordAPIView.as_view({"post": "post"}), name='forget_password'),
     path('verify-otp', VerifyOtpAPIView.as_view({"post": "post"}), name='verify_otp'),
     path('change-password', ChangePasswordAPIView.as_view({"post": "post"}), name='change_password'),
-    path('userdetails', UserDetailsViews.as_view({"get": "get_user_detail"})),
+    path('userdetails', UserDetailsViews.as_view({"get": "get"})),
     # path('api/check-session/', SessionCheckView.as_view(), name='check-session'),
 ]

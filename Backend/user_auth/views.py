@@ -48,5 +48,5 @@ class ForgetPasswordAPIView(ModelViewSet):
     
 class UserDetailsViews(ModelViewSet):
 
-    def get_user_detail(self, request):
-        return user_details_controller.get_user_detail(request)
+    def get(self, request):
+        return user_details_controller.get(request)

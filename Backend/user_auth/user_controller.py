@@ -199,33 +199,73 @@ class LogoutController:
         except Exception as e:
             return create_response({'error':str(e)}, UNSUCCESSFUL, 500)
         
-class UserDetailsController:
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import NotAuthenticated
+from rest_framework.authentication import TokenAuthentication
+
+class UserDetailsController(APIView):
     serializer_class = UserDetailsSerializer
-    filterset_class = UserDetailsFilter
+    authentication_classes = [TokenAuthentication]  # Specify TokenAuthentication
+    permission_classes = [IsAuthenticated]
 
-
-
-    # mydata = Member.objects.filter(firstname__endswith='s').values()
-    def get_user_detail(self, request):
+    def get(self, request):
         try:
-
-            instances = self.serializer_class.Meta.model.objects.all()
-
-            filtered_data = self.filterset_class(request.GET, queryset=instances)
-            data = filtered_data.qs
-
-            paginated_data, count = paginate_data(data, request)
-
-            serialized_data = self.serializer_class(paginated_data, many=True).data
+            # Check if the user is authenticated
+            if not request.user.is_authenticated:
+                raise NotAuthenticated("User is not authenticated. Please provide a valid token.")
+            
+            # Retrieve the logged-in user
+            user = request.user
+            
+            # Serialize the user data using the provided serializer class
+            serialized_data = self.serializer_class(user).data
+            
+            # Prepare the response data
             response_data = {
-                "count": count,
                 "data": serialized_data,
             }
-            return create_response(response_data, "SUCCESSFUL", 200)
+            return Response(response_data, status=200)
 
-
+        except NotAuthenticated as e:
+            return Response({'error': str(e)}, status=401)
         except Exception as e:
-            return Response({'error': str(e)}, 500)
+            return Response({'error': str(e)}, status=500)
+
+
+# from rest_framework.authentication import BaseAuthentication
+# from rest_framework.exceptions import AuthenticationFailed
+# from .models import Token  # Import your custom Token model
+
+# class CustomTokenAuthentication(BaseAuthentication):
+#     def authenticate(self, request):
+#         # Check for Authorization header
+#         auth_header = request.headers.get('Authorization')
+#         if not auth_header:
+#             return None
+
+#         try:
+#             # Extract the token from the header
+#             prefix, token_key = auth_header.split()
+#             if prefix != "Token":
+#                 return None
+
+#             # Retrieve the token from your custom Token model
+#             token = Token.objects.get(token=token_key)
+
+#             # Return the user associated with this token
+#             return (token.user, token)
+
+#         except (Token.DoesNotExist, ValueError):
+#             raise AuthenticationFailed("Invalid token")
+
+#         except Exception as e:
+#             raise AuthenticationFailed(f"Authentication error: {str(e)}")
+
+
+
+
 
 # class RegisterController:
 #     serializer_class = UserSerializer

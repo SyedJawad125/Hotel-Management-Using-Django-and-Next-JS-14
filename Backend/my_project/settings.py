@@ -193,3 +193,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # SESSION_COOKIE_NAME = 'sessionid'  # Default cookie name, can be customized if needed
 # SESSION_COOKIE_HTTPONLY = True
 # SESSION_COOKIE_SECURE = True  # Set to True if using HTTPS
+

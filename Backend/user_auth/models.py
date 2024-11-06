@@ -124,3 +124,28 @@ class Token(TimeStamps):
 
 
 
+# from django.db import models
+# from django.utils import timezone
+# from django.contrib.auth import get_user_model
+# import uuid
+
+# User = get_user_model()  # Get the user model, especially if you have a custom user model
+
+# class Token(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tokens")
+#     token = models.CharField(max_length=500, unique=True, default=uuid.uuid4)  # Use UUID for unique token generation
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     expires_at = models.DateTimeField()  # Optional: add expiration if desired
+
+#     def save(self, *args, **kwargs):
+#         # Set expiration (e.g., 1 day from creation) if using an expiration system
+#         if not self.expires_at:
+#             self.expires_at = timezone.now() + timezone.timedelta(days=1)
+#         super().save(*args, **kwargs)
+
+#     def is_expired(self):
+#         # Check if token is expired
+#         return timezone.now() > self.expires_at
+
+#     def __str__(self):
+#         return f"Token for {self.user.username} - {self.token}"
