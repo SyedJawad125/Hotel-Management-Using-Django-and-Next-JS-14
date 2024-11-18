@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 #from .blog_serializer import BlogSerializer
 from utils.base_authentication import JWTAuthentication
-from .hotel_controller import ContactController, EmployeeController, PublicRoomController, RoomController, GuestController, BookingController, PaymentController
+from .hotel_controller import ContactController, EmployeeController, PublicBookingController, PublicRoomController, RoomController, GuestController, BookingController, PaymentController
 
 
 employee_controller = EmployeeController()
@@ -15,6 +15,7 @@ guest_controller = GuestController()
 room_controller = RoomController()
 publicroom_controller = PublicRoomController()
 booking_controller = BookingController()
+publicbooking_controller = PublicBookingController()
 payment_controller = PaymentController()
 contact_controller = ContactController()
 # bookingroom_controller = BookingRoomController()
@@ -74,7 +75,7 @@ class RoomViews(ModelViewSet):
         return room_controller.delete_room(request)
     
 class PublicRoomViews(ModelViewSet):
-    authentication_classes = [JWTAuthentication]
+    # authentication_classes = [JWTAuthentication]
 
     def get_publicroom(self, request):
         return publicroom_controller.get_publicroom(request)
@@ -98,6 +99,12 @@ class BookingViews(ModelViewSet):
     @permission_required(['delete_booking'])
     def delete_booking(self, request):
         return booking_controller.delete_booking(request)
+
+class PublicBookingViews(ModelViewSet):
+    # authentication_classes = [JWTAuthentication]
+    
+    def post_publicbooking(self, request):
+        return publicbooking_controller.post_publicbooking(request)   
     
 class PaymentViews(ModelViewSet):
     authentication_classes = [JWTAuthentication]

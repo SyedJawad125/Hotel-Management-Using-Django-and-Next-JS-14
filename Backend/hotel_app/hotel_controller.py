@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.contrib.auth import authenticate
 from hotel_app.hotel_filters import EmployeeFilter
 from hotel_app.hotel_filters import *
-from hotel_app.hotel_serializer import BookingSerializer, ContactSerializer, EmployeeSerializer, GuestSerializer, PaymentSerializer, PublicRoomSerializer, RoomSerializer
+from hotel_app.hotel_serializer import BookingSerializer, ContactSerializer, EmployeeSerializer, GuestSerializer, PaymentSerializer, PublicBookingSerializer, PublicRoomSerializer, RoomSerializer
 from hotel_app.models import Employee
 from user_auth.user_serializer import UserSerializer
 from utils.reusable_methods import get_first_error_message, generate_six_length_random_number
@@ -738,6 +738,94 @@ class BookingController:
                     return Response({"data": "RECORD NOT FOUND"}, 404)
             else:
                 return Response({"data": "ID NOT PROVIDED"}, 400)
+        except Exception as e:
+            return Response({'error': str(e)}, 500)
+
+class PublicBookingController:
+    serializer_class = PublicBookingSerializer
+    filterset_class = PublicBookingFilter
+
+    from datetime import date
+    from rest_framework.response import Response
+
+    def post_publicbooking(self, request, *args, **kwargs):
+        try:
+            # Make POST data mutable
+            request.POST._mutable = True
+
+            # Get the list of room IDs from the request data
+            room_ids = request.data.get('rooms', [])
+            check_in_date = request.data.get('check_in')
+            check_out_date = request.data.get('check_out')
+            
+            if not room_ids:
+                return Response({'error': 'At least one room ID is required'}, 400)
+            if not check_in_date or not check_out_date:
+                return Response({'error': 'Check-in and check-out dates are required'}, 400)
+
+            total_price = 0
+            rooms = []
+            room_details = []  # To store room details with price
+
+            # Convert check-in and check-out dates to date objects
+            check_in_date = date.fromisoformat(check_in_date)
+            check_out_date = date.fromisoformat(check_out_date)
+
+            # Check the availability of each room for the entire requested date range
+            for room_id in room_ids:
+                try:
+                    # Fetch the room object
+                    room = Room.objects.get(id=room_id)
+                except Room.DoesNotExist:
+                    return Response({'error': f'Room with ID {room_id} does not exist'}, 404)
+
+                # Check for any overlapping bookings within the requested date range
+                overlapping_booking = Booking.objects.filter(
+                    rooms=room,
+                    check_out__gte=check_in_date,
+                    check_in__lte=check_out_date
+                ).order_by('-check_out').first()
+
+                if overlapping_booking:
+                    latest_booking = overlapping_booking
+                    return Response({
+                        'error': f'Room with ID {room_id} is not available until {latest_booking.check_out}'
+                    }, 400)
+
+                # Add room price to total price
+                total_price += room.price_per_night
+                rooms.append(room)
+
+                # Append room price details
+                room_details.append({
+                    'room_id': room.id,
+                    'room_price': room.price_per_night
+                })
+
+            # Set the total price and created_by field
+            request.data["total_price"] = total_price
+            request.data["created_by"] = request.user.guid
+
+            # Proceed with validating and saving the booking
+            validated_data = BookingSerializer(data=request.data)
+            if validated_data.is_valid():
+                # Save the booking and associate rooms
+                booking = validated_data.save()
+
+                # Link rooms to the booking
+                booking.rooms.set(rooms)
+                booking.save()
+
+                response_data = BookingSerializer(booking).data
+                # Add the room details and total price to the response
+                response_data['room_details'] = room_details
+                response_data['total_price'] = total_price
+
+                return Response({'data': response_data}, 200)
+            else:
+                error_message = get_first_error_message(validated_data.errors, "UNSUCCESSFUL")
+                return Response({'data': error_message}, 400)
+
         except Exception as e:
             return Response({'error': str(e)}, 500)
 

@@ -51,7 +51,7 @@ const AddBooking = () => {
     e.preventDefault();
     try {
       const payload = { check_in, check_out, adults, children, rooms: selectedRooms };
-      const response = await AxiosInstance.post('/hotel/booking', payload, {
+      const response = await AxiosInstance.post('/hotel/publicbooking', payload, {
         headers: { 'Content-Type': 'application/json' },
       });
 
