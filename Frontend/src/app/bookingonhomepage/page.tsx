@@ -116,7 +116,7 @@ const AddBooking = () => {
           </label>
           <select
             id="adults"
-            className="w-24 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg"
+            className="w-30 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg"
             value={adults}
             onChange={(e) => setAdults(e.target.value)}
           >
@@ -131,7 +131,7 @@ const AddBooking = () => {
           </label>
           <select
             id="children"
-            className="w-24 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg"
+            className="w-30 px-3 py-2 border border-gray-300 text-gray-700 rounded-lg"
             value={children}
             onChange={(e) => setChildren(e.target.value)}
           >
