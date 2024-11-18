@@ -34,6 +34,23 @@ class RoomSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Capacity must be at least 1.")
         return value
     
+class PublicRoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        # fields = '__all__'
+        fields = ['id', 'room_number', 'category', 'price_per_night', 'capacity']
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['created_by'] = UserListingSerializer(instance.created_by).data if instance.created_by else None
+        data['updated_by'] = UserListingSerializer(instance.updated_by).data if instance.updated_by else None 
+
+        return data
+    # Custom validation for capacity
+    def validate_capacity(self, value):
+        if value < 1:
+            raise serializers.ValidationError("Capacity must be at least 1.")
+        return value
+    
 class GuestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guest

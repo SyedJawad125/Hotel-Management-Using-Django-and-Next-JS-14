@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.contrib.auth import authenticate
 from hotel_app.hotel_filters import EmployeeFilter
 from hotel_app.hotel_filters import *
-from hotel_app.hotel_serializer import BookingSerializer, ContactSerializer, EmployeeSerializer, GuestSerializer, PaymentSerializer, RoomSerializer
+from hotel_app.hotel_serializer import BookingSerializer, ContactSerializer, EmployeeSerializer, GuestSerializer, PaymentSerializer, PublicRoomSerializer, RoomSerializer
 from hotel_app.models import Employee
 from user_auth.user_serializer import UserSerializer
 from utils.reusable_methods import get_first_error_message, generate_six_length_random_number
@@ -436,6 +436,32 @@ class RoomController:
         except Exception as e:
             return Response({'error': str(e)}, 500)
 
+
+class PublicRoomController:
+    serializer_class = PublicRoomSerializer
+    filterset_class = PublicRoomFilter
+
+ 
+    def get_publicroom(self, request):
+        try:
+
+            instances = self.serializer_class.Meta.model.objects.all()
+
+            filtered_data = self.filterset_class(request.GET, queryset=instances)
+            data = filtered_data.qs
+
+            paginated_data, count = paginate_data(data, request)
+
+            serialized_data = self.serializer_class(paginated_data, many=True).data
+            response_data = {
+                "count": count,
+                "data": serialized_data,
+            }
+            return create_response(response_data, "SUCCESSFUL", 200)
+
+
+        except Exception as e:
+            return Response({'error': str(e)}, 500)
 
 
 

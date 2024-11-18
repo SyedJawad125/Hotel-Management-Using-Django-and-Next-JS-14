@@ -14,6 +14,8 @@ const NavbarCom = () => {
       { name: 'Services', path: '/services' },
       { name: 'Check', path: '/checkpage' },
       { name: 'Contact', path: '/contactus' },
+      { name: 'Booking', path: '/bookingonhomepage' },
+
     ],
     []
   );
