@@ -199,39 +199,41 @@ class LogoutController:
         except Exception as e:
             return create_response({'error':str(e)}, UNSUCCESSFUL, 500)
         
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import NotAuthenticated
-from rest_framework.authentication import TokenAuthentication
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+# from rest_framework.permissions import IsAuthenticated
+# from rest_framework.exceptions import NotAuthenticated
+# from rest_framework.authentication import TokenAuthentication
 
-class UserDetailsController(APIView):
-    serializer_class = UserDetailsSerializer
-    authentication_classes = [TokenAuthentication]  # Specify TokenAuthentication
-    permission_classes = [IsAuthenticated]
+# class UserDetailsController:
+#     serializer_class = UserDetailsSerializer
+#     authentication_classes = [TokenAuthentication]  # Specify TokenAuthentication
+#     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        try:
-            # Check if the user is authenticated
-            if not request.user.is_authenticated:
-                raise NotAuthenticated("User is not authenticated. Please provide a valid token.")
+#     def get(self, request):
+#         try:
+#             # Check if the user is authenticated
+#             if not request.user.is_authenticated:
+#                 raise NotAuthenticated("User is not authenticated. Please provide a valid token.")
             
-            # Retrieve the logged-in user
-            user = request.user
+#             # Retrieve the logged-in user
+#             user = request.user
             
-            # Serialize the user data using the provided serializer class
-            serialized_data = self.serializer_class(user).data
+#             # Serialize the user data using the provided serializer class
+#             serialized_data = self.serializer_class(user).data
             
-            # Prepare the response data
-            response_data = {
-                "data": serialized_data,
-            }
-            return Response(response_data, status=200)
+#             # Prepare the response data
+#             response_data = {
+#                 "data": serialized_data,
+#             }
+#             return Response(response_data, status=200)
 
-        except NotAuthenticated as e:
-            return Response({'error': str(e)}, status=401)
-        except Exception as e:
-            return Response({'error': str(e)}, status=500)
+#         except NotAuthenticated as e:
+#             return Response({'error': str(e)}, status=401)
+#         except Exception as e:
+#             return Response({'error': str(e)}, status=500)
+
+
 
 
 # from rest_framework.authentication import BaseAuthentication

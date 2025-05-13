@@ -10,7 +10,7 @@ logout_controller = LogoutController()
 forget_password_controller = ForgetPasswordController()
 verify_otp_controller = VerifyOtpController()
 change_password_controller = ChangePasswordController()
-user_details_controller = UserDetailsController()
+# user_details_controller = UserDetailsController()
 
 
 
@@ -46,7 +46,42 @@ class ForgetPasswordAPIView(ModelViewSet):
     def post(self,request):
         return forget_password_controller.forget_password(request)
     
-class UserDetailsViews(ModelViewSet):
+# class UserDetailsViews(ModelViewSet):
+
+#     def get(self, request):
+#         return user_details_controller.get(request)
+
+
+# views.py
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+# from rest_framework.permissions import IsAuthenticated
+# from rest_framework.authentication import TokenAuthentication
+# from .user_serializer import UserDetailsSerializers
+
+# class UserDetailsView(APIView):
+#     authentication_classes = [TokenAuthentication]
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request):
+#         user = request.user
+#         serializer = UserDetailsSerializers(user)
+#         return Response({"data": serializer.data}, status=200)
+
+
+# views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+from .user_serializer import UserDetailsSerializer  # Ensure the import path is correct
+
+class UserDetailsView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return user_details_controller.get(request)
+        user = request.user
+        serializer = UserDetailsSerializer(user)
+        return Response({"data": serializer.data}, status=200)
+

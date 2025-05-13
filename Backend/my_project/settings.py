@@ -69,8 +69,17 @@ INSTALLED_APPS = [
     'permissions',
     'hotel_app',
     'images_app',
+    'rest_framework',
+    'rest_framework.authtoken',
     # 'rest_framework.authtoken',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
 
 
 # SITE_ID = 1

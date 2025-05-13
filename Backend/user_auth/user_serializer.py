@@ -175,7 +175,13 @@ class UserDetailsSerializer(serializers.ModelSerializer):
         # fields = ['guid','get_full_name','username','email','role']
         fields = '__all__'
 
+# serializers.py
 
+class UserDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name']  # add fields as needed
+        
 
 
 
