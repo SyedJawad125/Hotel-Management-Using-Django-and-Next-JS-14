@@ -58,7 +58,7 @@ const Login = () => {
         <div className="bg-black shadow-md rounded-lg p-8 mt-5">
           <h3 className="text-center text-2xl font-semibold">Login</h3>
           <form onSubmit={handleSubmit}>
-            <label className="block text-sm font-medium text-gray-500 mb-2">User Name</label>
+            <label className="block text-sm font-medium text-gray-500 mb-2">Email</label>
             <input
               type="text"
               value={email}
