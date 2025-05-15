@@ -79,8 +79,44 @@ class VerifyOtpSerializer(serializers.Serializer):
             raise serializers.ValidationError("Password must be at least 8 characters long.", code=400)
         if instance['new_password'] != instance['confirm_password']:
             raise serializers.ValidationError("The two password fields didn’t match.", code=400)
+        return instance  # ✅ THIS IS REQUIRED
+         
 
+# from rest_framework import serializers
 
+# class VerifyOtpSerializer(serializers.Serializer):
+#     otp = serializers.CharField(
+#         label="otp",
+#         style={"input_type": "otp"},
+#         trim_whitespace=True,
+#         write_only=True
+#     )
+#     new_password = serializers.CharField(
+#         label="new_password",
+#         style={"input_type": "new_password"},
+#         trim_whitespace=True,
+#         write_only=True
+#     )
+#     confirm_password = serializers.CharField(
+#         label="confirm_password",
+#         style={"input_type": "confirm_password"},
+#         trim_whitespace=True,
+#         write_only=True
+#     )
+
+#     def validate(self, attrs):
+#         user = self.context.get("user")
+        
+#         if user.check_password(attrs["new_password"]):
+#             raise serializers.ValidationError("The new password cannot be the same as the old password.", code=400)
+        
+#         if len(attrs["new_password"]) < 8:
+#             raise serializers.ValidationError("Password must be at least 8 characters long.", code=400)
+        
+#         if attrs['new_password'] != attrs['confirm_password']:
+#             raise serializers.ValidationError("The two password fields didn’t match.", code=400)
+        
+#         return attrs  # ✅ THIS IS REQUIRED
 
 class ForgetPasswordSerializer(serializers.Serializer):
     email = serializers.EmailField(
