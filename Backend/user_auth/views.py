@@ -77,7 +77,7 @@ from rest_framework.authentication import TokenAuthentication
 from .user_serializer import UserDetailsSerializer  # Ensure the import path is correct
 
 class UserDetailsView(APIView):
-    authentication_classes = [TokenAuthentication]
+    # authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):

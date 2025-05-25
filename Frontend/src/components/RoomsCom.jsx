@@ -52,7 +52,7 @@ const RoomCom = () => {
   };
 
   const updateRoom = (roomId) => {
-    router.push(`/updateroompage?roomid=${roomId}`);
+    router.push(`/updateroompage?roomId=${roomId}`);
   };
 
   const detailRoom = (roomId) => {
