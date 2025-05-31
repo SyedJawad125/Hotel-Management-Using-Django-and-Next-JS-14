@@ -49,7 +49,7 @@ export default function Slider() {
   ];
 
   return (
-    <div className='ml-10 mr-10'>
+    <div className='bg-gray-100 ml-10 mr-10'>
       <div className="relative w-full h-[500px] overflow-hidden flex items-center justify-center mb-20">
         <div className="relative flex items-center justify-center w-[95%] gap-3">
           {displayedImages.map((image, index) => (
