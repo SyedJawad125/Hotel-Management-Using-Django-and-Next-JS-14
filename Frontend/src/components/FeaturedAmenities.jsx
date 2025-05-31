@@ -87,7 +87,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 text-black">
+    <div className="min-h-screen bg-white text-black">
       <div className="max-w-7xl mx-auto px-8 py-20">
         <div className="flex flex-col lg:flex-row gap-16 items-center">
           {/* Left side: Text content */}

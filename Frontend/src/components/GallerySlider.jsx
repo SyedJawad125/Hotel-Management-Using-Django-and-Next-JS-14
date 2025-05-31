@@ -49,7 +49,7 @@ export default function Slider() {
   ];
 
   return (
-    <div className='bg-gray-100 ml-10 mr-10'>
+    <div className='bg-white'>
       <div className="relative w-full h-[500px] overflow-hidden flex items-center justify-center mb-20">
         <div className="relative flex items-center justify-center w-[95%] gap-3">
           {displayedImages.map((image, index) => (
@@ -80,7 +80,7 @@ export default function Slider() {
           <ChevronRightIcon className="h-6 w-6" />
         </button>
 
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-0">
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-1">
           <button className="bg-red-500 text-white px-6 py-2 rounded-lg">
             View More
           </button>

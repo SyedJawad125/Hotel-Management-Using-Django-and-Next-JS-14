@@ -82,7 +82,7 @@ export default function EventImageCom() {
     <div className="bg-white py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Luxurious Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-16 -mt-8">
           <p className="text-sm uppercase tracking-[0.3em] text-gold-500 mb-4">Exquisite Venues</p>
           <h2 className="text-4xl md:text-5xl font-serif font-light text-gray-900 mb-6">
             Our <span className="font-medium text-gold-600">Elegant</span> Event Spaces

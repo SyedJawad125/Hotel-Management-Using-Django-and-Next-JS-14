@@ -113,7 +113,7 @@ export default function Home() {
   }
 
   return (
-    <div className="bg-amber-50 min-h-screen">
+    <div className="bg-white min-h-screen">
       {/* Hero Section */}
       <div className="relative h-96 overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-40"></div>

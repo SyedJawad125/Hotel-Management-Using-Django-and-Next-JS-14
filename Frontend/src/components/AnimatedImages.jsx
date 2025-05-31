@@ -131,9 +131,9 @@ export default function Home() {
   }, [images]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b bg-white py-8 px-4 sm:px-6 lg:px-8">
       {/* Luxury Header */}
-      <div className="text-center mb-12">
+      <div className="text-center mb-12 mt-8">
         <h1 className="text-3xl md:text-4xl font-extralight text-black mb-3">
           <span className="font-serif italic">Luxury</span> 
           <span className="text-gold-500 mx-2">|</span> 
